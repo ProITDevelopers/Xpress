@@ -1,0 +1,104 @@
+<resources>
+    <string name="app_name">Xpress Entregas</string>
+    <string name="xpress_logo">Xpress Logo</string>
+    <string name="hint_email">Seu e-mail</string>
+    <string name="hint_password">Palavra-passe</string>
+    <string name="hint_forgot_password">Esqueceu a palavra-passe?</string>
+    <string name="hint_btn_login">Entrar</string>
+    <string name="hint_nao_tem_conta">Não tem uma conta?</string>
+    <string name="hint_registe_se">Não tem uma conta? Registe-se</string>
+    <string name="nome_de_usuario">Nome de usuário</string>
+    <string name="motoboy_logo">Motoboy Logo</string>
+    <string name="foto_de_usuario">Foto de usuario</string>
+    <string name="primeiro_nome">Primeiro nome</string>
+    <string name="sobrenome">Sobrenome</string>
+    <string name="numero_telefone">Nº de telefone</string>
+    <string name="confirmar_palavra_passe">Confirmar palavra-passe</string>
+    <string name="municipio">Município</string>
+    <string name="bairro">Bairro</string>
+    <string name="rua">Rua</string>
+    <string name="numero_da_casa">Nº da casa</string>
+    <string name="btn_registar_text">Registar</string>
+    <string name="ja_tenho_uma_conta">Já tenho uma conta.</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="entrar_com_outra_conta">Entrar com outra conta</string>
+    <string name="alterar_palavra_passe">Alterar palavra-passe</string>
+    <string name="alterar_palavra_passe_telef">Insira o seu nº de telefone para alterar a sua palavra-passe.</string>
+    <string name="alterar_palavra_passe_confirmcode_text">Insira o seu código de confirmação</string>
+    <string name="alterar_palavra_passe_codedenied_text">Não recebeu o código?</string>
+    <string name="txtTentarNovamente">Tentar outra vez</string>
+    <string name="hit_codigo_confirm">Código de confirmação</string>
+    <string name="hit_nova_senha">Nova palavra-passe</string>
+    <string name="hit_btn_enviar_cod">Continuar</string>
+    <string name="enviar">Enviar</string>
+    <string name="ok">OK</string>
+    <string name="sucesso">Sucesso!</string>
+    <string name="msg_conta_criada_sucesso">A sua conta foi criada com sucesso!</string>
+    <string name="txtTentarmaistarde">Tentar mais tarde.</string>
+    <string name="msg_erro_num_telefone_invalido">Preencha com um número válido.</string>
+    <string name="msg_erro_num_telefone">Preencha o campo com um de nº telefone.</string>
+    <string name="msg_support_telefone">Enviamos o código de confirmação para </string>
+    <string name="msg_corfim_code_reenviado">O código de confirmação foi reenviado.</string>
+    <string name="msg_confirm_code">Insira o código de confirmação.</string>
+    <string name="msg_confirm_code_short">Termine de inserir o código de confirmação.</string>
+    <string name="msg_sucesso_senha_alterada">A sua palavra-passe foi alterada com sucesso!</string>
+    <string name="msg_erro_campo_vazio">Preencha o campo.</string>
+    <string name="msg_erro_campo_vazio_sem_espaco">Preencha o campo sem espaço.</string>
+    <string name="msg_erro_campo_com_letras">Preencha o campo com letras.</string>
+    <string name="msg_erro_campo_com_email_telefone">Preencha o campo com email ou nº de telefone.</string>
+    <string name="msg_erro_min_tres_letras">Preencha o campo no mínimo com 3 letras.</string>
+    <string name="msg_erro_password_fraca">Palavra-passe fraca.</string>
+    <string name="msg_erro_password_diferente">Palavra-passe diferente.</string>
+    <string name="msg_erro_email_invalido">Preencha o campo com email válido.</string>
+    <string name="msg_erro_internet">O dispositivo não está conectado a nenhuma rede 3G ou WI-FI.</string>
+    <string name="msg_erro_internet_timeout">O tempo de comunicação excedeu. Possivelmente a internet está lenta.</string>
+    <string name="msg_erro">Algum problema ocorreu. Relate o problema.</string>
+    <string name="msg_erro_internet_deslizar">Deslize para baixo, para actualizar.</string>
+    <string name="msg_login_auth_verification">Verificando…</string>
+    <string name="msg_register_quase_pronto">Quase pronto…</string>
+    <string name="msg_register_registrando">Registando…</string>
+    <string name="msg_login_auth_carregando_dados">Carregando dados…</string>
+    <string name="msg_carregando">Carregando…</string>
+    <string name="xpress_realm_db">xpress_realm_db</string>
+    <string name="gender_male">M</string>
+    <string name="gender_female">F</string>
+    <string name="msg_selecione_genero">Selecione o género.</string>
+    <string name="msg_confirmar_processo">msg_confirmar_processo</string>
+    <string name="titulo_confirmar_processo">titulo_confirmar_processo</string>
+    <string name="negar_confirm">Não</string>
+    <string name="aceitar_confirm">Sim</string>
+    <string name="registo_sem_foto">Registro sem foto!</string>
+    <string name="msg_deseja_continuar">Deseja continuar?</string>
+    <string name="msg_login_auth_validando">Validando os dados...</string>
+    <string name="terminar_sessao">Terminar a sessão</string>
+    <string name="sem_imagem">Sem Imagem</string>
+    <string name="msg_palavra_passe_errada">Palavra-passe errada</string>
+    <string name="criar_conta">Criar conta</string>
+    <string name="msg_erro_user_not_found">Este usuário não exite!</string>
+
+    <string-array name="genero">
+        <item>Feminino</item>
+        <item>Masculino</item>
+    </string-array>
+    <string-array name="cidade">
+        <item>Luanda</item>
+        <item>Bengo</item>
+        <item>Benguela</item>
+        <item>Bié</item>
+        <item>Cabinda</item>
+        <item>Cuando-Cubango</item>
+        <item>Cuanza Norte</item>
+        <item>Cuanza Sul</item>
+        <item>Cunene</item>
+        <item>Huambo</item>
+        <item>Huíla</item>
+        <item>Lunda Norte</item>
+        <item>Lunda Sul</item>
+        <item>Malanje</item>
+        <item>Moxico</item>
+        <item>Namibe</item>
+        <item>Uíge</item>
+        <item>Zaire</item>
+    </string-array>
+
+</resources>

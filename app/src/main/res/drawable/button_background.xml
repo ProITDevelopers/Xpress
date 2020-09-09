@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <gradient-->
+<!--        android:startColor="#8F49B1"-->
+<!--        android:endColor="#3599A8"/>-->
+    <gradient
+        android:startColor="@color/btn_login_start_color"
+        android:endColor="@color/btn_login_end_color"/>
+    <corners android:radius="30dp"/>
+</shape>
