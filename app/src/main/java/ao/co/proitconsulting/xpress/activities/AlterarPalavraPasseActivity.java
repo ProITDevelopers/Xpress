@@ -1,12 +1,16 @@
 package ao.co.proitconsulting.xpress.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +24,12 @@ import android.widget.Toast;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.api.ApiClient;
+import ao.co.proitconsulting.xpress.api.ApiInterface;
+import ao.co.proitconsulting.xpress.api.ErrorResponce;
+import ao.co.proitconsulting.xpress.api.ErrorUtils;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.modelos.ReporSenha;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,7 +58,6 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
     //DIALOG_LAYOUT_SUCESSO
     private Dialog dialogLayoutSuccess;
     private TextView dialog_txtConfirmSucesso;
-    private ImageView dialog_img_status;
     private Button dialog_btn_sucesso;
 
 
@@ -74,6 +82,7 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
     }
 
     private void initViews() {
+
         imgBackground = findViewById(R.id.imgBackground);
 
         //-------------------------------------------------------------//
@@ -126,7 +135,6 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
             dialogLayoutSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog_txtConfirmSucesso = dialogLayoutSuccess.findViewById(R.id.dialog_txtConfirmSucesso);
-        dialog_img_status = dialogLayoutSuccess.findViewById(R.id.dialog_img_status);
         dialog_btn_sucesso = dialogLayoutSuccess.findViewById(R.id.dialog_btn_sucesso);
 
         dialog_btn_sucesso.setOnClickListener(this);
@@ -160,7 +168,7 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
 
             case R.id.txtTenteOutraVez:
                 if (!TextUtils.isEmpty(telefoneReceberDeNovo)) {
-                    enviarTelefoneRedifDeNovo();
+                    verificarConecxaoInternetReenviarNumber();
                 } else {
                     MetodosUsados.esconderTeclado(this);
                     MetodosUsados.mostrarMensagem(this, R.string.txtTentarmaistarde);
@@ -170,7 +178,7 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
             case R.id.dialog_btn_continuar:
                 if (verificarCampoTelef()){
                     MetodosUsados.esconderTeclado(this);
-                    enviarCodRedifinicaoTelef();
+                    verificarConecxaoInternetReporSenha();
                 }
                 break;
 
@@ -192,7 +200,7 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
 
     private void enviarTelefonelRedif() {
         if (verificarTelefone()) {
-            mandarTelefoneResetSenha(telefoneRedif_senha);
+            verificarConecxaoInternetSenDNumber();
         }
     }
 
@@ -214,89 +222,84 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
 
     private void mandarTelefoneResetSenha(String telefone) {
 
+        MetodosUsados.showLoadingDialog(getString(R.string.enviando_num_telefone));
         dialog_editTelefone.setError(null);
         telefoneReceberDeNovo = telefone;
 
-        dialog_editTelefone.setText(null);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<Void> enviarTelefoneReset = apiInterface.enviarTelefone(Integer.parseInt(telefone));
+        enviarTelefoneReset.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
 
-        txt_telefone.setText(getString(R.string.msg_support_telefone).concat(" "+telefone));
+                    MetodosUsados.hideLoadingDialog();
 
-        dialogLayoutCodeResetPass.show();
-        dialogLayoutEnviarNumTelefone.cancel();
+                    dialog_editTelefone.setText(null);
+                    txt_telefone.setText(getString(R.string.msg_support_telefone).concat(" "+telefone));
 
+                    dialogLayoutCodeResetPass.show();
+                    dialogLayoutEnviarNumTelefone.cancel();
 
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        Call<Void> enviarTelefoneReset = apiInterface.enviarTelefone(Integer.parseInt(telefone));
-//        progressDialog.setMessage(msgAEnviarTelefone);
-//        progressDialog.show();
-//        enviarTelefoneReset.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-//                if (response.isSuccessful()) {
-//
-//                    progressDialog.cancel();
-//                    dialog_editTelefone.setText(null);
-//
-//                    txt_telefone.setText(msgSupporte.concat(telefone));
-//                    dialogLayoutCodeResetPass.show();
-//                } else {
-//                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-//                    progressDialog.dismiss();
-//                    dialog_editTelefone_telefone.setError(errorResponce.getError());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-//                progressDialog.dismiss();
-//                if (!conexaoInternetTrafego(AlterarSenhaActivity.this,TAG)){
-//                    mostrarMensagem(AlterarSenhaActivity.this,R.string.txtMsg);
-//                }else  if ("timeout".equals(t.getMessage())) {
-//                    mostrarMensagem(AlterarSenhaActivity.this,R.string.txtTimeout);
-//                }else {
-//                    mostrarMensagem(AlterarSenhaActivity.this,R.string.txtProblemaMsg);
-//                }
-//                Log.i(TAG,"onFailure" + t.getMessage());
-//            }
-//        });
+                } else {
+                    MetodosUsados.hideLoadingDialog();
+                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
+                    dialog_editTelefone.setError(errorResponce.getError());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                MetodosUsados.hideLoadingDialog();
+                if (!MetodosUsados.conexaoInternetTrafego(AlterarPalavraPasseActivity.this,TAG)){
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this,R.string.msg_erro_internet);
+                }else  if ("timeout".equals(t.getMessage())) {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this,R.string.msg_erro_internet_timeout);
+                }else {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this,R.string.msg_erro);
+                }
+                Log.i(TAG,"onFailure" + t.getMessage());
+            }
+        });
     }
 
     private void enviarTelefoneRedifDeNovo() {
 
+        MetodosUsados.showLoadingDialog(getString(R.string.reenviando_num_telefone));
+
         dialog_editTelefone.setError(null);
         String telefone = telefoneReceberDeNovo.trim();
-        MetodosUsados.mostrarMensagem(this, R.string.msg_corfim_code_reenviado);
 
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        Call<Void> enviarYelefoneReset = apiInterface.enviarTelefone(Integer.parseInt(telefone));
-//        progressDialog.setMessage(msgReenviarNumTelef);
-//        progressDialog.show();
-//        enviarYelefoneReset.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    progressDialog.dismiss();
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtCodigoenviado);
-//                } else {
-//                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-//                    Toast.makeText(AlterarSenhaActivity.this, errorResponce.getError(), Toast.LENGTH_SHORT).show();
-//                    progressDialog.dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-//                progressDialog.dismiss();
-//                if (!conexaoInternetTrafego(AlterarSenhaActivity.this,TAG)) {
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtMsg);
-//                } else if ("timeout".equals(t.getMessage())) {
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtTimeout);
-//                } else {
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtProblemaMsg);
-//                }
-//                Log.i(TAG, "onFailure" + t.getMessage());
-//            }
-//        });
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<Void> enviarTelefoneReset = apiInterface.enviarTelefone(Integer.parseInt(telefone));
+        enviarTelefoneReset.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    MetodosUsados.hideLoadingDialog();
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_corfim_code_reenviado);
+                } else {
+                    MetodosUsados.hideLoadingDialog();
+                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, errorResponce.getError());
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                MetodosUsados.hideLoadingDialog();
+                if (!MetodosUsados.conexaoInternetTrafego(AlterarPalavraPasseActivity.this,TAG)) {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet);
+                } else if ("timeout".equals(t.getMessage())) {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet_timeout);
+                } else {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro);
+                }
+                Log.i(TAG, "onFailure" + t.getMessage());
+            }
+        });
 
     }
 
@@ -310,7 +313,9 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
             dialog_pinCodigoConfirmacao.setError(getString(R.string.msg_erro_campo_vazio));
             return false;
         }
-        if (codigoConfTelef.length() <2) {
+        if (codigoConfTelef.length() <=2) {
+            dialog_pinCodigoConfirmacao.requestFocus();
+            dialog_pinCodigoConfirmacao.setError(getString(R.string.msg_confirm_code_min_three));
             MetodosUsados.mostrarMensagem(this, R.string.msg_confirm_code_short);
             return false;
         }
@@ -321,68 +326,67 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
             return false;
         }
 
+        if (novaSenha.length()<=5){
+            dialog_editNovaPass.requestFocus();
+            dialog_editNovaPass.setError(getString(R.string.msg_erro_password_fraca));
+            return false;
+        }
+
 
         return true;
 
     }
 
     private void enviarCodRedifinicaoTelef() {
-//        imgBackground.setImageResource(R.color.login_register_text_color);
+
+        MetodosUsados.showLoadingDialog(getString(R.string.enviando_confirm_code));
 
         String telefone = telefoneReceberDeNovo.trim();
-        limparPinView(dialog_pinCodigoConfirmacao,dialog_editNovaPass);
-
-        dialog_txtConfirmSucesso.setText(getString(R.string.msg_sucesso_senha_alterada));
-
-        dialogLayoutSuccess.show();
-        dialogLayoutCodeResetPass.cancel();
+        ReporSenha reporSenha = new ReporSenha();
+        reporSenha.codigoRecuperacao = codigoConfTelef;
+        reporSenha.novaPassword = novaSenha;
 
 
-//        progressDialog.setMessage(msgEnviandoCodigo);
-//        progressDialog.show();
-//
-//        String telefone = telefoneReceberDeNovo.trim();
-//
-//        ReporSenha reporSenha = new ReporSenha();
-//        reporSenha.codigoRecuperacao = codigoConfTelef;
-//        reporSenha.novaPassword = novaSenha;
-//
-////        ApiInterface apiInterface = ApiClient.apiClient().create(ApiInterface.class);
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-////        Call<String> enviarCod = apiInterface.enviarConfirCodigo(Integer.parseInt(telefone), codigoConfTelef,novaSenha);
-//        Call<String> enviarCod = apiInterface.enviarConfirCodigo(telefone,reporSenha);
-//        enviarCod.enqueue(new Callback<String>() {
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                if (!response.isSuccessful()) {
-//                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-//                    mostrarMensagem(AlterarSenhaActivity.this, errorResponce.getError());
-//                    progressDialog.cancel();
-//                } else {
-//
-//                    String message = response.body();
-//
-//                    limparPinView(pinCodigoConfirmacaoTelef,editNovaSenha);
-//                    dialogSenhaEnviarTelefoneCodReset.cancel();
-//                    progressDialog.dismiss();
-//                    txtConfirmSucesso.setText(getString(R.string.msg_sucesso_senha_alterada));
-//                    dialogConfirmTelefoneSuccesso.show();
-////                    mostrarDialogoOK(message);
-//                }
-//            }
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                progressDialog.dismiss();
-//                if (!conexaoInternetTrafego(AlterarSenhaActivity.this,TAG)) {
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtMsg);
-//                } else if ("timeout".equals(t.getMessage())) {
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtTimeout);
-//                } else {
-//                    mostrarMensagem(AlterarSenhaActivity.this, R.string.txtProblemaMsg);
-//                }
-//                Log.i(TAG, "onFailure" + t.getMessage());
-//            }
-//        });
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<String> enviarCod = apiInterface.enviarConfirCodigo(telefone,reporSenha);
+        enviarCod.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+
+
+                    String message = response.body();
+
+                    limparPinView(dialog_pinCodigoConfirmacao,dialog_editNovaPass);
+                    MetodosUsados.hideLoadingDialog();
+
+                    dialog_txtConfirmSucesso.setText(getString(R.string.msg_sucesso_senha_alterada));
+
+                    dialogLayoutSuccess.show();
+                    dialogLayoutCodeResetPass.cancel();
+
+
+                } else {
+                    MetodosUsados.hideLoadingDialog();
+                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, errorResponce.getError());
+                    dialog_pinCodigoConfirmacao.setError(getString(R.string.msg_confirm_code_incorrecto));
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                MetodosUsados.hideLoadingDialog();
+                if (!MetodosUsados.conexaoInternetTrafego(AlterarPalavraPasseActivity.this,TAG)) {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet);
+                } else if ("timeout".equals(t.getMessage())) {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet_timeout);
+                } else {
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro);
+                }
+                Log.i(TAG, "onFailure" + t.getMessage());
+            }
+        });
 
 
 
@@ -393,12 +397,47 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
         editNovaSenha.setText(null);
     }
 
+
+    private void verificarConecxaoInternetSenDNumber() {
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conMgr!=null){
+            NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+            if (netInfo == null) {
+                MetodosUsados.mostrarMensagem(this,R.string.msg_erro_internet);
+            } else {
+                mandarTelefoneResetSenha(telefoneRedif_senha);
+            }
+        }
+    }
+
+    private void verificarConecxaoInternetReenviarNumber() {
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conMgr!=null){
+            NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+            if (netInfo == null) {
+                MetodosUsados.mostrarMensagem(this,R.string.msg_erro_internet);
+            } else {
+                enviarTelefoneRedifDeNovo();
+            }
+        }
+    }
+
+
+    private void verificarConecxaoInternetReporSenha() {
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conMgr!=null){
+            NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+            if (netInfo == null) {
+                MetodosUsados.mostrarMensagem(this,R.string.msg_erro_internet);
+            } else {
+                enviarCodRedifinicaoTelef();
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
-
-//        if (dialogLayoutSuccess.isShowing()){
-//            imgBackground.setImageResource(R.color.login_register_text_color);
-//        }
+        MetodosUsados.spotsDialog(this);
         super.onResume();
     }
 
@@ -407,6 +446,7 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
         dialogLayoutEnviarNumTelefone.cancel();
         dialogLayoutCodeResetPass.cancel();
         dialogLayoutSuccess.cancel();
+        MetodosUsados.hideLoadingDialog();
         super.onDestroy();
     }
 }

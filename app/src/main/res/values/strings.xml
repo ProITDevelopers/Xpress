@@ -75,6 +75,11 @@
     <string name="msg_palavra_passe_errada">Palavra-passe errada</string>
     <string name="criar_conta">Criar conta</string>
     <string name="msg_erro_user_not_found">Este usuário não exite!</string>
+    <string name="enviando_num_telefone">A enviar o nº de telefone...</string>
+    <string name="reenviando_num_telefone">A reenviar o nº de telefone...</string>
+    <string name="enviando_confirm_code">Enviando o código de confirmação...</string>
+    <string name="msg_confirm_code_min_three">3 dígitos no mínimo.</string>
+    <string name="msg_confirm_code_incorrecto">Código incorrecto.</string>
 
     <string-array name="genero">
         <item>Feminino</item>
@@ -100,5 +105,19 @@
         <item>Uíge</item>
         <item>Zaire</item>
     </string-array>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Definições</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+
+    <string name="apagar_token">Apagar token</string>
 
 </resources>

@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initViews(){
-        MetodosUsados.spotsDialog(this);
 
         login_root = findViewById(R.id.login_root);
         imgAppLogo = findViewById(R.id.imgAppLogo);
@@ -292,12 +291,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
 
+                    MetodosUsados.hideLoadingDialog();
                     if (response.body()!=null){
                         UsuarioPerfil usuarioPerfil = response.body().get(0);
-
-
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
-                        MetodosUsados.hideLoadingDialog();
                         launchHomeScreen();
                     }
 
@@ -328,12 +325,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        MetodosUsados.spotsDialog(this);
+        super.onResume();
+    }
 
     @Override
     protected void onDestroy() {

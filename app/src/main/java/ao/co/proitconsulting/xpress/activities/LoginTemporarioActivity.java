@@ -85,7 +85,7 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     }
 
     private void initViews(){
-        MetodosUsados.spotsDialog(this);
+
         usuarioPerfil = AppPrefsSettings.getInstance().getUser();
 
         logintemp_root = findViewById(R.id.logintemp_root);
@@ -341,7 +341,7 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        Intent intent = new Intent(LoginTemporarioActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginTemporarioActivity.this, MenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -382,6 +382,12 @@ public class LoginTemporarioActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        MetodosUsados.spotsDialog(this);
+        super.onResume();
     }
 
     @Override

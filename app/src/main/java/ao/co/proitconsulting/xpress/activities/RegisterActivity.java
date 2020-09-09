@@ -92,7 +92,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     //DIALOG_LAYOUT_SUCESSO
     private Dialog dialogLayoutSuccess;
-    private ImageView dialog_img_status;
     private TextView dialog_txtConfirmSucesso;
     private Button dialog_btn_sucesso;
 
@@ -107,7 +106,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     private void initViews() {
 
-        MetodosUsados.spotsDialog(this);
 
         register_root = findViewById(R.id.register_root);
         imgUserPhoto = findViewById(R.id.imgUserPhoto);
@@ -261,7 +259,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             dialogLayoutSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog_txtConfirmSucesso = dialogLayoutSuccess.findViewById(R.id.dialog_txtConfirmSucesso);
-        dialog_img_status = dialogLayoutSuccess.findViewById(R.id.dialog_img_status);
         dialog_btn_sucesso = dialogLayoutSuccess.findViewById(R.id.dialog_btn_sucesso);
 
         dialog_btn_sucesso.setOnClickListener(new View.OnClickListener() {
@@ -646,6 +643,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        MetodosUsados.spotsDialog(this);
+        super.onResume();
     }
 
     @Override
