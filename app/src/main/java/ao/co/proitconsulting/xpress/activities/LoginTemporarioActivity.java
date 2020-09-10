@@ -97,39 +97,26 @@ public class LoginTemporarioActivity extends AppCompatActivity {
         txtOutraConta = findViewById(R.id.txtOutraConta);
         btnLogin = findViewById(R.id.btnLogin);
 
-        if (usuarioPerfil!=null){
-            emailTelefone = usuarioPerfil.email;
-        }
+
 
         carregarDadosOffline(usuarioPerfil);
 
 
-        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        txtForgotPassword.setOnClickListener(v -> {
 
-                Intent intent = new Intent(LoginTemporarioActivity.this, AlterarPalavraPasseActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(LoginTemporarioActivity.this, AlterarPalavraPasseActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (verificarCamposEmailTelefone()) {
-                    verificarConecxaoInternet();
-                }
-
+        btnLogin.setOnClickListener(v -> {
+            if (verificarCamposEmailTelefone()) {
+                verificarConecxaoInternet();
             }
+
         });
 
-        txtOutraConta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mensagemLogOut();
-            }
-        });
+        txtOutraConta.setOnClickListener(v -> mensagemLogOut());
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -149,17 +136,18 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     }
 
     private void carregarDadosOffline(UsuarioPerfil usuarioPerfil) {
+        String userNameInitial;
         if (usuarioPerfil!=null){
             txtNomeUser.setText(usuarioPerfil.primeiroNome.concat(" "+usuarioPerfil.ultimoNome));
 
             if (usuarioPerfil.imagem.equals(getString(R.string.sem_imagem))){
                 if (!usuarioPerfil.primeiroNome.isEmpty()){
-                    String userNameInitial = String.valueOf(usuarioPerfil.primeiroNome.charAt(0));
+                    userNameInitial = String.valueOf(usuarioPerfil.primeiroNome.charAt(0));
                     txtUserNameInitial.setText(userNameInitial.toUpperCase());
                     txtUserNameInitial.setVisibility(View.VISIBLE);
 
                 }else {
-                    String userNameInitial = String.valueOf(usuarioPerfil.email.charAt(0));
+                    userNameInitial = String.valueOf(usuarioPerfil.email.charAt(0));
                     txtUserNameInitial.setText(userNameInitial.toUpperCase());
                 }
 
@@ -172,10 +160,23 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                         .placeholder(R.drawable.photo_placeholder)
                         .into(imgUserPhoto);
             }
+        }else{
+            userNameInitial = String.valueOf(getString(R.string.xpress_co_ao).charAt(0));
+            txtUserNameInitial.setText(userNameInitial.toUpperCase());
+            txtUserNameInitial.setVisibility(View.VISIBLE);
+            txtNomeUser.setText(getString(R.string.xpress_co_ao));
         }
     }
 
     private boolean verificarCamposEmailTelefone() {
+
+        if (usuarioPerfil==null){
+            MetodosUsados.mostrarMensagem(this,getString(R.string.entrar_com_outra_conta));
+            return false;
+        }else{
+            emailTelefone = usuarioPerfil.email;
+        }
+
 
         password = editPassword.getText().toString().trim();
 
@@ -238,7 +239,9 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                     String message ="";
 
                         try {
-                            message = response.errorBody().string();
+                            if (response.errorBody() != null) {
+                                message = response.errorBody().string();
+                            }
                             Log.v("Error code 400",message);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -251,13 +254,10 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                         if (message.equals("\"Usuario Não Existe\"")){
                             Snackbar.make(logintemp_root, getString(R.string.msg_erro_user_not_found), Snackbar.LENGTH_LONG)
                                     .setActionTextColor(ContextCompat.getColor(LoginTemporarioActivity.this, R.color.login_register_text_color))
-                                    .setAction(getString(R.string.criar_conta), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(LoginTemporarioActivity.this, RegisterActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(intent);
-                                        }
+                                    .setAction(getString(R.string.criar_conta), v -> {
+                                        Intent intent = new Intent(LoginTemporarioActivity.this, RegisterActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
                                     }).show();
                         }
 
@@ -280,6 +280,7 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                 Log.i(TAG,"onFailure" + t.getMessage());
 
                 try {
+                    if (t.getMessage()!=null)
                     Snackbar
                             .make(logintemp_root, t.getMessage(), 4000)
                             .setActionTextColor(Color.MAGENTA)
@@ -353,22 +354,12 @@ public class LoginTemporarioActivity extends AppCompatActivity {
         txtConfirmTitle.setText(R.string.entrar_com_outra_conta);
         txtConfirmMsg.setText(getString(R.string.msg_deseja_continuar));
 
-        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogLayoutConfirmarProcesso.cancel();
-                logOut();
-            }
+        dialog_btn_accept_processo.setOnClickListener(v -> {
+            dialogLayoutConfirmarProcesso.cancel();
+            logOut();
         });
 
-        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialogLayoutConfirmarProcesso.cancel();
-
-            }
-        });
+        dialog_btn_deny_processo.setOnClickListener(v -> dialogLayoutConfirmarProcesso.cancel());
 
         dialogLayoutConfirmarProcesso.show();
 

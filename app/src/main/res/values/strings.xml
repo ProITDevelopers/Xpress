@@ -69,15 +69,15 @@
     <string name="aceitar_confirm">Sim</string>
     <string name="registo_sem_foto">Registro sem foto!</string>
     <string name="msg_deseja_continuar">Deseja continuar?</string>
-    <string name="msg_login_auth_validando">Validando os dados...</string>
+    <string name="msg_login_auth_validando">Validando os dados…</string>
     <string name="terminar_sessao">Terminar a sessão</string>
     <string name="sem_imagem">Sem Imagem</string>
     <string name="msg_palavra_passe_errada">Palavra-passe errada</string>
     <string name="criar_conta">Criar conta</string>
     <string name="msg_erro_user_not_found">Este usuário não exite!</string>
-    <string name="enviando_num_telefone">A enviar o nº de telefone...</string>
-    <string name="reenviando_num_telefone">A reenviar o nº de telefone...</string>
-    <string name="enviando_confirm_code">Enviando o código de confirmação...</string>
+    <string name="enviando_num_telefone">A enviar o nº de telefone…</string>
+    <string name="reenviando_num_telefone">A reenviar o nº de telefone…</string>
+    <string name="enviando_confirm_code">Enviando o código de confirmação…</string>
     <string name="msg_confirm_code_min_three">3 dígitos no mínimo.</string>
     <string name="msg_confirm_code_incorrecto">Código incorrecto.</string>
 
@@ -119,5 +119,6 @@
 
 
     <string name="apagar_token">Apagar token</string>
+    <string name="xpress.co.ao">xpress.co.ao</string>
 
 </resources>
