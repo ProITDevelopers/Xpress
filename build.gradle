@@ -19,7 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url "https://jitpack.io" } //SHOW_HIDE_PASSWORD, NAIKSOFT_STOMPANDROID
+        maven { url "https://jitpack.io" } //SHOW_HIDE_PASSWORD, NAIKSOFT_STOMPANDROID, YALANTIS_UCROP
     }
 }
 

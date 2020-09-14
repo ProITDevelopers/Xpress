@@ -12,9 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
 
-    private static final String BASE_URL_XPRESS = "http://ec2-18-218-110-105.us-east-2.compute.amazonaws.com:8082/";
+    private static final String BASE_URL_XPRESS = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8082/";
     private static Retrofit retrofit = null;
-    private static int REQUEST_TIMEOUT = 30;
+    private static int REQUEST_TIMEOUT = 90;
     private static OkHttpClient okHttpClient;
 
 

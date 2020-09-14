@@ -52,7 +52,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "TAG_LoginActivity";
     private RelativeLayout login_root;
     private ImageView imgAppLogo;
     private AppCompatEditText editEmail;

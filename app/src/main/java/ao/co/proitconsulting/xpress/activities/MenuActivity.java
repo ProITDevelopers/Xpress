@@ -19,6 +19,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,17 +34,21 @@ import androidx.appcompat.widget.Toolbar;
 
 import ao.co.proitconsulting.xpress.MainActivity;
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.fragmentos.EstabelecimentoFragment;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
 
-    private AppBarConfiguration mAppBarConfiguration;
+
+    private static final String TAG = "TAG_MenuActivity";
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+    private Toolbar toolbar;
     private NavigationView navigationView;
 
-    private UsuarioPerfil usuarioPerfil;
     private CircleImageView imgUserPhoto;
     private TextView txtUserNameInitial, txtUserName, txtUserEmail;
 
@@ -53,27 +62,18 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
         navigationView = findViewById(R.id.nav_view);
-        // Passing each menu_options ID as a set of Ids because each
-        // menu_options should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
 
         View view = navigationView.getHeaderView(0);
@@ -82,8 +82,10 @@ public class MenuActivity extends AppCompatActivity {
         txtUserName = view.findViewById(R.id.txtUserName);
         txtUserEmail = view.findViewById(R.id.txtUserEmail);
 
-        usuarioPerfil = AppPrefsSettings.getInstance().getUser();
-        carregarDadosOffline(usuarioPerfil);
+
+
+        Fragment fragment = new EstabelecimentoFragment();
+        goToEstabelecimentoFragment(fragment);
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -99,6 +101,18 @@ public class MenuActivity extends AppCompatActivity {
         txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
         dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
         dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
+    }
+
+    private void goToEstabelecimentoFragment(Fragment fragment) {
+        if (getSupportActionBar()!=null)
+            toolbar.setTitle(getString(R.string.txt_estabelecimentos));
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frameLayout, fragment);
+        transaction.addToBackStack(BACK_STACK_ROOT_TAG);
+        transaction.commit();
     }
 
     private void carregarDadosOffline(UsuarioPerfil usuarioPerfil) {
@@ -166,13 +180,70 @@ public class MenuActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            int fragments = getSupportFragmentManager().getBackStackEntryCount();
+            if (fragments == 1) {
+                finish();
+            } else if (getFragmentManager().getBackStackEntryCount() > 1) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
+
+        }
+
+
+
+    }
+
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            MetodosUsados.mostrarMensagem(this,"nav_home");
+
+        }
+        else if (id == R.id.nav_menu_perfil) {
+            MetodosUsados.mostrarMensagem(this,"nav_menu_perfil");
+
+        }
+
+        else if (id == R.id.nav_menu_pedidos) {
+
+            MetodosUsados.mostrarMensagem(this,"nav_menu_encomendas");
+
+        }
+
+        else if (id == R.id.nav_menu_mapa) {
+            MetodosUsados.mostrarMensagem(this,"nav_menu_mapa");
+        }
+
+//        else if (id == R.id.nav_menu_favoritos) {
+//            if (getSupportActionBar()!=null)
+//                toolbar.setTitle(getString(R.string.nav_menu_favoritos));
+//            FavoritosFragment favoritosFragment = new FavoritosFragment();
+//            gotoFragment(favoritosFragment);
+//        }
+
+        else if (id == R.id.nav_menu_share) {
+            MetodosUsados.mostrarMensagem(this,"nav_menu_share");
+        }
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
+
+
 
 
     @Override
@@ -207,6 +278,29 @@ public class MenuActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+
+        checkNavigationViewSelection();
+        UsuarioPerfil usuarioPerfil = AppPrefsSettings.getInstance().getUser();
+        carregarDadosOffline(usuarioPerfil);
+        super.onResume();
+    }
+
+    private void checkNavigationViewSelection() {
+        if (getSupportActionBar()!=null){
+
+            if (toolbar.getTitle().equals(getString(R.string.txt_estabelecimentos))){
+                navigationView.setCheckedItem(R.id.nav_home);
+            }
+
+        }
+        navigationView.getMenu().getItem(1).setCheckable(false);
+        navigationView.getMenu().getItem(2).setCheckable(false);
+        navigationView.getMenu().getItem(3).setCheckable(false);
+        navigationView.getMenu().getItem(4).setCheckable(false);
     }
 
     @Override

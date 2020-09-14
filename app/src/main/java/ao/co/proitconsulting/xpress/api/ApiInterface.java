@@ -2,7 +2,9 @@ package ao.co.proitconsulting.xpress.api;
 
 import java.util.List;
 
+import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
+import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
 import ao.co.proitconsulting.xpress.modelos.ReporSenha;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
@@ -54,8 +56,7 @@ public interface ApiInterface {
             @Part("Bairro") RequestBody bairro,
             @Part("Rua") RequestBody rua,
             @Part("NCasa") RequestBody nCasa,
-            @Part MultipartBody.Part imagem
-    );
+            @Part MultipartBody.Part imagem);
 
     @Multipart
     @POST("/cadastrarcliente")
@@ -126,15 +127,15 @@ public interface ApiInterface {
 //    @GET("/ListarEstabA24h2")
 //    Call<List<Estabelecimento>> getAltasHorasEstabelecimentos();
 //
-//    @GET("/ListagemEstabelecimentoA")
-//    Call<List<Estabelecimento>> getAllEstabelecimentos();
+    @GET("/ListagemEstabelecimentoA")
+    Call<List<Estabelecimento>> getAllEstabelecimentos();
 //
 //    @GET("/ListarEstabPorTipo/{IdTipoEstabelecimento}")
 //    Call<List<Estabelecimento>> getEstabelecimentosPorTipo(@Path("IdTipoEstabelecimento") int idTipoEstabelecimento);
 //
 //
-//    @GET("/ListarProdutosEstab/{idE}")
-//    Call<List<Produtos>> getAllProdutosDoEstabelecimento(@Path("idE") int idEstabelecimento);
+    @GET("/ListarProdutosEstab/{idE}")
+    Call<List<Produtos>> getAllProdutosDoEstabelecimento(@Path("idE") int idEstabelecimento);
 //
 //    @GET("/ListarProdutos")
 //    Call<List<Produtos>> getAllProdutos();

@@ -67,6 +67,11 @@ public class MetodosUsados {
         Toast.makeText(mContexto,mensagem,Toast.LENGTH_SHORT).show();
     }
 
+    public static void mostrarMensagemSnackBar(View view, String mensagem) {
+        Snackbar.make(view, mensagem, 4000)
+                .setActionTextColor(Color.WHITE).show();
+    }
+
     //=====================================================================//
     //=====================================================================//
 

@@ -2,6 +2,7 @@ package ao.co.proitconsulting.xpress.modelos;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
 import java.io.Serializable;
 
 public class RegisterRequest implements Serializable {
@@ -44,4 +45,6 @@ public class RegisterRequest implements Serializable {
 
     @SerializedName("usuario")
     public String usuario;
+
+    public File imagem;
 }

@@ -60,8 +60,8 @@
     <string name="msg_login_auth_carregando_dados">Carregando dados…</string>
     <string name="msg_carregando">Carregando…</string>
     <string name="xpress_realm_db">xpress_realm_db</string>
-    <string name="gender_male">M</string>
-    <string name="gender_female">F</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Feminino</string>
     <string name="msg_selecione_genero">Selecione o género.</string>
     <string name="msg_confirmar_processo">msg_confirmar_processo</string>
     <string name="titulo_confirmar_processo">titulo_confirmar_processo</string>
@@ -120,5 +120,26 @@
 
     <string name="apagar_token">Apagar token</string>
     <string name="xpress.co.ao">xpress.co.ao</string>
+    <string name="genero_sexo">Sexo:</string>
+
+    <!--    <string name="msg_error_unable_select_profile_pic">Unable to set profile image. Please try again!</string>-->
+    <string name="lbl_set_profile_photo">Definir imagem de perfil</string>
+    <string name="lbl_take_camera_picture">Tirar uma foto</string>
+    <string name="lbl_choose_from_gallery">Escolha da galeria</string>
+    <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
+
+    <string name="price_with_currency">%.2f</string>
+
+    <string name="dialog_permission_title">Conceder permissões</string>
+    <string name="dialog_permission_message">Este aplicativo precisa de permissão para usar este recurso. Você pode concedê-los nas configurações do aplicativo.</string>
+    <string name="go_to_settings">VÁ PARA AS CONFIGURAÇÕES</string>
+    <string name="pesquisar">pesquisar</string>
+    <string name="txt_estabelecimentos">Estabelecimentos</string>
+    <string name="nav_home_title">Inicio</string>
+    <string name="nav_meu_perfil_title">Meu perfil</string>
+    <string name="nav_encomendas_title">Encomendas</string>
+    <string name="nav_mapa_title">Mapa</string>
+    <string name="group_redes_sociais_title">Redes Sociais</string>
+    <string name="nav_partilhar_title">Partilhar</string>
 
 </resources>
