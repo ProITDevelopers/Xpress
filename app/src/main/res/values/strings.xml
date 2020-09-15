@@ -141,5 +141,7 @@
     <string name="nav_mapa_title">Mapa</string>
     <string name="group_redes_sociais_title">Redes Sociais</string>
     <string name="nav_partilhar_title">Partilhar</string>
+    <string name="email_ou_num_de_telefone">Email /Nº de telefone</string>
+    <string name="escolher_fotografia">Escolher fotografia</string>
 
 </resources>

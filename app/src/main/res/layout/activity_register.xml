@@ -98,31 +98,10 @@
 
                     </LinearLayout>
 
+
+
                     <RelativeLayout
                         app:layout_constraintTop_toBottomOf="@+id/hint_nome"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_nome_user">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editNomeUtilizador"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/nome_de_usuario"
-                            android:maxLines="1"
-                            android:inputType="textPersonName"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_nome_user"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="0dp"
@@ -190,31 +169,10 @@
 
                     </RelativeLayout>
 
+
+
                     <RelativeLayout
                         app:layout_constraintTop_toBottomOf="@+id/hint_pass"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_confirm_pass">
-
-                        <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
-                            android:id="@+id/editConfirmPass"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/confirmar_palavra_passe"
-                            android:maxLines="1"
-                            android:inputType="textPassword"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_confirm_pass"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_width="0dp"
@@ -285,166 +243,12 @@
 
 
 
-                    <LinearLayout
-                        android:weightSum="2"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_genero"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:paddingTop="5dp"
-                        android:layout_marginTop="15dp"
-                        android:id="@+id/hint_municipio_bairro"
-                        >
-
-
-
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/hint_municipio">
-
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editMunicipio"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/municipio"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:id="@+id/hint_bairro">
-
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editBairro"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/bairro"
-                                android:maxLength="25"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:weightSum="2"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_municipio_bairro"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:paddingTop="5dp"
-                        android:id="@+id/hint_rua_nCasa"
-                        >
-
-
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/hint_rua">
-
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editRua"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/rua"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/hint_nCasa">
-
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editNCasa"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/numero_da_casa"
-                                android:maxLength="5"
-                                android:maxLines="1"
-                                android:inputType="text"
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/hint_cidade_sexo"
-                        android:weightSum="1"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_rua_nCasa"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:paddingTop="5dp">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:background="@drawable/box_border"
-                            android:gravity="center"
-                            >
-
-                            <Spinner
-                                android:id="@+id/editCidadeSpiner"
-                                android:layout_width="match_parent"
-                                app:backgroundTint="#1c966a"
-                                android:popupBackground="#0f4f38"
-                                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                                android:layout_height="40dp" />
-
-                        </LinearLayout>
-
-
-
-
-
-
-                    </LinearLayout>
 
                     <Button
                         android:id="@+id/btnRegistro"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_cidade_sexo"
-                        app:layout_constraintStart_toStartOf="@+id/hint_cidade_sexo"
-                        app:layout_constraintEnd_toEndOf="@+id/hint_cidade_sexo"
+                        app:layout_constraintTop_toBottomOf="@+id/hint_genero"
+                        app:layout_constraintStart_toStartOf="@+id/hint_genero"
+                        app:layout_constraintEnd_toEndOf="@+id/hint_genero"
                         android:text="@string/btn_registar_text"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:background="@drawable/button_background"

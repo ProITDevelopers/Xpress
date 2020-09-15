@@ -76,29 +76,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG_RegisterActivity";
     public static final int REQUEST_IMAGE = 100;
 
     private RelativeLayout register_root;
     private CircleImageView imgUserPhoto;
-    private AppCompatEditText editPrimeiroNome,editUltimoNome,editNomeUtilizador;
+    private AppCompatEditText editPrimeiroNome,editUltimoNome;
     private AppCompatEditText editTelefone,editEmail;
-    private ShowHidePasswordEditText editPass,editConfirmPass;
-    private AppCompatEditText editMunicipio,editBairro,editRua,editNCasa;
-    private Spinner editCidadeSpiner;
+    private ShowHidePasswordEditText editPass;
+
     private RadioGroup radioGroup;
     private RadioButton radioBtnFem,radioBtnMasc;
     private Button btnRegistro;
     private TextView txtCancelar;
 
-    private String nomeUtilizador,primeiroNome,sobreNome,email,telefone,senha,senhaConf;
-    private String valorGeneroItem,valorCidadeItem;
-    private String municipio,bairro,rua,nCasa;
-    private String textlistenerNome="";
-    private String textlistenerSobreNome="";
-    private String textFullUserName="";
+    private String primeiroNome,sobreNome,email,telefone,senha;
+    private String valorGeneroItem;
+
     private Uri selectedImage;
     private String postPath="";
 
@@ -113,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     private Dialog dialogLayoutSuccess;
     private TextView dialog_txtConfirmSucesso;
     private Button dialog_btn_sucesso;
+    private String textlistenerNome, textlistenerSobreNome;
 
 
     @Override
@@ -131,19 +128,15 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         editPrimeiroNome = findViewById(R.id.editPrimeiroNome);
         editUltimoNome = findViewById(R.id.editUltimoNome);
-        editNomeUtilizador = findViewById(R.id.editNomeUtilizador);
+
         editEmail = findViewById(R.id.editEmail);
 
         editPass = findViewById(R.id.editPass);
-        editConfirmPass = findViewById(R.id.editConfirmPass);
+
 
         editTelefone = findViewById(R.id.editTelefone);
 
-        editMunicipio = findViewById(R.id.editMunicipio);
-        editBairro = findViewById(R.id.editBairro);
-        editRua = findViewById(R.id.editRua);
-        editNCasa = findViewById(R.id.editNCasa);
-        editCidadeSpiner = findViewById(R.id.editCidadeSpiner);
+
 
         radioGroup = findViewById(R.id.radioGroup);
         radioBtnFem = findViewById(R.id.radioBtnFem);
@@ -152,12 +145,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         btnRegistro = findViewById(R.id.btnRegistro);
         txtCancelar = findViewById(R.id.txtCancelar);
 
-
-        ArrayAdapter<CharSequence> adapterCidade = ArrayAdapter.createFromResource(this,
-                R.array.cidade, android.R.layout.simple_spinner_item);
-        adapterCidade.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        editCidadeSpiner.setAdapter(adapterCidade);
-        editCidadeSpiner.setOnItemSelectedListener(this);
 
         editPrimeiroNome.addTextChangedListener(new TextWatcher() {
             @Override
@@ -174,8 +161,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 textlistenerNome = textlistenerNome.replaceAll("\\s+","").toLowerCase();
                 if (textlistenerSobreNome==null)
                     textlistenerSobreNome="";
-                textFullUserName = textlistenerNome.concat(textlistenerSobreNome);
-                editNomeUtilizador.setText(textFullUserName);
+//                textFullUserName = textlistenerNome.concat(textlistenerSobreNome);
+//                editNomeUtilizador.setText(textFullUserName);
             }
 
             @Override
@@ -197,8 +184,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 textlistenerSobreNome = textlistenerSobreNome.replaceAll("\\s+","").toLowerCase();
                 if (textlistenerNome==null)
                     textlistenerNome="";
-                textFullUserName = textlistenerNome.concat(textlistenerSobreNome);
-                editNomeUtilizador.setText(textFullUserName);
+//                textFullUserName = textlistenerNome.concat(textlistenerSobreNome);
+//                editNomeUtilizador.setText(textFullUserName);
             }
 
             @Override
@@ -259,6 +246,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 finish();
             }
         });
+
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -342,6 +330,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 launchGalleryIntent();
             }
         });
+
     }
 
     private void launchCameraIntent() {
@@ -427,18 +416,12 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     private boolean verificarCampos() {
 
-        nomeUtilizador = editNomeUtilizador.getText().toString().trim();
         primeiroNome = editPrimeiroNome.getText().toString().trim();
         sobreNome = editUltimoNome.getText().toString().trim();
         email = editEmail.getText().toString().trim();
         telefone = editTelefone.getText().toString().trim();
         senha = editPass.getText().toString().trim();
-        senhaConf = editConfirmPass.getText().toString().trim();
 
-        municipio = editMunicipio.getText().toString().trim();
-        bairro = editBairro.getText().toString().trim();
-        rua = editRua.getText().toString().trim();
-        nCasa = editNCasa.getText().toString().trim();
 
 
         if (primeiroNome.isEmpty()){
@@ -480,35 +463,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
 
 
-        if (nomeUtilizador.isEmpty()){
-            editNomeUtilizador.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Nome de usuário'");
-            return false;
-        }
-
-        if (nomeUtilizador.contains(" ")){
-            editNomeUtilizador.setError(getString(R.string.msg_erro_campo_vazio_sem_espaco));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Nome de usuário', não pode contér espaços");
-            return false;
-        }
-
-//        if (!nomeUtilizador.matches("^[a-zA-Z\\s]+$")){
-//            editNomeUtilizador.setError(getString(R.string.msg_erro_campo_com_letras));
-//            return false;
-//        }
-
-        if (nomeUtilizador.length()<3){
-            editNomeUtilizador.setError(getString(R.string.msg_erro_min_tres_letras));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Nome de usuário', três letras no mínimo");
-            return false;
-        }
-
-        try {
-            nomeUtilizador =  MetodosUsados.removeAcentos(nomeUtilizador);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
 
         if (email.isEmpty()){
             editEmail.setError(getString(R.string.msg_erro_campo_vazio));
@@ -549,57 +503,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             return false;
         }
 
-        if (senhaConf.isEmpty()){
-            editConfirmPass.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Confirmar palavra-passe'");
-            return false;
-        }
-
-        if (!senha.equals(senhaConf)){
-            editConfirmPass.setError(getString(R.string.msg_erro_password_diferente));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Palavras-passe' diferentes");
-            return false;
-        }
-
-
-        if (municipio.isEmpty()){
-            editMunicipio.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Município'");
-            return false;
-        }
-
-        if (municipio.length()<3){
-            editMunicipio.setError(getString(R.string.msg_erro_min_tres_letras));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Município', três letras no mínimo");
-            return false;
-        }
-
-
-        if (bairro.isEmpty()){
-            editBairro.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Bairro'");
-            return false;
-        }
-
-        if (bairro.length()<3){
-            editBairro.setError(getString(R.string.msg_erro_min_tres_letras));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Bairro', três letras no mínimo");
-            return false;
-        }
-
-
-        if (rua.isEmpty()){
-            editRua.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Rua'");
-            return false;
-        }
-
-
-        if (nCasa.isEmpty()){
-            editNCasa.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Nº da casa'");
-            return false;
-        }
 
 
         if (!radioBtnMasc.isChecked() && !radioBtnFem.isChecked()){
@@ -680,31 +583,19 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         MetodosUsados.showLoadingDialog(getString(R.string.msg_register_quase_pronto));
 
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.usuario = nomeUtilizador;
         registerRequest.primeiroNome = primeiroNome;
         registerRequest.ultimoNome = sobreNome;
         registerRequest.email = email;
         registerRequest.contactoMovel = telefone;
         registerRequest.password = senha;
-        registerRequest.provincia = valorCidadeItem;
-        registerRequest.municipio = municipio;
-        registerRequest.bairro = bairro;
-        registerRequest.rua = rua;
-        registerRequest.nCasa = nCasa;
         registerRequest.sexo = String.valueOf(valorGeneroItem.charAt(0));
 
         RequestBody primeiroNome = RequestBody.create(MediaType.parse("text/plain"),registerRequest.primeiroNome);
         RequestBody ultimoNome = RequestBody.create(MediaType.parse("text/plain"), registerRequest.ultimoNome);
-        RequestBody usuario = RequestBody.create(MediaType.parse("text/plain"),registerRequest.usuario);
         RequestBody email = RequestBody.create(MediaType.parse("text/plain"), registerRequest.email);
         RequestBody password = RequestBody.create(MediaType.parse("text/plain"), registerRequest.password);
         RequestBody contactoMovel = RequestBody.create(MediaType.parse("text/plain"), registerRequest.contactoMovel);
         RequestBody sexo = RequestBody.create(MediaType.parse("text/plain"), registerRequest.sexo);
-        RequestBody provincia = RequestBody.create(MediaType.parse("text/plain"), registerRequest.provincia);
-        RequestBody municipio = RequestBody.create(MediaType.parse("text/plain"), registerRequest.municipio);
-        RequestBody bairro = RequestBody.create(MediaType.parse("text/plain"), registerRequest.bairro);
-        RequestBody rua = RequestBody.create(MediaType.parse("text/plain"), registerRequest.rua);
-        RequestBody nCasa = RequestBody.create(MediaType.parse("text/plain"), registerRequest.nCasa);
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -721,12 +612,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
             MultipartBody.Part imagem  = MultipartBody.Part.createFormData("Imagem",filename,requestFile);
 
             call = apiInterface.registrarUsuarioComImg(primeiroNome,ultimoNome,
-                    usuario,email,password,contactoMovel,sexo,
-                    provincia,municipio,bairro,rua,nCasa,imagem);
+                    email,password,contactoMovel,sexo,imagem);
         } else {
             call = apiInterface.registrarUsuarioSemImg(primeiroNome,ultimoNome,
-                    usuario,email,password,contactoMovel,sexo,
-                    provincia,municipio,bairro,rua,nCasa);
+                    email,password,contactoMovel,sexo);
         }
 
         call.enqueue(new Callback<Void>() {
@@ -742,17 +631,13 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
                                     MetodosUsados.hideLoadingDialog();
                                     imgUserPhoto.setImageResource(R.drawable.photo_placeholder);
-                                    editNomeUtilizador.setText("");
                                     editPrimeiroNome.setText("");
                                     editUltimoNome.setText("");
                                     editEmail.setText("");
                                     editTelefone.setText("");
                                     editPass.setText("");
-                                    editConfirmPass.setText("");
-                                    editMunicipio.setText("");
-                                    editBairro.setText("");
-                                    editRua.setText("");
-                                    editNCasa.setText("");
+                                    radioBtnFem.setChecked(false);
+                                    radioBtnMasc.setChecked(false);
 
 
 
@@ -806,19 +691,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.login_register_text_color));
-        if (parent.getId() == R.id.editCidadeSpiner) {
-            valorCidadeItem = parent.getItemAtPosition(position).toString();
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     @Override
     protected void onResume() {

@@ -46,16 +46,10 @@ public interface ApiInterface {
     Call<Void> registrarUsuarioComImg(
             @Part("PrimeiroNome") RequestBody primeiroNome,
             @Part("UltimoNome") RequestBody ultimoNome,
-            @Part("UserName") RequestBody usuario,
             @Part("Email") RequestBody email,
             @Part("Password") RequestBody password,
             @Part("ContactoMovel") RequestBody contactoMovel,
             @Part("Sexo") RequestBody sexo,
-            @Part("Provincia") RequestBody provincia,
-            @Part("Municipio") RequestBody municipio,
-            @Part("Bairro") RequestBody bairro,
-            @Part("Rua") RequestBody rua,
-            @Part("NCasa") RequestBody nCasa,
             @Part MultipartBody.Part imagem);
 
     @Multipart
@@ -63,16 +57,10 @@ public interface ApiInterface {
     Call<Void> registrarUsuarioSemImg(
             @Part("PrimeiroNome") RequestBody primeiroNome,
             @Part("UltimoNome") RequestBody ultimoNome,
-            @Part("UserName") RequestBody usuario,
             @Part("Email") RequestBody email,
             @Part("Password") RequestBody password,
             @Part("ContactoMovel") RequestBody contactoMovel,
-            @Part("Sexo") RequestBody sexo,
-            @Part("Provincia") RequestBody provincia,
-            @Part("Municipio") RequestBody municipio,
-            @Part("Bairro") RequestBody bairro,
-            @Part("Rua") RequestBody rua,
-            @Part("NCasa") RequestBody nCasa
+            @Part("Sexo") RequestBody sexo
     );
 
 

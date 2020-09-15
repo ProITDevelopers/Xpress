@@ -1,10 +1,16 @@
 package ao.co.proitconsulting.xpress.activities.imagePicker;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.activities.RegisterActivity;
+import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+
 import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
@@ -22,6 +28,8 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
@@ -55,6 +63,9 @@ public class ImagePickerActivity extends AppCompatActivity {
     private int ASPECT_RATIO_X = 16, ASPECT_RATIO_Y = 9, bitmapMaxWidth = 1000, bitmapMaxHeight = 1000;
     private int IMAGE_COMPRESSION = 80;
     public static String fileName;
+
+
+
 
     public interface PickerOptionListener {
         void onTakeCameraSelected();
@@ -91,26 +102,59 @@ public class ImagePickerActivity extends AppCompatActivity {
 
 
     public static void showImagePickerOptions(Context context, PickerOptionListener listener) {
-        // setup the alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.lbl_set_profile_photo));
 
-        // add a list
-        String[] animals = {context.getString(R.string.lbl_take_camera_picture), context.getString(R.string.lbl_choose_from_gallery)};
-        builder.setItems(animals, (dialog, which) -> {
-            switch (which) {
-                case 0:
-                    listener.onTakeCameraSelected();
-                    break;
-                case 1:
-                    listener.onChooseGallerySelected();
-                    break;
+        //DIALOG_LAYOUT_ESCOLHER_FOTOGRAFIA
+        Dialog dialogLayoutEscolherFoto = new Dialog(context);
+        dialogLayoutEscolherFoto.setContentView(R.layout.layout_escolher_foto);
+        dialogLayoutEscolherFoto.setCancelable(true);
+        if (dialogLayoutEscolherFoto.getWindow()!=null)
+            dialogLayoutEscolherFoto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        ImageView dialog_ImgBtnCamera = dialogLayoutEscolherFoto.findViewById(R.id.dialog_ImgBtnCamera);
+        ImageView dialog_ImgBtnGaleria = dialogLayoutEscolherFoto.findViewById(R.id.dialog_ImgBtnGaleria);
+
+
+
+        dialog_ImgBtnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onTakeCameraSelected();
+                dialogLayoutEscolherFoto.cancel();
+
             }
         });
 
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        dialog_ImgBtnGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                listener.onChooseGallerySelected();
+                dialogLayoutEscolherFoto.cancel();
+
+            }
+        });
+        dialogLayoutEscolherFoto.show();
+
+//        // setup the alert builder
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setTitle(context.getString(R.string.lbl_set_profile_photo));
+//
+//        // add a list
+//        String[] animals = {context.getString(R.string.lbl_take_camera_picture), context.getString(R.string.lbl_choose_from_gallery)};
+//        builder.setItems(animals, (dialog, which) -> {
+//            switch (which) {
+//                case 0:
+//                    listener.onTakeCameraSelected();
+//                    break;
+//                case 1:
+//                    listener.onChooseGallerySelected();
+//                    break;
+//            }
+//        });
+//
+//        // create and show the alert dialog
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
     }
 
     private void takeCameraImage() {

@@ -109,7 +109,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclewProdutos);
-        gridLayoutManager = new GridLayoutManager(this, 1);
+        gridLayoutManager = new GridLayoutManager(this, 2);
         progressBar = findViewById(R.id.progressBar);
 
 
