@@ -5,41 +5,37 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import ao.co.proitconsulting.xpress.MainActivity;
+import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
+
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.fragmentos.EstabelecimentoFragment;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
+import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
+import ao.co.proitconsulting.xpress.utilityClasses.AddBadgeCartConverter;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class MenuActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
@@ -58,6 +54,11 @@ public class MenuActivity extends AppCompatActivity implements
     private ImageView imgConfirm;
     private TextView txtConfirmTitle,txtConfirmMsg;
     private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
+
+    private Realm realm;
+    private RealmResults<CartItemProdutos> cartItems;
+    private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
+    int cart_count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,27 @@ public class MenuActivity extends AppCompatActivity implements
         txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
         dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
         dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
+
+        realm = Realm.getDefaultInstance();
+        cartItems = realm.where(CartItemProdutos.class).findAllAsync();
+
+        cartRealmChangeListener = cartItems -> {
+
+            if (cartItems != null && cartItems.size() > 0) {
+                setCartInfoBar(cartItems);
+            } else {
+                cart_count = 0;
+                invalidateOptionsMenu();
+            }
+
+            invalidateOptionsMenu();
+        };
+    }
+
+    private void setCartInfoBar(RealmResults<CartItemProdutos> cartItems) {
+
+        cart_count = cartItems.size();
+
     }
 
     private void goToEstabelecimentoFragment(Fragment fragment) {
@@ -251,6 +273,8 @@ public class MenuActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_options; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_options, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_cart);
+        menuItem.setIcon(AddBadgeCartConverter.convertLayoutToImage(MenuActivity.this,cart_count,R.drawable.ic_baseline_shopping_cart_white_24));
         return true;
     }
 
@@ -265,12 +289,11 @@ public class MenuActivity extends AppCompatActivity implements
 //        }
 //
 //
-//        if (id == R.id.action_clear_token) {
-//            MetodosUsados.mostrarMensagem(this,getString(R.string.apagar_token));
-//            AppPrefsSettings.getInstance().deleteToken();
-//            Toast.makeText(this, "Token deleted!", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
+        if (id == R.id.action_cart) {
+            MetodosUsados.mostrarMensagem(this,getString(R.string.carrinho));
+
+            return true;
+        }
 
         if (id == R.id.action_logout) {
             mensagemLogOut();
@@ -287,6 +310,10 @@ public class MenuActivity extends AppCompatActivity implements
         checkNavigationViewSelection();
         UsuarioPerfil usuarioPerfil = AppPrefsSettings.getInstance().getUser();
         carregarDadosOffline(usuarioPerfil);
+
+        if (cartItems != null) {
+            cartItems.addChangeListener(cartRealmChangeListener);
+        }
         super.onResume();
     }
 
@@ -306,6 +333,12 @@ public class MenuActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+        if (cartItems != null) {
+            cartItems.addChangeListener(cartRealmChangeListener);
+        }
+        if (realm != null) {
+            realm.close();
+        }
         dialogLayoutConfirmarProcesso.cancel();
         super.onDestroy();
     }

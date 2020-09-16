@@ -143,5 +143,7 @@
     <string name="nav_partilhar_title">Partilhar</string>
     <string name="email_ou_num_de_telefone">Email /Nº de telefone</string>
     <string name="escolher_fotografia">Escolher fotografia</string>
+    <string name="carrinho">Carrinho</string>
+    <string name="nenhum_estabelecimento_n_encontrado">Nenhum estabelecimento \n encontrado!</string>
 
 </resources>

@@ -25,7 +25,7 @@
     <color name="register_bkg_start_color">#0e4e37</color>
     <color name="register_bkg_center_color">#136548</color>
     <color name="register_bkg_end_color">#0f4f38</color>
-    <color name="side_nav_bar_start_color">#4DB6AC</color>
-    <color name="side_nav_bar_center_color">#009688</color>
-    <color name="side_nav_bar_end_color">#00695C</color>
+    <color name="side_nav_bar_start_color">#1c966a</color>
+    <color name="side_nav_bar_center_color">#136548</color>
+    <color name="side_nav_bar_end_color">#0e4e37</color>
 </resources>

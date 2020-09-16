@@ -14,7 +14,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/coordinatorLayout"
@@ -88,7 +89,7 @@
                                     <TextView
                                         android:id="@+id/txtEstabAddress"
                                         android:text="KFC"
-                                        android:textSize="16sp"
+                                        android:textSize="14sp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:paddingStart="5dp"
@@ -109,7 +110,6 @@
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintStart_toEndOf="@+id/txtEstabNome"
                                         app:layout_constraintEnd_toEndOf="parent"
-
                                         android:clickable="true"
                                         android:focusable="true"
                                         android:foreground="?android:attr/selectableItemBackground"/>

@@ -1,9 +1,12 @@
 package ao.co.proitconsulting.xpress.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,6 +69,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     ImageView header;
 
     int cart_count = 0;
+    int imgCart = R.drawable.ic_baseline_shopping_cart_24;
+
     private Realm realm;
     private RealmResults<CartItemProdutos> cartItems;
     private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
@@ -90,6 +96,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         errorLayout = (RelativeLayout) findViewById(R.id.erroLayout);
         btnTentarDeNovo = (TextView) findViewById(R.id.btn);
 
+
         realm = Realm.getDefaultInstance();
         cartItems = realm.where(CartItemProdutos.class).findAllAsync();
 
@@ -99,6 +106,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         txtEstabAddress = findViewById(R.id.txtEstabAddress);
         imgShopCart = findViewById(R.id.imgShopCart);
 
+
         Picasso.with(this).load(estabelecimento.imagemCapa).placeholder(R.drawable.store_placeholder).into(header);
         txtEstabNome.setText(estabelecimento.nomeEstabelecimento);
         txtEstabAddress.setText(estabelecimento.endereco);
@@ -106,7 +114,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclewProdutos);
-        gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager = new GridLayoutManager(this, 1);
         progressBar = findViewById(R.id.progressBar);
 
 
@@ -188,7 +196,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         cart_count = cartItems.size();
 
 
-        imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_24));
+
+        imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,imgCart));
 
     }
 
@@ -274,9 +283,6 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
     }
-
-
-
 
 
 

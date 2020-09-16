@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_menu_home" android:icon="@drawable/ic_baseline_home_24" android:title="@string/nav_home_title"/>
+        <item android:id="@+id/nav_menu_home"
+            android:icon="@drawable/ic_baseline_home_24"
+            app:iconTint="@color/login_register_text_color"
+            android:title="@string/nav_home_title"/>
 
-        <item android:id="@+id/nav_menu_perfil" android:icon="@drawable/ic_baseline_person_outline_24" android:title="@string/nav_meu_perfil_title"/>
+        <item android:id="@+id/nav_menu_perfil"
+            android:icon="@drawable/ic_baseline_person_outline_24"
+            app:iconTint="@color/login_register_text_color"
+            android:title="@string/nav_meu_perfil_title"/>
 
-        <!--        <item android:id="@+id/nav_menu_favoritos" android:icon="@drawable/ic_favorite_orange_24dp" android:title="Favoritos"/>-->
+        <!--        <item android:id="@+id/nav_menu_favoritos"
+        android:icon="@drawable/ic_favorite_orange_24dp"
+        android:title="Favoritos"/>-->
 
-        <item android:id="@+id/nav_menu_pedidos" android:icon="@drawable/ic_baseline_restaurant_24" android:title="@string/nav_encomendas_title"/>
+        <item android:id="@+id/nav_menu_pedidos"
+            android:icon="@drawable/ic_baseline_restaurant_24"
+            app:iconTint="@color/login_register_text_color"
+            android:title="@string/nav_encomendas_title"/>
 
-        <item android:id="@+id/nav_menu_mapa" android:icon="@drawable/ic_baseline_map_24" android:title="@string/nav_mapa_title"/>
+        <item android:id="@+id/nav_menu_mapa"
+            android:icon="@drawable/ic_baseline_map_24"
+            app:iconTint="@color/login_register_text_color"
+            android:title="@string/nav_mapa_title"/>
 
     </group>
     <item android:title="@string/group_redes_sociais_title">
         <menu>
-            <group android:id="@+id/menu_redes_sociais" android:checkableBehavior="single">
-                <item android:id="@+id/nav_menu_share" android:icon="@drawable/ic_baseline_share_24" android:title="@string/nav_partilhar_title"/>
+            <group android:id="@+id/menu_redes_sociais" android:checkableBehavior="none"
+                >
+                <item android:id="@+id/nav_menu_share"
+                    android:icon="@drawable/ic_baseline_share_24"
+                    app:iconTint="@color/login_register_text_color"
+                    android:title="@string/nav_partilhar_title"/>
 
             </group>
         </menu>

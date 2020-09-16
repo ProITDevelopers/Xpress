@@ -55,6 +55,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
+        <TextView
+            android:id="@+id/txtNotFound"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:textColor="@color/login_register_text_color"
+            android:gravity="center"
+            android:padding="12dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

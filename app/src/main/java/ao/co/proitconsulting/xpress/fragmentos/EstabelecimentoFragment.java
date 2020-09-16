@@ -71,7 +71,7 @@ public class EstabelecimentoFragment extends Fragment {
     String categoriaNome;
 
     Toolbar toolbar;
-    public TextView txtToolbar;
+    private TextView txtNotFound;
 
     SearchView searchView;
 
@@ -121,6 +121,8 @@ public class EstabelecimentoFragment extends Fragment {
 
         if (getActivity()!=null)
             getActivity().setTitle(getString(R.string.txt_estabelecimentos));
+
+        txtNotFound = view.findViewById(R.id.txtNotFound);
 
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
         errorLayout = (RelativeLayout) view.findViewById(R.id.erroLayout);
@@ -213,9 +215,16 @@ public class EstabelecimentoFragment extends Fragment {
                         if (searchView!=null) {
                             for (Estabelecimento estabelecimento:response.body()){
                                 if (estabelecimento.nomeEstabelecimento.toLowerCase().startsWith(searchText.toLowerCase()) ||
-                                        estabelecimento.nomeEstabelecimento.toLowerCase().contains(searchText.toLowerCase())
-                                )
+                                        estabelecimento.nomeEstabelecimento.toLowerCase().contains(searchText.toLowerCase())){
+
+                                    txtNotFound.setVisibility(View.GONE);
                                     estabelecimentoList.add(estabelecimento);
+                                }
+                                else {
+
+                                    txtNotFound.setText(getString(R.string.nenhum_estabelecimento_n_encontrado));
+                                    txtNotFound.setVisibility(View.VISIBLE);
+                                }
                             }
                         } else{
 

@@ -117,7 +117,16 @@ public class LoginTemporarioActivity extends AppCompatActivity {
 
         });
 
-        txtOutraConta.setOnClickListener(v -> mensagemLogOut());
+        txtOutraConta.setOnClickListener(v ->{
+
+            if (usuarioPerfil==null){
+                AppPrefsSettings.getInstance().clearAppPrefs();
+                AppDatabase.clearData();
+                finish();
+            }else{
+                mensagemLogOut();
+            }
+        });
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//

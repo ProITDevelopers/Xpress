@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="6dp"
-            android:src="@drawable/ic_baseline_shopping_cart_24" />
+            android:src="@mipmap/ic_launcher" />
 
     </FrameLayout>
 
@@ -38,11 +38,11 @@
                 android:layout_gravity="center"
                 android:background="@drawable/badge_icon_circle"
                 android:gravity="center"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:text="9"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 />
 
