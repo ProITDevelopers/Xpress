@@ -36,6 +36,7 @@ import ao.co.proitconsulting.xpress.MainActivity;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.fragmentos.EstabelecimentoFragment;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -171,8 +172,8 @@ public class MenuActivity extends AppCompatActivity implements
 
     private void logOut() {
 
+        AppDatabase.clearData();
         AppPrefsSettings.getInstance().clearAppPrefs();
-
         Intent intent = new Intent(this, SplashScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

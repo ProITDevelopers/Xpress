@@ -9,15 +9,22 @@ public class Produtos extends RealmObject {
 
     @PrimaryKey
     public int idProduto;
+
     public String categoriaProduto;
     public String descricaoProdutoC;
     public String descricaoProduto;
+
     @SerializedName("estabelecimento")
     public String estabelecimento;
+
     @SerializedName("imagemProduto")
     public String imagemProduto;
+
     public float precoUnid;
+
+    @SerializedName("emStock")
     public int emStock;
+
     public int tempo_de_preparacao;
 
 

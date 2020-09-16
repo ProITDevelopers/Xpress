@@ -38,6 +38,7 @@ import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
@@ -366,9 +367,8 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     }
 
     private void logOut() {
-
+        AppDatabase.clearData();
         AppPrefsSettings.getInstance().clearAppPrefs();
-
         Intent intent = new Intent(LoginTemporarioActivity.this, SplashScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

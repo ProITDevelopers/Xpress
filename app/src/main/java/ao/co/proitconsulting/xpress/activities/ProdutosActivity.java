@@ -1,26 +1,22 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.annotations.SerializedName;
 import com.squareup.picasso.Picasso;
@@ -38,6 +34,7 @@ import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
+import ao.co.proitconsulting.xpress.utilityClasses.AddBadgeCartConverter;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -109,7 +106,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclewProdutos);
-        gridLayoutManager = new GridLayoutManager(this, 1);
+        gridLayoutManager = new GridLayoutManager(this, 2);
         progressBar = findViewById(R.id.progressBar);
 
 
@@ -128,6 +125,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             } else {
 //                toggleCartBar(false);
                 cart_count = 0;
+                imgShopCart.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
 
             }
 
@@ -190,6 +188,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         cart_count = cartItems.size();
 
 
+        imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_24));
 
     }
 

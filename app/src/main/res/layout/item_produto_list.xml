@@ -50,12 +50,26 @@
                 android:id="@+id/titleProdList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:text="Image 1"
                 android:textColor="@color/login_icon_text_color"
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:maxLines="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:id="@+id/priceProdList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="20 likes · 33 comments"
+                android:layout_marginBottom="2dp"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:textColor="@color/login_icon_text_color"
+                android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginRight="12dp"
@@ -74,19 +88,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_marginEnd="12dp"/>
 
-            <TextView
-                android:id="@+id/priceProdList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="20 likes · 33 comments"
-                android:textSize="14sp"
-                android:maxLines="1"
-                android:textColor="@color/login_icon_text_color"
-                android:textStyle="bold"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp"/>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -99,8 +101,8 @@
 
                 <ImageView
                     android:id="@+id/btn_addCart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:src="@drawable/ic_baseline_add_shopping_cart_24"
                     android:clickable="true"
                     android:focusable="true"
@@ -118,8 +120,8 @@
 
                     <ImageView
                         android:id="@+id/ic_remove"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
                         android:src="@drawable/ic_baseline_remove_circle_outline_24"
                         android:clickable="true"
                         android:focusable="true"
@@ -143,8 +145,8 @@
 
                     <ImageView
                         android:id="@+id/ic_add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
                         android:src="@drawable/ic_baseline_add_circle_outline_24"
                         android:clickable="true"
                         android:focusable="true"
