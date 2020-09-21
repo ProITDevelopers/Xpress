@@ -1,13 +1,17 @@
 package ao.co.proitconsulting.xpress.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -35,6 +39,7 @@ import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
+import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
@@ -83,6 +88,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     private Estabelecimento estabelecimento;
     private ImageView imgShopCart;
 
+    //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+    private Dialog dialogLayoutConfirmarProcesso;
+    private ImageView imgConfirm;
+    private TextView txtConfirmTitle,txtConfirmMsg;
+    private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +104,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         setContentView(R.layout.activity_produtos);
 
         coordinatorLayout = findViewById(R.id.coordinatorLayout);
-        errorLayout = (RelativeLayout) findViewById(R.id.erroLayout);
-        btnTentarDeNovo = (TextView) findViewById(R.id.btn);
+        errorLayout = findViewById(R.id.erroLayout);
+        btnTentarDeNovo = findViewById(R.id.btn);
 
 
         realm = Realm.getDefaultInstance();
@@ -142,6 +153,21 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
         };
 
+
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+        dialogLayoutConfirmarProcesso = new Dialog(this);
+        dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
+        dialogLayoutConfirmarProcesso.setCancelable(true);
+        if (dialogLayoutConfirmarProcesso.getWindow()!=null)
+            dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        imgConfirm = dialogLayoutConfirmarProcesso.findViewById(R.id.imgConfirm);
+        txtConfirmTitle = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmTitle);
+        txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
+        dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
+        dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
 
 
     }
@@ -229,10 +255,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             @Override
             public void onResponse(@NonNull Call<List<Produtos>> call, @NonNull Response<List<Produtos>> response) {
 
-                if (!response.isSuccessful()) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(ProdutosActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
-                } else {
+                if (response.isSuccessful()) {
 
                     if (response.body()!=null){
 
@@ -245,6 +268,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                         Toast.makeText(ProdutosActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
                     }
                     progressBar.setVisibility(View.GONE);
+                } else {
+
+                    progressBar.setVisibility(View.GONE);
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
                 }
             }
 
@@ -260,6 +289,31 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 }
             }
         });
+    }
+
+    private void mensagemTokenExpirado() {
+        imgConfirm.setImageResource(R.drawable.xpress_logo);
+        txtConfirmTitle.setText(getString(R.string.a_sessao_expirou));
+        txtConfirmMsg.setText(getString(R.string.inicie_outra_vez_a_sessao));
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogLayoutConfirmarProcesso.cancel();
+                logOutTemp();
+            }
+        });
+
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+
+            }
+        });
+
+        dialogLayoutConfirmarProcesso.show();
     }
 
     private void setProdutosAdapters(List<Produtos> produtosList) {
@@ -284,6 +338,14 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
     }
 
+    private void logOutTemp() {
+
+        AppPrefsSettings.getInstance().deleteToken();
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
 
 
 
@@ -291,9 +353,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     @Override
     protected void onPause() {
         super.onPause();
-        if (cartItems != null) {
-//             cartItems.removeChangeListener(cartRealmChangeListener);
-        }
+
     }
 
     @Override
@@ -316,5 +376,6 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             realm.close();
         }
         progressBar.setVisibility(View.GONE);
+        dialogLayoutConfirmarProcesso.cancel();
     }
 }

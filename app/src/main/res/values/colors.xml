@@ -28,4 +28,8 @@
     <color name="side_nav_bar_start_color">#1c966a</color>
     <color name="side_nav_bar_center_color">#136548</color>
     <color name="side_nav_bar_end_color">#0e4e37</color>
+
+    <color name="swipe_refresh_green_light_color">#1c966a</color>
+    <color name="swipe_refresh_grey_color">#80000000</color>
+    <color name="swipe_refresh_green_color">#0e4e37</color>
 </resources>

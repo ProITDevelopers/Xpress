@@ -135,6 +135,7 @@
     <string name="go_to_settings">VÁ PARA AS CONFIGURAÇÕES</string>
     <string name="pesquisar">pesquisar</string>
     <string name="txt_estabelecimentos">Estabelecimentos</string>
+    <string name="txt_xpress">Xpress</string>
     <string name="nav_home_title">Inicio</string>
     <string name="nav_meu_perfil_title">Meu perfil</string>
     <string name="nav_encomendas_title">Encomendas</string>
@@ -145,5 +146,9 @@
     <string name="escolher_fotografia">Escolher fotografia</string>
     <string name="carrinho">Carrinho</string>
     <string name="nenhum_estabelecimento_n_encontrado">Nenhum estabelecimento \n encontrado!</string>
+    <string name="a_sessao_expirou">A sua sessão expirou!</string>
+    <string name="inicie_outra_vez_a_sessao">Inicie outra vez a sessão.</string>
+    <string name="minha_localizacao">Minha localização</string>
+    <string name="txt_deseja_usar_esse_endereco">Deseja usar este endereço?</string>
 
 </resources>

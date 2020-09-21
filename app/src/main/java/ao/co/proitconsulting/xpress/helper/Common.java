@@ -1,7 +1,10 @@
 package ao.co.proitconsulting.xpress.helper;
 
+import android.location.Location;
+
 public class Common {
 
+    public static Location mLastLocation;
     public static final String SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id=";
     public static String bearerApi = "Bearer ";
 

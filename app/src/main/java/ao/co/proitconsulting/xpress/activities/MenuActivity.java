@@ -1,9 +1,12 @@
 package ao.co.proitconsulting.xpress.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,7 +28,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.api.ApiClient;
+import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.fragmentos.EstabelecimentoFragment;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
@@ -36,6 +44,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +57,7 @@ public class MenuActivity extends AppCompatActivity implements
     private Toolbar toolbar;
     private NavigationView navigationView;
 
+    private UsuarioPerfil usuarioPerfil;
     private CircleImageView imgUserPhoto;
     private TextView txtUserNameInitial, txtUserName, txtUserEmail;
 
@@ -83,6 +95,9 @@ public class MenuActivity extends AppCompatActivity implements
         txtUserNameInitial = view.findViewById(R.id.txtUserNameInitial);
         txtUserName = view.findViewById(R.id.txtUserName);
         txtUserEmail = view.findViewById(R.id.txtUserEmail);
+
+        usuarioPerfil = AppPrefsSettings.getInstance().getUser();
+        carregarDadosOffline(usuarioPerfil);
 
 
 
@@ -128,7 +143,7 @@ public class MenuActivity extends AppCompatActivity implements
 
     private void goToEstabelecimentoFragment(Fragment fragment) {
         if (getSupportActionBar()!=null)
-            toolbar.setTitle(getString(R.string.txt_estabelecimentos));
+            toolbar.setTitle(getString(R.string.txt_xpress));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -202,10 +217,101 @@ public class MenuActivity extends AppCompatActivity implements
         finish();
     }
 
+    private void verificaoPerfil() {
+        ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conMgr!=null) {
+            NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+            if (netInfo != null){
+                carregarMeuPerfil();
+            }
+        }
+    }
+
+    private void carregarMeuPerfil() {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<UsuarioPerfil>> usuarioCall = apiInterface.getMeuPerfil();
+        usuarioCall.enqueue(new Callback<List<UsuarioPerfil>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Response<List<UsuarioPerfil>> response) {
+
+                if (response.isSuccessful()) {
+                    if (response.body()!=null){
+                        usuarioPerfil = response.body().get(0);
+
+                        AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
+
+                        carregarDadosOffline(usuarioPerfil);
+
+                    }
+
+                } else {
+
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
+
+                }
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
+
+                if (!MetodosUsados.conexaoInternetTrafego(MenuActivity.this,TAG)){
+                    MetodosUsados.mostrarMensagem(MenuActivity.this,R.string.msg_erro_internet);
+                }else  if ("timeout".equals(t.getMessage())) {
+                    MetodosUsados.mostrarMensagem(MenuActivity.this,R.string.msg_erro_internet_timeout);
+                }else {
+                    MetodosUsados.mostrarMensagem(MenuActivity.this,R.string.msg_erro);
+                }
+
+
+            }
+        });
+    }
+
+    private void mensagemTokenExpirado() {
+        imgConfirm.setImageResource(R.drawable.xpress_logo);
+        txtConfirmTitle.setText(getString(R.string.a_sessao_expirou));
+        txtConfirmMsg.setText(getString(R.string.inicie_outra_vez_a_sessao));
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogLayoutConfirmarProcesso.cancel();
+                logOutTemp();
+            }
+        });
+
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+
+            }
+        });
+
+        dialogLayoutConfirmarProcesso.show();
+    }
+
+    private void logOutTemp() {
+
+        AppPrefsSettings.getInstance().deleteToken();
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -246,7 +352,8 @@ public class MenuActivity extends AppCompatActivity implements
         }
 
         else if (id == R.id.nav_menu_mapa) {
-            MetodosUsados.mostrarMensagem(this,"nav_menu_mapa");
+            Intent intent = new Intent(this,MapaActivity.class);
+            startActivity(intent);
         }
 
 //        else if (id == R.id.nav_menu_favoritos) {
@@ -261,7 +368,7 @@ public class MenuActivity extends AppCompatActivity implements
         }
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -308,19 +415,18 @@ public class MenuActivity extends AppCompatActivity implements
     protected void onResume() {
 
         checkNavigationViewSelection();
-        UsuarioPerfil usuarioPerfil = AppPrefsSettings.getInstance().getUser();
-        carregarDadosOffline(usuarioPerfil);
 
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
         }
+        verificaoPerfil();
         super.onResume();
     }
 
     private void checkNavigationViewSelection() {
         if (getSupportActionBar()!=null){
 
-            if (toolbar.getTitle().equals(getString(R.string.txt_estabelecimentos))){
+            if (toolbar.getTitle().equals(getString(R.string.txt_xpress))){
                 navigationView.setCheckedItem(R.id.nav_home);
             }
 

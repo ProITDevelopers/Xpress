@@ -95,9 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         imgAppLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, LoginTemporarioActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                MetodosUsados.mostrarMensagem(LoginActivity.this,getString(R.string.xpress_co_ao));
             }
         });
 

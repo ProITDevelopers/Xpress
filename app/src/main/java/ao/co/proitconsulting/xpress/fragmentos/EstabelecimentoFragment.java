@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,7 @@ public class EstabelecimentoFragment extends Fragment {
     private TextView txtNotFound;
 
     SearchView searchView;
+    private SwipeRefreshLayout swipeRefreshEstab;
 
 
     public EstabelecimentoFragment() {
@@ -120,23 +122,23 @@ public class EstabelecimentoFragment extends Fragment {
         view =  inflater.inflate(R.layout.fragment_estabelecimento, container, false);
 
         if (getActivity()!=null)
-            getActivity().setTitle(getString(R.string.txt_estabelecimentos));
+            getActivity().setTitle(getString(R.string.txt_xpress));
 
         txtNotFound = view.findViewById(R.id.txtNotFound);
 
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
-        errorLayout = (RelativeLayout) view.findViewById(R.id.erroLayout);
-        btnTentarDeNovo = (TextView) view.findViewById(R.id.btn);
+        errorLayout = view.findViewById(R.id.erroLayout);
+        btnTentarDeNovo = view.findViewById(R.id.btn);
 
-        searchView = (SearchView) view.findViewById(R.id.search_bar);
+        searchView = view.findViewById(R.id.search_bar);
         searchView.setQueryHint(getString(R.string.pesquisar));
 //        searchView.onActionViewExpanded();
         searchView.setIconifiedByDefault(true);
 
 
         gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEstab);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        recyclerView = view.findViewById(R.id.recyclerViewEstab);
+        progressBar = view.findViewById(R.id.progressBar);
 
 
         if (searchView==null) {
@@ -160,6 +162,9 @@ public class EstabelecimentoFragment extends Fragment {
             }
         });
 
+        swipeRefreshEstab = view.findViewById(R.id.swipeRefreshEstab);
+        swipeRefreshEstab.setColorSchemeResources(R.color.swipe_refresh_green_light_color,
+                R.color.swipe_refresh_grey_color,R.color.swipe_refresh_green_color);
 
         return view;
     }
@@ -171,6 +176,7 @@ public class EstabelecimentoFragment extends Fragment {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
+                    swipeRefreshEstab.setRefreshing(false);
                     mostarMsnErro();
                 } else {
                     carregarListaEstabelicimentos(searchText);
@@ -208,8 +214,10 @@ public class EstabelecimentoFragment extends Fragment {
             public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
 
                 if (response.isSuccessful()) {
+                    swipeRefreshEstab.setRefreshing(false);
 
                     if (response.body()!=null){
+
 
                         estabelecimentoList.clear();
                         if (searchView!=null) {
@@ -238,7 +246,7 @@ public class EstabelecimentoFragment extends Fragment {
                     }
 
                 } else {
-
+                    swipeRefreshEstab.setRefreshing(false);
                     Toast.makeText(getContext(), ""+response.message(), Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
@@ -286,4 +294,15 @@ public class EstabelecimentoFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        //handling swipe refresh
+        swipeRefreshEstab.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                verifConecxaoEstabelecimentos("");
+            }
+        });
+        super.onResume();
+    }
 }

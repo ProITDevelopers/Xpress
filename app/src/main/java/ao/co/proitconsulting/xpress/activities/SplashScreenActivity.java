@@ -27,7 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void delaySplashScreen() {
 //        mAuth = FirebaseAuth.getInstance();
 
-        Completable.timer(3, TimeUnit.SECONDS,
+        Completable.timer(2, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
                 .subscribe(new Action() {
                     @Override
