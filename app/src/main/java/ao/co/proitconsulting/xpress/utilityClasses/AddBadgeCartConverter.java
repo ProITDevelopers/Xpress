@@ -22,8 +22,8 @@ public class AddBadgeCartConverter {
             View counterTextPanel = view.findViewById(R.id.counterValuePanel);
             counterTextPanel.setVisibility(View.GONE);
         } else {
-            TextView textView = (TextView) view.findViewById(R.id.count);
-            textView.setText("" + count);
+            TextView textView = view.findViewById(R.id.count);
+            textView.setText(String.valueOf(count));
         }
 
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),

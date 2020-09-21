@@ -1,11 +1,9 @@
 package ao.co.proitconsulting.xpress.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +20,6 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.RealmResults;
 
 import static ao.co.proitconsulting.xpress.helper.Common.SPAN_COUNT_ONE;
@@ -153,26 +150,26 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
         public ItemViewHolder(View itemView, int viewType) {
             super(itemView);
             if (viewType == VIEW_TYPE_LIST) {
-                thumbnail = (ImageView) itemView.findViewById(R.id.imgProdList);
-                name = (TextView) itemView.findViewById(R.id.titleProdList);
-                descricao = (TextView) itemView.findViewById(R.id.descProdList);
-                price = (TextView) itemView.findViewById(R.id.priceProdList);
-                btn_addCart = (ImageView) itemView.findViewById(R.id.btn_addCart);
+                thumbnail = itemView.findViewById(R.id.imgProdList);
+                name =  itemView.findViewById(R.id.titleProdList);
+                descricao =  itemView.findViewById(R.id.descProdList);
+                price =  itemView.findViewById(R.id.priceProdList);
+                btn_addCart =  itemView.findViewById(R.id.btn_addCart);
 
-                ic_remove = (ImageView) itemView.findViewById(R.id.ic_remove);
-                product_count = (TextView) itemView.findViewById(R.id.product_count);
-                ic_add = (ImageView) itemView.findViewById(R.id.ic_add);
+                ic_remove =  itemView.findViewById(R.id.ic_remove);
+                product_count =  itemView.findViewById(R.id.product_count);
+                ic_add =  itemView.findViewById(R.id.ic_add);
                 linearAddRemove = itemView.findViewById(R.id.linearAddRemove);
 
             } else {
-                thumbnail = (ImageView) itemView.findViewById(R.id.imgProdGrid);
-                name = (TextView) itemView.findViewById(R.id.titleProdGrid);
-                price = (TextView) itemView.findViewById(R.id.priceProdGrid);
-                btn_addCart = (ImageView) itemView.findViewById(R.id.btn_addCart);
+                thumbnail =  itemView.findViewById(R.id.imgProdGrid);
+                name = itemView.findViewById(R.id.titleProdGrid);
+                price =  itemView.findViewById(R.id.priceProdGrid);
+                btn_addCart = itemView.findViewById(R.id.btn_addCart);
 
-                ic_remove = (ImageView) itemView.findViewById(R.id.ic_remove);
-                product_count = (TextView) itemView.findViewById(R.id.product_count);
-                ic_add = (ImageView) itemView.findViewById(R.id.ic_add);
+                ic_remove =  itemView.findViewById(R.id.ic_remove);
+                product_count =  itemView.findViewById(R.id.product_count);
+                ic_add =  itemView.findViewById(R.id.ic_add);
 
                 linearAddRemove = itemView.findViewById(R.id.linearAddRemove);
             }

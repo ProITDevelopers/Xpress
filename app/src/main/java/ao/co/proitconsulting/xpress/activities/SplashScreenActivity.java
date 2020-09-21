@@ -1,15 +1,13 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.concurrent.TimeUnit;
 
-import ao.co.proitconsulting.xpress.MainActivity;
-import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

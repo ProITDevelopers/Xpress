@@ -42,7 +42,7 @@
         <activity
             android:name=".activities.MapaActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/MapaTheme">
         </activity>
 
         <activity
@@ -81,9 +81,8 @@
             android:name=".activities.LoginTemporarioActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" /> <!-- cache directory file provider paths -->
+
+        <!-- cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

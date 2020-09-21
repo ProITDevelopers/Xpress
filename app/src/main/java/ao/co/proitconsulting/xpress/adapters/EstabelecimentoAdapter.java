@@ -17,7 +17,6 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static ao.co.proitconsulting.xpress.helper.Common.SPAN_COUNT_ONE;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_GRID;
@@ -102,12 +101,12 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
         ItemViewHolder(View itemView, int viewType) {
             super(itemView);
             if (viewType == VIEW_TYPE_LIST) {
-                iv = (ImageView) itemView.findViewById(R.id.imgList);
-                title = (TextView) itemView.findViewById(R.id.titleList);
-                info = (TextView) itemView.findViewById(R.id.descInfoList);
+                iv = itemView.findViewById(R.id.imgList);
+                title =  itemView.findViewById(R.id.titleList);
+                info = itemView.findViewById(R.id.descInfoList);
             } else {
-                iv = (ImageView) itemView.findViewById(R.id.imgGrid);
-                title = (TextView) itemView.findViewById(R.id.titleGrid);
+                iv =  itemView.findViewById(R.id.imgGrid);
+                title =  itemView.findViewById(R.id.titleGrid);
             }
 
             itemView.setOnClickListener(this);

@@ -3,8 +3,6 @@ package ao.co.proitconsulting.xpress.localDB;
 import android.content.Context;
 import android.widget.Toast;
 
-
-
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;

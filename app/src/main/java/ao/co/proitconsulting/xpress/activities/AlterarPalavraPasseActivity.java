@@ -1,11 +1,6 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,9 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
@@ -38,7 +35,6 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
 
     private static final String TAG = "AlterarSenhaActivity";
 
-    private ImageView imgBackground;
 
     //DIALOG_LAYOUT_ALTERAR_PASS_NUM_TELEFONE
     private Dialog dialogLayoutEnviarNumTelefone;
@@ -82,8 +78,6 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
     }
 
     private void initViews() {
-
-        imgBackground = findViewById(R.id.imgBackground);
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//

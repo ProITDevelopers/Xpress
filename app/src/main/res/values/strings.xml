@@ -113,9 +113,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Definições</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+
 
 
     <string name="apagar_token">Apagar token</string>
@@ -136,7 +134,7 @@
     <string name="pesquisar">pesquisar</string>
     <string name="txt_estabelecimentos">Estabelecimentos</string>
     <string name="txt_xpress">Xpress</string>
-    <string name="nav_home_title">Inicio</string>
+    <string name="nav_home_title">Início</string>
     <string name="nav_meu_perfil_title">Meu perfil</string>
     <string name="nav_encomendas_title">Encomendas</string>
     <string name="nav_mapa_title">Mapa</string>
@@ -150,5 +148,6 @@
     <string name="inicie_outra_vez_a_sessao">Inicie outra vez a sessão.</string>
     <string name="minha_localizacao">Minha localização</string>
     <string name="txt_deseja_usar_esse_endereco">Deseja usar este endereço?</string>
+    <string name="one">1</string>
 
 </resources>

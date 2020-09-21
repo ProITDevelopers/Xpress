@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
-
 import com.squareup.picasso.Picasso;
 
 import ao.co.proitconsulting.xpress.R;

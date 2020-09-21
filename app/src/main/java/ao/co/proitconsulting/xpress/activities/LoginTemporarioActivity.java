@@ -1,9 +1,5 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,17 +15,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.List;
 
-import ao.co.proitconsulting.xpress.MainActivity;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;

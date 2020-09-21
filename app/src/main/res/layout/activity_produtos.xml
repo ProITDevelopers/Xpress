@@ -74,7 +74,7 @@
 
                                     <TextView
                                         android:id="@+id/txtEstabNome"
-                                        android:text="KFC"
+
                                         android:textColor="@color/login_icon_text_color"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
@@ -88,12 +88,13 @@
 
                                     <TextView
                                         android:id="@+id/txtEstabAddress"
-                                        android:text="KFC"
                                         android:textSize="14sp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:paddingStart="5dp"
                                         android:paddingLeft="5dp"
+                                        android:paddingRight="5dp"
+                                        android:paddingEnd="5dp"
                                         android:lines="2"
 
                                         app:layout_constraintTop_toBottomOf="@+id/txtEstabNome"

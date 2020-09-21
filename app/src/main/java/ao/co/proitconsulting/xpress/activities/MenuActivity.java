@@ -336,7 +336,7 @@ public class MenuActivity extends AppCompatActivity implements
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_menu_home) {
             MetodosUsados.mostrarMensagem(this,"nav_home");
 
         }
@@ -427,14 +427,14 @@ public class MenuActivity extends AppCompatActivity implements
         if (getSupportActionBar()!=null){
 
             if (toolbar.getTitle().equals(getString(R.string.txt_xpress))){
-                navigationView.setCheckedItem(R.id.nav_home);
+                navigationView.setCheckedItem(R.id.nav_menu_home);
             }
 
         }
         navigationView.getMenu().getItem(1).setCheckable(false);
         navigationView.getMenu().getItem(2).setCheckable(false);
         navigationView.getMenu().getItem(3).setCheckable(false);
-        navigationView.getMenu().getItem(4).setCheckable(false);
+
     }
 
     @Override

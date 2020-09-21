@@ -1,36 +1,25 @@
 package ao.co.proitconsulting.xpress.activities.imagePicker;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.RegisterActivity;
-import ao.co.proitconsulting.xpress.helper.MetodosUsados;
-
-import androidx.core.content.ContextCompat;
-
-import android.app.AlertDialog;
-import android.os.Bundle;
-
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -41,6 +30,8 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.util.List;
+
+import ao.co.proitconsulting.xpress.R;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 

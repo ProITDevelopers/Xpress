@@ -1,17 +1,10 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -23,23 +16,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.List;
 
-import ao.co.proitconsulting.xpress.MainActivity;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.api.ErrorResponce;
-import ao.co.proitconsulting.xpress.api.ErrorUtils;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
