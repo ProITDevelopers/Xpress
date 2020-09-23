@@ -96,8 +96,7 @@ public class MenuActivity extends AppCompatActivity implements
         txtUserName = view.findViewById(R.id.txtUserName);
         txtUserEmail = view.findViewById(R.id.txtUserEmail);
 
-        usuarioPerfil = AppPrefsSettings.getInstance().getUser();
-        carregarDadosOffline(usuarioPerfil);
+
 
 
 
@@ -341,7 +340,9 @@ public class MenuActivity extends AppCompatActivity implements
 
         }
         else if (id == R.id.nav_menu_perfil) {
-            MetodosUsados.mostrarMensagem(this,"nav_menu_perfil");
+
+            Intent intent = new Intent(this,PerfilActivity.class);
+            startActivity(intent);
 
         }
 
@@ -397,7 +398,8 @@ public class MenuActivity extends AppCompatActivity implements
 //
 //
         if (id == R.id.action_cart) {
-            MetodosUsados.mostrarMensagem(this,getString(R.string.carrinho));
+            Intent intent = new Intent(this,ShoppingCartActivity.class);
+            startActivity(intent);
 
             return true;
         }
@@ -414,11 +416,14 @@ public class MenuActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
 
-        checkNavigationViewSelection();
-
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
         }
+
+        usuarioPerfil = AppPrefsSettings.getInstance().getUser();
+        carregarDadosOffline(usuarioPerfil);
+
+        checkNavigationViewSelection();
         verificaoPerfil();
         super.onResume();
     }

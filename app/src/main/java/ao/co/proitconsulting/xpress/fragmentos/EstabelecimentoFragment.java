@@ -57,20 +57,16 @@ public class EstabelecimentoFragment extends Fragment {
 
 
     private RecyclerView recyclerView;
-    private EstabelecimentoAdapter estabelecimentoAdapter;
     private GridLayoutManager gridLayoutManager;
 
     private ConstraintLayout coordinatorLayout;
     private RelativeLayout errorLayout;
     private TextView btnTentarDeNovo;
 
-    int idTipoEstabelecimento;
-    String categoriaNome;
 
-    Toolbar toolbar;
     private TextView txtNotFound;
 
-    SearchView searchView;
+    private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshEstab;
 
 
@@ -84,7 +80,7 @@ public class EstabelecimentoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment CategoriaFragment.
+     * @return A new instance of fragment EstabelecimentoFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static EstabelecimentoFragment newInstance(String param1, String param2) {
@@ -269,7 +265,7 @@ public class EstabelecimentoFragment extends Fragment {
     private void setAdapters(List<Estabelecimento> estabelecimentoList) {
 
         if (estabelecimentoList.size()>0){
-            estabelecimentoAdapter = new EstabelecimentoAdapter(getContext(), estabelecimentoList, gridLayoutManager);
+            EstabelecimentoAdapter estabelecimentoAdapter = new EstabelecimentoAdapter(getContext(), estabelecimentoList, gridLayoutManager);
             recyclerView.setAdapter(estabelecimentoAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -277,7 +273,7 @@ public class EstabelecimentoFragment extends Fragment {
                 @Override
                 public void onItemClickListener(int position) {
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
-                    MetodosUsados.mostrarMensagem(getContext(),estabelecimento.nomeEstabelecimento);
+
                     Intent intent = new Intent(getContext(), ProdutosActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("estabelecimento",estabelecimento);

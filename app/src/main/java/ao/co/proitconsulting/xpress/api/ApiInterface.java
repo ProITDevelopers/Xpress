@@ -9,6 +9,7 @@ import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
 import ao.co.proitconsulting.xpress.modelos.ReporSenha;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
+import ao.co.proitconsulting.xpress.modelos.UsuarioPerfilRequest;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -97,7 +98,7 @@ public interface ApiInterface {
 
 
     @PUT("/UpdateDadosPessoaisCliente")
-    Call<Void> actualizarPerfil(@Body UsuarioPerfil usuarioPerfil);
+    Call<ResponseBody> actualizarPerfil(@Body UsuarioPerfilRequest usuarioPerfilRequest);
 
     @Multipart
     @POST("/AlterarFotoPerfilCliente")

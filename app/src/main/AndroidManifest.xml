@@ -25,26 +25,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".activities.EnviarPedidoActivity"
+            android:screenOrientation="portrait"></activity>
         <!-- FOTO_CROP_ACTIVITY -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activities.CheckOutActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.ShoppingCartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.EditarPerfilActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.PerfilActivity"
+            android:label="@string/title_activity_perfil"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
         <activity
             android:name=".activities.MapaActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/MapaTheme">
-        </activity>
-
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.ProdutosActivity"
             android:screenOrientation="portrait"
@@ -80,9 +92,7 @@
         <activity
             android:name=".activities.LoginTemporarioActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <!-- cache directory file provider paths -->
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -64,10 +64,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     private GridLayoutManager gridLayoutManager;
     private ProgressBar progressBar;
 
-    @SerializedName("estabelecimento")
-    private String nomeEstabelecimento;
 
-    String imagemCapa;
     ImageView header;
 
     int cart_count = 0;
@@ -113,6 +110,15 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         txtEstabNome = findViewById(R.id.txtEstabNome);
         txtEstabAddress = findViewById(R.id.txtEstabAddress);
         imgShopCart = findViewById(R.id.imgShopCart);
+
+        imgShopCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProdutosActivity.this,ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
 
         Picasso.with(this).load(estabelecimento.imagemCapa).placeholder(R.drawable.store_placeholder).into(header);

@@ -55,10 +55,9 @@ public class UsuarioPerfil implements Serializable {
     public UsuarioPerfil() {
     }
 
-    public UsuarioPerfil(String primeiroNome, String ultimoNome, String contactoMovel, String contactoAlternativo, String provincia, String municipio, String bairro, String rua, String nCasa, String sexo) {
+    public UsuarioPerfil(String primeiroNome, String ultimoNome,String contactoAlternativo, String provincia, String municipio, String bairro, String rua, String nCasa, String sexo) {
         this.primeiroNome = primeiroNome;
         this.ultimoNome = ultimoNome;
-        this.contactoMovel = contactoMovel;
         this.contactoAlternativo = contactoAlternativo;
         this.provincia = provincia;
         this.municipio = municipio;
@@ -68,10 +67,5 @@ public class UsuarioPerfil implements Serializable {
         this.sexo = sexo;
     }
 
-    public UsuarioPerfil(String primeiroNome, String ultimoNome, String email, String imagem) {
-        this.primeiroNome = primeiroNome;
-        this.ultimoNome = ultimoNome;
-        this.email = email;
-        this.imagem = imagem;
-    }
+
 }

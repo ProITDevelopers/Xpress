@@ -13,6 +13,7 @@
     <string name="primeiro_nome">Primeiro nome</string>
     <string name="sobrenome">Sobrenome</string>
     <string name="numero_telefone">Nº de telefone</string>
+    <string name="telefone_alternativo">Nº alternativo</string>
     <string name="confirmar_palavra_passe">Confirmar palavra-passe</string>
     <string name="municipio">Município</string>
     <string name="bairro">Bairro</string>
@@ -24,6 +25,7 @@
     <string name="entrar_com_outra_conta">Entrar com outra conta</string>
     <string name="alterar_palavra_passe">Alterar palavra-passe</string>
     <string name="alterar_palavra_passe_telef">Insira o seu nº de telefone para alterar a sua palavra-passe.</string>
+    <string name="hit_enviar_telef">Insira o nº de telefone e o endereço para fazer o seu pedido</string>
     <string name="alterar_palavra_passe_confirmcode_text">Insira o seu código de confirmação</string>
     <string name="alterar_palavra_passe_codedenied_text">Não recebeu o código?</string>
     <string name="txtTentarNovamente">Tentar outra vez</string>
@@ -114,8 +116,6 @@
     <string name="action_settings">Definições</string>
 
 
-
-
     <string name="apagar_token">Apagar token</string>
     <string name="xpress.co.ao">xpress.co.ao</string>
     <string name="genero_sexo">Sexo:</string>
@@ -127,6 +127,9 @@
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
 
     <string name="price_with_currency">%.2f</string>
+    <string name="lbl_item_price_quantity">%s x %d</string>
+    <string name="cart_info_bar_items">%d Items</string>
+    <string name="cart_info_bar_total">Total: %.2f</string>
 
     <string name="dialog_permission_title">Conceder permissões</string>
     <string name="dialog_permission_message">Este aplicativo precisa de permissão para usar este recurso. Você pode concedê-los nas configurações do aplicativo.</string>
@@ -149,5 +152,27 @@
     <string name="minha_localizacao">Minha localização</string>
     <string name="txt_deseja_usar_esse_endereco">Deseja usar este endereço?</string>
     <string name="one">1</string>
+    <string name="title_activity_perfil">PerfilActivity</string>
+
+    <string name="nome_completo">Nome Completo</string>
+    <string name="contactos">Contactos</string>
+    <string name="genero">Género</string>
+    <string name="provincia">Província</string>
+    <string name="endereco">Endereço</string>
+    <string name="editar_perfil">Editar perfil</string>
+    <string name="salvar">Salvar</string>
+    <string name="dados_salvos_com_sucesso">Seus dados foram salvos com sucesso!</string>
+    <string name="salvando_foto">Salvando a foto…</string>
+    <string name="foto_atualizada_com_sucesso">Foto de perfil atualizada com sucesso!</string>
+    <string name="checkout">Checkout</string>
+    <string name="btn_pagamento">Pagamento</string>
+    <string name="local_de_entrega">Local de entrega</string>
+    <string name="quer_usar_o_seu_n_toque_aqui">Quer usar o seu nº? Toque aqui!</string>
+    <string name="continuar">Continuar</string>
+    <string name="tipo_de_pagamento">Tipo de Pagamento</string>
+    <string name="escolha_o_tipo_de_pagamento">Escolha o tipo de pagamento</string>
+    <string name="multicaixa">Multicaixa</string>
+    <string name="referencia">Referência</string>
+    <string name="enviar_pedido">Enviar Pedido</string>
 
 </resources>

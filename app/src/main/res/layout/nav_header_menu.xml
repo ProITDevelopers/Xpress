@@ -24,8 +24,7 @@
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:src="@color/white"
             android:layout_gravity="center"
-            app:civ_border_color="@color/userphoto_nav_bar_border"
-            app:civ_border_width="5dp"
+
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -38,6 +37,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
+            app:civ_border_color="@color/userphoto_nav_bar_border"
+            app:civ_border_width="5dp"
             />
 
         <TextView

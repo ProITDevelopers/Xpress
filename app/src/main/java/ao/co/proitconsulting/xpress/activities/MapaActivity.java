@@ -56,6 +56,7 @@ import ao.co.proitconsulting.xpress.utilityClasses.CustomInfoWindow;
 
 public class MapaActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
+    private static final String TAG = "TAG_MapaActivity";
     SupportMapFragment mapFragment;
 
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -83,7 +84,6 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     String getMyEndereco,getMyDestination;
     String toolbarTitle;
-    Toolbar toolbar;
     private UsuarioPerfil usuarioPerfil;
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
@@ -105,10 +105,9 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (toolbarTitle==null){
             toolbarTitle = "Mapa";
         }
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(toolbarTitle);
-        setSupportActionBar(toolbar);
+
         if (getSupportActionBar()!=null){
+            getSupportActionBar().setTitle(toolbarTitle);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
