@@ -18,7 +18,6 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CheckOutItemsListView extends ConstraintLayout {
 

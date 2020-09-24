@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -274,10 +273,16 @@ public class EstabelecimentoFragment extends Fragment {
                 public void onItemClickListener(int position) {
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
 
-                    Intent intent = new Intent(getContext(), ProdutosActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("estabelecimento",estabelecimento);
-                    startActivity(intent);
+                    if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
+                        Intent intent = new Intent(getContext(), ProdutosActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("estabelecimento",estabelecimento);
+                        startActivity(intent);
+                    }else{
+                        MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
+                    }
+
+
                 }
             });
 
@@ -295,6 +300,8 @@ public class EstabelecimentoFragment extends Fragment {
                 verifConecxaoEstabelecimentos("");
             }
         });
+
+        MetodosUsados.esconderTeclado(getActivity());
         super.onResume();
     }
 }

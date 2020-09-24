@@ -33,6 +33,7 @@ import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
@@ -52,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private String emailTelefone,password;
     private LoginRequest loginRequest = new LoginRequest();
+    private NotificationHelper notificationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         //showBackground in status bar
         MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_login);
+
+        notificationHelper = new NotificationHelper(this);
 
         //InitViews
         initViews();
@@ -284,6 +288,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.body()!=null){
                         UsuarioPerfil usuarioPerfil = response.body().get(0);
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
+
+                        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
+                        String message = "Seja bem-vindo(a) ao Xpress!";
+
+                        notificationHelper.createNotification(title,message,false);
                         launchHomeScreen();
                     }
 

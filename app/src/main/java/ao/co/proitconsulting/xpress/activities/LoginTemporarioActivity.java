@@ -32,6 +32,7 @@ import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
@@ -62,11 +63,14 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     private TextView txtConfirmTitle,txtConfirmMsg;
     private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
 
+    private NotificationHelper notificationHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showCustomUI();
         setContentView(R.layout.activity_login_temporario);
+        notificationHelper = new NotificationHelper(this);
 
         //InitViews
         initViews();
@@ -316,6 +320,12 @@ public class LoginTemporarioActivity extends AppCompatActivity {
 
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
                         MetodosUsados.hideLoadingDialog();
+
+                        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
+                        String message = "Sentimos, a sua falta. Bem-vindo(a) de volta ao Xpress!";
+
+                        notificationHelper.createNotification(title,message,false);
+
                         launchHomeScreen();
                     }
 

@@ -22,9 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,7 +47,6 @@ import java.util.Locale;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.helper.Common;
-import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.utilityClasses.CustomInfoWindow;

@@ -19,6 +19,7 @@
             android:layout_height="40dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_gravity="center_vertical|center_horizontal"
             >
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -28,7 +29,7 @@
                 android:src="@color/white"
                 app:civ_border_color="@color/userphoto_nav_bar_border"
                 app:civ_border_width="3dp"
-                android:layout_gravity="center_vertical|center_horizontal"
+
                 />
 
             <TextView
@@ -43,11 +44,6 @@
                 android:visibility="gone"/>
 
         </FrameLayout>
-
-
-
-
-
 
 
         <LinearLayout
@@ -66,7 +62,9 @@
             <TextView
                 android:id="@+id/txtEnderecoSnippet"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+
+                />
 
         </LinearLayout>
 

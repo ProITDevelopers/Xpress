@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +73,17 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
             holder.info.setText(estabelecimento.descricao);
         }
 
+        if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
+            holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.login_register_text_color));
+            holder.linearLayout.setEnabled(true);
+        }else{
+            holder.linearLayout.setEnabled(false);
+            holder.linearLayout.setAlpha(0.5f);
+            holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.login_icon_text_color));
+        }
+        holder.estadoInfoList.setText(estabelecimento.estadoEstabelecimento);
+
+
 
 //        if (getItemViewType(position) == VIEW_TYPE_BIG) {
 //            holder.info.setText(item.descricao);
@@ -96,7 +109,8 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView iv;
-        TextView title,info;
+        TextView title,info,estadoInfoList;
+        LinearLayout linearLayout;
 
         ItemViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -104,9 +118,13 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
                 iv = itemView.findViewById(R.id.imgList);
                 title =  itemView.findViewById(R.id.titleList);
                 info = itemView.findViewById(R.id.descInfoList);
+                estadoInfoList = itemView.findViewById(R.id.estadoInfoList);
+                linearLayout = itemView.findViewById(R.id.linearLayout);
             } else {
                 iv =  itemView.findViewById(R.id.imgGrid);
                 title =  itemView.findViewById(R.id.titleGrid);
+                estadoInfoList =  itemView.findViewById(R.id.estadoInfoList);
+                linearLayout =  itemView.findViewById(R.id.linearLayout);
             }
 
             itemView.setOnClickListener(this);

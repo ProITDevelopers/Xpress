@@ -1,11 +1,5 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -14,7 +8,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,6 @@ import ao.co.proitconsulting.xpress.adapters.CheckoutAdapter;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.CheckoutOrder;
-import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.LocalEncomenda;
 import io.realm.Realm;
 import io.realm.RealmResults;

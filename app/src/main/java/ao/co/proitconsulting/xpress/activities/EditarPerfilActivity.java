@@ -1,12 +1,5 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,13 +21,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -50,8 +50,6 @@ import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.activities.imagePicker.ImagePickerActivity;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.api.ErrorResponce;
-import ao.co.proitconsulting.xpress.api.ErrorUtils;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
@@ -143,6 +141,32 @@ public class EditarPerfilActivity extends AppCompatActivity implements AdapterVi
         editNCasa = findViewById(R.id.editNCasa);
 
         btnSalvar = findViewById(R.id.btnSalvar);
+
+        radioBtnFem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    radioBtnFem.setTextColor(ContextCompat.getColor(EditarPerfilActivity.this,R.color.login_register_text_color));
+                    radioBtnFem.setError(null);
+                    radioBtnMasc.setError(null);
+                }else{
+                    radioBtnFem.setTextColor(ContextCompat.getColor(EditarPerfilActivity.this,R.color.transparentBlack));
+                }
+            }
+        });
+
+        radioBtnMasc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    radioBtnMasc.setTextColor(ContextCompat.getColor(EditarPerfilActivity.this,R.color.login_register_text_color));
+                    radioBtnMasc.setError(null);
+                    radioBtnFem.setError(null);
+                }else{
+                    radioBtnMasc.setTextColor(ContextCompat.getColor(EditarPerfilActivity.this,R.color.transparentBlack));
+                }
+            }
+        });
 
 
 

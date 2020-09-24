@@ -1,12 +1,5 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,6 +13,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.CartProdutosAdapter;
@@ -67,6 +67,12 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     private Dialog dialogLayoutTipoPagamento;
     private ImageView imgBtnFechar;
     private Button dialog_btn_multicaixa,dialog_btn_referencia;
+
+    //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+    private Dialog dialogLayoutConfirmarProcesso;
+    private ImageView imgConfirm;
+    private TextView txtConfirmTitle,txtConfirmMsg;
+    private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +143,22 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         dialog_btn_referencia = dialogLayoutTipoPagamento.findViewById(R.id.dialog_btn_referencia);
 
 
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+        dialogLayoutConfirmarProcesso = new Dialog(this);
+        dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
+        dialogLayoutConfirmarProcesso.setCancelable(true);
+        if (dialogLayoutConfirmarProcesso.getWindow()!=null)
+            dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        imgConfirm = dialogLayoutConfirmarProcesso.findViewById(R.id.imgConfirm);
+        txtConfirmTitle = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmTitle);
+        txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
+        dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
+        dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
+
+
     }
 
     private void abrirMapaActivity() {
@@ -204,6 +226,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
         dialogLayoutEnviarNumTelefoneAdress.cancel();
         dialogLayoutTipoPagamento.cancel();
+        dialogLayoutConfirmarProcesso.cancel();
 
 
     }
@@ -255,8 +278,11 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
                 if (cartItems.size()==1){
 
-                    Toast.makeText(this, "Remover este item!", Toast.LENGTH_SHORT).show();
+                    deleteAllItemsFromCart(getString(R.string.msg_remover_um_item));
 
+                }else {
+
+                    deleteAllItemsFromCart(getString(R.string.msg_remover_todos_items));
                 }
 
             } else {
@@ -267,6 +293,34 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAllItemsFromCart(String message) {
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+
+        imgConfirm.setImageResource(R.drawable.xpress_logo);
+        txtConfirmTitle.setText(getString(R.string.msg_tem_certeza));
+        txtConfirmMsg.setText(message);
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogLayoutConfirmarProcesso.cancel();
+            }
+        });
+
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppDatabase.clearAllCart();
+                dialogLayoutConfirmarProcesso.cancel();
+            }
+        });
+
+
+        dialogLayoutConfirmarProcesso.show();
     }
 
     @Override

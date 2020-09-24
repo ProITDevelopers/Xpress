@@ -287,7 +287,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void verificarPermissaoFotoCameraGaleria() {
-        Dexter.withActivity(this)
+        Dexter.withContext(this)
                 .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override

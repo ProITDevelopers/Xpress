@@ -177,5 +177,8 @@
     <string name="enviar_pedido">Enviar Pedido</string>
     <string name="pedido_enviado_com_sucesso">O seu pedido foi enviado com sucesso!</string>
     <string name="pedido_nao_foi_enviado">O seu pedido não foi enviado!</string>
+    <string name="msg_tem_certeza">Tem a certeza?</string>
+    <string name="msg_remover_um_item">Essa acção irá remover o item do seu carrinho.</string>
+    <string name="msg_remover_todos_items">Essa acção irá remover todos os items do seu carrinho.</string>
 
 </resources>
