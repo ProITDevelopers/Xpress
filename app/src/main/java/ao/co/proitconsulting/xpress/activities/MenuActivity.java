@@ -348,7 +348,8 @@ public class MenuActivity extends AppCompatActivity implements
 
         else if (id == R.id.nav_menu_pedidos) {
 
-            MetodosUsados.mostrarMensagem(this,"nav_menu_encomendas");
+            Intent intent = new Intent(this,MeusPedidosActivity.class);
+            startActivity(intent);
 
         }
 

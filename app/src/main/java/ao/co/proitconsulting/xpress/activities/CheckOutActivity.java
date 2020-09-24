@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -108,7 +109,12 @@ public class CheckOutActivity extends AppCompatActivity {
     }
 
     private void abrirActividadePagamento() {
-        MetodosUsados.mostrarMensagem(this,getString(R.string.msg_register_quase_pronto));
+        Intent intent = new Intent(CheckOutActivity.this,EnviarPedidoActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("tipoPagamento",tipoPagamento);
+        intent.putExtra("localEncomenda",localEncomenda);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -6,4 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.EnviarPedidoActivity">
 
+    <include layout="@layout/activity_sem_internet"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,16 +25,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.EnviarPedidoActivity"
-            android:screenOrientation="portrait"></activity>
         <!-- FOTO_CROP_ACTIVITY -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".activities.MeusPedidosActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
+            android:name=".activities.EnviarPedidoActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".activities.CheckOutActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".activities.ShoppingCartActivity"
             android:screenOrientation="portrait" />
@@ -102,6 +112,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <service
+            android:name=".mySignalR.MySignalRService"
+            android:enabled="true" />
     </application>
 
 </manifest>

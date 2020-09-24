@@ -91,7 +91,7 @@
                                     android:paddingRight="5dp"
                                     android:paddingEnd="5dp"
                                     android:lines="2"
-                                    android:text="ugugguggui"
+                                    android:textColor="@color/login_icon_text_color"
                                     app:layout_constraintTop_toBottomOf="@+id/txtEstabNome"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintEnd_toStartOf="@+id/imgShopCart"

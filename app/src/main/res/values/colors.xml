@@ -19,6 +19,7 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="transparentBlack">#80000000</color>
+    <color name="yellow">#d7a900</color>
 
     <color name="userphoto_nav_bar_border">#1c9468</color>
 

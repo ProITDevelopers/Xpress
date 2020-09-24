@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:title="Actualizar"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_sync_24"/>
+
+<!--    <item-->
+<!--        android:id="@+id/action_favoritos"-->
+<!--        android:orderInCategory="101"-->
+<!--        android:title="@string/action_favoritos"-->
+<!--        app:showAsAction="never" />-->
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="103"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+
+</menu>

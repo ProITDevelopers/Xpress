@@ -3,7 +3,9 @@ package ao.co.proitconsulting.xpress.api;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
+import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
+import ao.co.proitconsulting.xpress.modelos.Order;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
 import ao.co.proitconsulting.xpress.modelos.ReporSenha;
@@ -106,11 +108,14 @@ public interface ApiInterface {
 
 
 
-//    @POST("/FacturaTpa")
-//    Call<ResponseBody> facturaTPA(@Body Order order);
-//
-//    @GET("/FacturasActualCliente")
-//    Call<List<Factura>> getTodasFacturas();
+    @POST("/FacturaTpa")
+    Call<ResponseBody> facturaTPA(@Body Order order);
+
+    @POST("/FacturaReferencia")
+    Call<List<String>> facturaReferencia(@Body Order order);
+
+    @GET("/FacturasActualCliente")
+    Call<List<Factura>> getTodasFacturas();
 //
 //
 //    @GET("/ListarEstabA24h2")

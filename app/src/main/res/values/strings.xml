@@ -127,6 +127,7 @@
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
 
     <string name="price_with_currency">%.2f</string>
+    <string name="order_id">Factura #%s</string>
     <string name="lbl_item_price_quantity">%s x %d</string>
     <string name="cart_info_bar_items">%d Items</string>
     <string name="cart_info_bar_total">Total: %.2f</string>
@@ -174,5 +175,7 @@
     <string name="multicaixa">Multicaixa</string>
     <string name="referencia">Referência</string>
     <string name="enviar_pedido">Enviar Pedido</string>
+    <string name="pedido_enviado_com_sucesso">O seu pedido foi enviado com sucesso!</string>
+    <string name="pedido_nao_foi_enviado">O seu pedido não foi enviado!</string>
 
 </resources>

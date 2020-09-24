@@ -31,7 +31,6 @@
                 android:textColor="@color/login_icon_text_color"
                 android:text="@string/sucesso"
                 android:gravity="center"
-                android:lines="2"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:textSize="18sp"
@@ -50,6 +49,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/imgStatus"
                     android:src="@drawable/phone_success"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"

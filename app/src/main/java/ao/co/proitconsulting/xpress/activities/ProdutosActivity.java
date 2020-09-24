@@ -331,7 +331,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 @Override
                 public void onItemClickListener(int position) {
                     Produtos produto = produtosList.get(position);
-                    Toast.makeText(ProdutosActivity.this, "Item: "+produto.getDescricaoProdutoC(), Toast.LENGTH_SHORT).show();
+
                 }
             });
 
