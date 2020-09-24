@@ -27,16 +27,28 @@
                 app:layout_constraintRight_toRightOf="parent"
                 >
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:fillViewport="true"
+                >
                 <ImageView
                     android:id="@+id/imgHeader"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp" />
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    />
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
                     android:src="@color/transparentBlack"
                     android:alpha="0.3"/>
+
+            </FrameLayout>
+
+
 
                 <GridLayout
                     android:rowCount="1"

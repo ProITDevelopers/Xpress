@@ -594,7 +594,8 @@ public class RegisterActivity extends AppCompatActivity {
         if (hasPhoto){
 
             registerRequest.imagem = new File(postPath);
-            String filename  = registerRequest.imagem.getName();
+//            String filename  = registerRequest.imagem.getName();
+            String filename  = System.currentTimeMillis() + ".jpg";
 //            filepart = RequestBody.create(MediaType.parse(getContentResolver().getType(selectedImage)),file);
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"),registerRequest.imagem);
 //            RequestBody requestFile = RequestBody.create(MultipartBody.FORM, registerRequest.imagem);

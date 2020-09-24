@@ -638,8 +638,8 @@ public class EditarPerfilActivity extends AppCompatActivity implements AdapterVi
                     Log.d("TAG", "Image Get Uri path: " + uri.getPath());
                     Log.d("TAG", "Image Get Uri toString(): " + uri.toString());
 
-                    // loading profile image from local cache
-                    loadProfile(uri.toString());
+//                    // loading profile image from local cache
+//                    loadProfile(uri.toString());
 
                     salvarFoto(postPath);
                 } catch (IOException e) {
@@ -658,7 +658,8 @@ public class EditarPerfilActivity extends AppCompatActivity implements AdapterVi
 
         File file = new File(postPath);
 
-        String filename  = file.getName();
+//        String filename  = file.getName();
+        String filename  = System.currentTimeMillis() + ".jpg";
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"),file);
         MultipartBody.Part imagem  = MultipartBody.Part.createFormData("FotoCapa",filename,requestFile);
 
@@ -669,6 +670,9 @@ public class EditarPerfilActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+
+                    // loading profile image from local cache
+                    loadProfile(selectedImage.toString());
                     waitingDialog.cancel();
 
                     mensagemSucesso(getString(R.string.foto_atualizada_com_sucesso));

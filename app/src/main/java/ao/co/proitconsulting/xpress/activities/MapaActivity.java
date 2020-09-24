@@ -47,6 +47,7 @@ import java.util.Locale;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.helper.Common;
+import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.utilityClasses.CustomInfoWindow;
@@ -95,6 +96,9 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
+
+        getMyEndereco="";
+        getMyDestination="";
 
         usuarioPerfil =  AppPrefsSettings.getInstance().getUser();
 
@@ -353,11 +357,21 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (toolbarTitle.equals("Local de entrega")){
             if (marker.getTitle().equals("Eu")){
 //                Toast.makeText(this, ""+marker.getTitle(), Toast.LENGTH_SHORT).show();
+                if (getMyEndereco == null || getMyEndereco.isEmpty()){
+                    MetodosUsados.mostrarMensagem(this,"Nenhum endereço encontrado.");
+                }else {
+                    alertaUsarLocalizacao(getMyEndereco,latitude,longitude);
+                }
 
-                alertaUsarLocalizacao(getMyEndereco,latitude,longitude);
             }else if (marker.getTitle().equals("Local de entrega")){
 
-                alertaUsarLocalizacao(getMyDestination,latitude,longitude);
+                if (getMyDestination == null || getMyDestination.isEmpty()){
+                    MetodosUsados.mostrarMensagem(this,"Nenhum endereço encontrado.");
+                }else {
+                    alertaUsarLocalizacao(getMyDestination,latitude,longitude);
+                }
+
+
 
 
             }

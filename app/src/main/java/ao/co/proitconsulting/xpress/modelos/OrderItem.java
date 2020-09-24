@@ -10,6 +10,7 @@ public class OrderItem {
     @SerializedName("quantidade")
     public int quantidade;
 
+
     @SerializedName("produtos")
     public Produtos produtos;
 }

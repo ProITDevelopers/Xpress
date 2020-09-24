@@ -84,7 +84,7 @@ public class MySignalRService extends Service {
         }
 
 
-        String serverUrl = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/eventhub";
+        String serverUrl = "https://apivendas.xpressentregas.com/eventhub";
 
 
         mHubConnection = HubConnectionBuilder.create(serverUrl)

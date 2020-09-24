@@ -121,15 +121,21 @@ public class EstabelecimentoFragment extends Fragment {
         errorLayout = view.findViewById(R.id.erroLayout);
         btnTentarDeNovo = view.findViewById(R.id.btn);
 
-        searchView = view.findViewById(R.id.search_bar);
-        searchView.setQueryHint(getString(R.string.pesquisar));
-//        searchView.onActionViewExpanded();
-        searchView.setIconifiedByDefault(true);
+
 
 
         gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
         recyclerView = view.findViewById(R.id.recyclerViewEstab);
         progressBar = view.findViewById(R.id.progressBar);
+
+        swipeRefreshEstab = view.findViewById(R.id.swipeRefreshEstab);
+        swipeRefreshEstab.setColorSchemeResources(R.color.swipe_refresh_green_light_color,
+                R.color.swipe_refresh_grey_color,R.color.swipe_refresh_green_color);
+
+        searchView = view.findViewById(R.id.search_bar);
+        searchView.setQueryHint(getString(R.string.pesquisar));
+//        searchView.onActionViewExpanded();
+        searchView.setIconifiedByDefault(true);
 
 
         if (searchView==null) {
@@ -153,9 +159,7 @@ public class EstabelecimentoFragment extends Fragment {
             }
         });
 
-        swipeRefreshEstab = view.findViewById(R.id.swipeRefreshEstab);
-        swipeRefreshEstab.setColorSchemeResources(R.color.swipe_refresh_green_light_color,
-                R.color.swipe_refresh_grey_color,R.color.swipe_refresh_green_color);
+
 
         return view;
     }
@@ -273,14 +277,20 @@ public class EstabelecimentoFragment extends Fragment {
                 public void onItemClickListener(int position) {
                     Estabelecimento estabelecimento = estabelecimentoList.get(position);
 
-                    if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
-                        Intent intent = new Intent(getContext(), ProdutosActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("estabelecimento",estabelecimento);
-                        startActivity(intent);
-                    }else{
-                        MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
+                    if (estabelecimento.estadoEstabelecimento!=null){
+
+                        if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
+                            Intent intent = new Intent(getContext(), ProdutosActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("estabelecimento",estabelecimento);
+                            startActivity(intent);
+                        }else{
+                            MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
+                        }
+
                     }
+
+
 
 
                 }

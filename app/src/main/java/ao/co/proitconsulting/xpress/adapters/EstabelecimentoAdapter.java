@@ -66,6 +66,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
 
         Estabelecimento estabelecimento = estabelecimentoList.get(position);
 
+
         holder.title.setText(estabelecimento.nomeEstabelecimento);
         Picasso.with(context).load(estabelecimento.logotipo).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.iv);
 
@@ -73,30 +74,23 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
             holder.info.setText(estabelecimento.descricao);
         }
 
-        if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
-            holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.login_register_text_color));
-            holder.linearLayout.setEnabled(true);
-        }else{
-            holder.linearLayout.setEnabled(false);
-            holder.linearLayout.setAlpha(0.5f);
-            holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.login_icon_text_color));
+        if (estabelecimento.estadoEstabelecimento!=null){
+            holder.estadoInfoList.setVisibility(View.VISIBLE);
+            if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
+                holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.login_register_text_color));
+                holder.linearLayout.setEnabled(true);
+            }else{
+                holder.linearLayout.setEnabled(false);
+                holder.linearLayout.setAlpha(0.5f);
+                holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.login_icon_text_color));
+            }
+            holder.estadoInfoList.setText(estabelecimento.estadoEstabelecimento);
+        }else {
+            holder.linearLayout.setVisibility(View.GONE);
         }
-        holder.estadoInfoList.setText(estabelecimento.estadoEstabelecimento);
 
 
 
-//        if (getItemViewType(position) == VIEW_TYPE_BIG) {
-//            holder.info.setText(item.descricao);
-//        }
-
-//        if (item.estadoEstabelecimento != null){
-//
-//            if (item.estadoEstabelecimento.equals("Aberto")){
-//                holder.image_estado.setImageResource(image_aberto);
-//            }else{
-//                holder.image_estado.setImageResource(image_fechado);
-//            }
-//        }
 
 
     }
