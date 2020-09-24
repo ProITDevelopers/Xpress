@@ -6,6 +6,7 @@ public class Common {
 
     public static Location mLastLocation;
     public static final String SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id=";
+    public static final String SHARE_URL_GOOGLE_DRIVE = "https://drive.google.com/file/d/1bJ1aNdo2fhHblrpm7YtazTXVHUAK6uJp/view?usp=sharing";
     public static String bearerApi = "Bearer ";
 
     public static final int SPAN_COUNT_ONE = 1;

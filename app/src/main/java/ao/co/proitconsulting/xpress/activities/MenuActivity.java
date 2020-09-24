@@ -366,7 +366,7 @@ public class MenuActivity extends AppCompatActivity implements
 //        }
 
         else if (id == R.id.nav_menu_share) {
-            MetodosUsados.mostrarMensagem(this,"nav_menu_share");
+            MetodosUsados.shareTheApp(this);
         }
 
 
