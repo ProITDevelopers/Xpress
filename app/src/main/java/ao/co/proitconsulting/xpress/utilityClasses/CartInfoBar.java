@@ -31,7 +31,8 @@ public class CartInfoBar extends RelativeLayout implements View.OnClickListener 
 
     public void init(Context context, @Nullable AttributeSet attrs) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.view_cart_info_bar, null);
+//        View view = inflater.inflate(R.layout.view_cart_info_bar, null);
+        View view = View.inflate(context,R.layout.view_cart_info_bar, null);
         cartInfo = view.findViewById(R.id.cart_price);
         cart_total = view.findViewById(R.id.cart_total);
         relativeLayout = view.findViewById(R.id.container);

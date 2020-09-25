@@ -1,7 +1,6 @@
 package ao.co.proitconsulting.xpress.utilityClasses;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,8 +20,8 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
 
     public CustomInfoWindow(Context context) {
         usuarioPerfil = AppPrefsSettings.getInstance().getUser();
-        myView = LayoutInflater.from(context)
-                .inflate(R.layout.custom_info_window, null) ;
+//        myView = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null) ;
+        myView = View.inflate(context,R.layout.custom_info_window, null) ;
     }
 
     @Override

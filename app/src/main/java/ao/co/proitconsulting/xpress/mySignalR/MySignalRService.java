@@ -16,10 +16,13 @@ import io.reactivex.Single;
 
 public class MySignalRService extends Service {
 
+    //    private static final String BASE_URL_XPRESS_EVENTHUB = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/eventhub";
+    private static final String BASE_URL_XPRESS_EVENTHUB = "https://apivendas.xpressentregas.com/eventhub";
+
     private HubConnection mHubConnection;
     private final IBinder mBinder = new LocalBinder(); // Binder given to clients
 
-    NotificationHelper notificationHelper;
+    private NotificationHelper notificationHelper;
 
     public MySignalRService() {
     }
@@ -84,10 +87,10 @@ public class MySignalRService extends Service {
         }
 
 
-        String serverUrl = "https://apivendas.xpressentregas.com/eventhub";
 
 
-        mHubConnection = HubConnectionBuilder.create(serverUrl)
+
+        mHubConnection = HubConnectionBuilder.create(BASE_URL_XPRESS_EVENTHUB)
                 .withAccessTokenProvider(Single.defer(() -> {
 
                     // Your logic here.

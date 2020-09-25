@@ -15,7 +15,8 @@ public class AddBadgeCartConverter {
 
     public static Drawable convertLayoutToImage(Context mContext, int count, int drawableId) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.layout_cart_badge_icon, null);
+//        View view = inflater.inflate(R.layout.layout_cart_badge_icon, null);
+        View view = View.inflate(mContext,R.layout.layout_cart_badge_icon, null);
         ((ImageView)view.findViewById(R.id.icon_badge)).setImageResource(drawableId);
 
         if (count == 0) {
