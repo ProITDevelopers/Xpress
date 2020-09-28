@@ -321,10 +321,7 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
                         MetodosUsados.hideLoadingDialog();
 
-                        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
-                        String message = "Sentimos, a sua falta. Bem-vindo(a) de volta ao Xpress!";
 
-                        notificationHelper.createNotification(title,message,false);
 
                         launchHomeScreen();
                     }
@@ -359,6 +356,11 @@ public class LoginTemporarioActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginTemporarioActivity.this, MenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+
+        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
+        String message = "Sentimos, a sua falta. Bem-vindo(a) de volta ao Xpress!";
+        notificationHelper.createNotification(title,message,false);
+
         finish();
     }
 

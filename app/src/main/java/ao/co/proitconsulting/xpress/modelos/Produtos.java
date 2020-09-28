@@ -17,6 +17,9 @@ public class Produtos extends RealmObject {
     @SerializedName("estabelecimento")
     public String estabelecimento;
 
+    @SerializedName("ideStabelecimento")
+    public int ideStabelecimento;
+
     @SerializedName("imagemProduto")
     public String imagemProduto;
 

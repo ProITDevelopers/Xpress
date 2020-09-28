@@ -38,7 +38,7 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:civ_border_color="@color/userphoto_nav_bar_border"
-            app:civ_border_width="5dp"
+            app:civ_border_width="3dp"
             />
 
         <TextView

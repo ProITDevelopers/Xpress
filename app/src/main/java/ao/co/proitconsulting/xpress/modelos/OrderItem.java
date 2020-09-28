@@ -11,6 +11,6 @@ public class OrderItem {
     public int quantidade;
 
 
-    @SerializedName("produtos")
-    public Produtos produtos;
+    @SerializedName("ideStabelecimento")
+    public int ideStabelecimento;
 }

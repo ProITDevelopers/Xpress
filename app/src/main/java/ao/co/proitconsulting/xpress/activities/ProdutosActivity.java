@@ -52,11 +52,11 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
     private static final String TAG = "TAG_ProdutosActivity";
 
-    @SerializedName("idEstabelecimento")
-    public int idEstabelecimento;
+    @SerializedName("ideStabelecimento")
+    public int ideStabelecimento;
 
     List<Produtos> produtosList = new ArrayList<>();
-    private RealmResults<Produtos> produtosListRealm;
+
 
 
     private RecyclerView recyclerView;
@@ -94,6 +94,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         showCustomUI();
         if (getIntent()!=null){
             estabelecimento = (Estabelecimento) getIntent().getSerializableExtra("estabelecimento");
+
+            if (estabelecimento!=null){
+                if (estabelecimento.estabelecimentoID!=0){
+                    ideStabelecimento = estabelecimento.estabelecimentoID;
+                }
+            }
         }
         setContentView(R.layout.activity_produtos);
 
@@ -323,7 +329,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
         if (produtosList.size()>0){
 
-            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
+            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager,ideStabelecimento);
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 

@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     private String emailTelefone,password;
     private LoginRequest loginRequest = new LoginRequest();
     private NotificationHelper notificationHelper;
+    private UsuarioPerfil usuarioPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -286,13 +287,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     MetodosUsados.hideLoadingDialog();
                     if (response.body()!=null){
-                        UsuarioPerfil usuarioPerfil = response.body().get(0);
+                        usuarioPerfil = response.body().get(0);
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
 
-                        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
-                        String message = "Seja bem-vindo(a) ao Xpress!";
 
-                        notificationHelper.createNotification(title,message,false);
                         launchHomeScreen();
                     }
 
@@ -326,6 +324,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+
+        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
+        String message = "Seja bem-vindo(a) ao Xpress!";
+        notificationHelper.createNotification(title,message,false);
+
         finish();
     }
 

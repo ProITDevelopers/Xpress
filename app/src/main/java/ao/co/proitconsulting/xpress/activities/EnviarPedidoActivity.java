@@ -142,6 +142,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
             OrderItem orderItem = new OrderItem();
             orderItem.produtoId = cartItem.produtos.getIdProduto();
             orderItem.quantidade = cartItem.quantity;
+            orderItem.ideStabelecimento = cartItem.produtos.ideStabelecimento;
 
 
             orderItems.add(orderItem);
