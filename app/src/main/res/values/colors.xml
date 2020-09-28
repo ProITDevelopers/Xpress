@@ -33,4 +33,5 @@
     <color name="swipe_refresh_green_light_color">#1c966a</color>
     <color name="swipe_refresh_grey_color">#80000000</color>
     <color name="swipe_refresh_green_color">#0e4e37</color>
+    <color name="colorDarkSemiTransparent">#C6000000</color>
 </resources>

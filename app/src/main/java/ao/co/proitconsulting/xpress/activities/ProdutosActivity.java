@@ -337,6 +337,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 @Override
                 public void onItemClickListener(int position) {
                     Produtos produto = produtosList.get(position);
+                    Intent intent = new Intent(ProdutosActivity.this, ProdutoDetailsActivity.class);
+                    intent.putExtra("toolbarTitle",estabelecimento.nomeEstabelecimento);
+                    intent.putExtra("productImg",produto.imagemProduto);
+                    intent.putExtra("produtoId",produto.idProduto);
+                    intent.putExtra("position",position);
+                    startActivity(intent);
 
                 }
             });
