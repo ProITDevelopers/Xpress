@@ -32,6 +32,7 @@ import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.LocalEncomenda;
 import ao.co.proitconsulting.xpress.modelos.Order;
 import ao.co.proitconsulting.xpress.modelos.OrderItem;
+import ao.co.proitconsulting.xpress.modelos.ReferenciaRequest;
 import dmax.dialog.SpotsDialog;
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -46,7 +47,8 @@ public class EnviarPedidoActivity extends AppCompatActivity {
     private AlertDialog waitingDialog;
 
     private LocalEncomenda localEncomenda;
-    private String tipoPagamento,codigoReferencia;
+    private String tipoPagamento;
+    private ReferenciaRequest referenciaRequest;
     private NotificationHelper notificationHelper;
 
     private Realm realm;
@@ -247,16 +249,16 @@ public class EnviarPedidoActivity extends AppCompatActivity {
     private void facturacaoReferencia(Order order) {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<String>> facturaWallet = apiInterface.facturaReferencia(order);
-        facturaWallet.enqueue(new Callback<List<String>>() {
+        Call<List<ReferenciaRequest>> facturaWallet = apiInterface.facturaReferencia(order);
+        facturaWallet.enqueue(new Callback<List<ReferenciaRequest>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+            public void onResponse(@NonNull Call<List<ReferenciaRequest>> call, @NonNull Response<List<ReferenciaRequest>> response) {
 
                 if (response.isSuccessful()) {
                     waitingDialog.cancel();
                     if (response.body()!=null){
 
-                        codigoReferencia = response.body().get(0);
+                        referenciaRequest = response.body().get(0);
 
                         mensagemSucesso(getString(R.string.pedido_enviado_com_sucesso), tipoPagamento,true);
 
@@ -277,7 +279,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<ReferenciaRequest>> call, @NonNull Throwable t) {
                 waitingDialog.cancel();
                 if ("timeout".equals(t.getMessage())) {
                     MetodosUsados.mostrarMensagem(EnviarPedidoActivity.this,R.string.msg_erro_internet_timeout);
@@ -301,7 +303,10 @@ public class EnviarPedidoActivity extends AppCompatActivity {
             imgStatus.setImageResource(R.drawable.phone_success);
 
             if (tipoPagamento.equals(getString(R.string.referencia))){
-                status_message = message.concat("\n").concat("\n").concat(tipoPagamento+": "+codigoReferencia);
+                status_message = message.concat("\n").concat("\n")
+                        .concat(tipoPagamento+": "+referenciaRequest.codigo).concat("\n")
+                        .concat("Entidade: "+referenciaRequest.entidade).concat("\n")
+                        .concat("Valor: "+referenciaRequest.valor+" AKZ");
             }else{
                 status_message = message;
             }

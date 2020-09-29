@@ -678,7 +678,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void loadProfile(String url) {
         Log.d(TAG, "Image cache path: " + url);
 
-        Picasso.with(this).load(url).into(imgUserPhoto);
+        Picasso.with(this).load(url).fit().centerCrop().into(imgUserPhoto);
 
     }
 

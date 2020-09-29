@@ -58,9 +58,43 @@ public class FacturaAdapter extends RecyclerView.Adapter<FacturaAdapter.FacturaV
             }
             holder.txtEstadoPagamento.setText(factura.estadoPagamento);
 
+            if (factura.metododPagamento!=null){
+                holder.txtMetododPagamento.setText(factura.metododPagamento);
+
+                if (factura.metododPagamento.equals("Referencia")){
+                    if (factura.identificacaoPagamento!=null){
+
+                        holder.txtRefereciaCode.setText(factura.identificacaoPagamento);
+                        holder.txtEntidadeCode.setText(factura.entidade);
+
+                        holder.textView4.setVisibility(View.VISIBLE);
+                        holder.txtRefereciaCode.setVisibility(View.VISIBLE);
+                        holder.textView5.setVisibility(View.VISIBLE);
+                        holder.txtEntidadeCode.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.textView4.setVisibility(View.GONE);
+                        holder.txtRefereciaCode.setVisibility(View.GONE);
+                        holder.textView5.setVisibility(View.GONE);
+                        holder.txtEntidadeCode.setVisibility(View.GONE);
+
+                        holder.txtRefereciaCode.setText("");
+                        holder.txtEntidadeCode.setText("");
 
 
-            holder.txtMetododPagamento.setText(factura.metododPagamento);
+                    }
+                }else{
+                    holder.textView4.setVisibility(View.GONE);
+                    holder.txtRefereciaCode.setVisibility(View.GONE);
+                    holder.textView5.setVisibility(View.GONE);
+                    holder.txtEntidadeCode.setVisibility(View.GONE);
+
+                    holder.txtRefereciaCode.setText("");
+                    holder.txtEntidadeCode.setText("");
+                }
+            }
+
+
+
 
             String total = String.valueOf(factura.total);
             holder.txtTotal.setText(context.getString(R.string.price_with_currency, Float.parseFloat(total)).concat(" AKZ"));
@@ -92,6 +126,8 @@ public class FacturaAdapter extends RecyclerView.Adapter<FacturaAdapter.FacturaV
         OrderItemsListView orderItems;
 
         TextView txtEstado, txtEstadoPagamento, txtMetododPagamento, txtTotal, txtDataPagamento;
+        TextView textView4,txtRefereciaCode;
+        TextView textView5,txtEntidadeCode;
 
         public FacturaViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -106,6 +142,13 @@ public class FacturaAdapter extends RecyclerView.Adapter<FacturaAdapter.FacturaV
             txtEstado = itemView.findViewById(R.id.txtEstado);
             txtEstadoPagamento = itemView.findViewById(R.id.txtEstadoPagamento);
             txtMetododPagamento = itemView.findViewById(R.id.txtMetododPagamento);
+
+            textView4 = itemView.findViewById(R.id.textView4);
+            txtRefereciaCode = itemView.findViewById(R.id.txtRefereciaCode);
+            textView5 = itemView.findViewById(R.id.textView5);
+            txtEntidadeCode = itemView.findViewById(R.id.txtEntidadeCode);
+
+
             txtTotal = itemView.findViewById(R.id.txtTotal);
             txtDataPagamento = itemView.findViewById(R.id.txtDataPagamento);
 

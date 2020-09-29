@@ -66,6 +66,7 @@ public class CheckOutItemsListView extends ConstraintLayout {
 
                 Picasso.with(getContext())
                         .load(item.produtos.getImagemProduto())
+                        .fit()
                         .placeholder(R.drawable.store_placeholder)
                         .into((ImageView) view.findViewById(R.id.thumbnail));
 

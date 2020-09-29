@@ -16,6 +16,10 @@ public class Factura implements Comparator<Factura> {
     public String horaRecebidoCliente;
     public int clienteID;
 
+    public String identificacaoPagamento;
+    public String entidade;
+
+
     public List<FacturaItens> itens;
 
     private boolean expanded;

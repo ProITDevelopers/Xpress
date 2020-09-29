@@ -147,7 +147,7 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
         product_detail_root = findViewById(R.id.product_detail_root);
 
         productImg = findViewById(R.id.productImg);
-        Picasso.with(this).load(produtos.imagemProduto).placeholder(R.drawable.store_placeholder).into(productImg);
+        Picasso.with(this).load(produtos.imagemProduto).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(productImg);
 
 
 

@@ -68,7 +68,7 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         CartItemProdutos cartItem = cartItems.get(position);
         Produtos product = cartItem.produtos;
 
-        Picasso.with(context).load(product.getImagemProduto()).placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
+        Picasso.with(context).load(product.getImagemProduto()).fit().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
 
 
 

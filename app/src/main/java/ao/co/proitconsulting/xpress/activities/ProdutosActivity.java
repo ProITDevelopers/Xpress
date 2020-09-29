@@ -128,7 +128,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         });
 
 
-        Picasso.with(this).load(estabelecimento.imagemCapa).placeholder(R.drawable.store_placeholder).into(header);
+        Picasso.with(this).load(estabelecimento.imagemCapa).fit().placeholder(R.drawable.store_placeholder).into(header);
         txtEstabNome.setText(estabelecimento.nomeEstabelecimento);
         txtEstabAddress.setText(estabelecimento.endereco);
 
