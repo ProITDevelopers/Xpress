@@ -7,6 +7,7 @@ import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.Order;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
+import ao.co.proitconsulting.xpress.modelos.ReferenciaRequest;
 import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
 import ao.co.proitconsulting.xpress.modelos.ReporSenha;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
@@ -80,16 +81,6 @@ public interface ApiInterface {
             @Body ReporSenha reporSenha);
 
 
-    @Multipart
-    @POST("/ConfirmacaoPagamentoWallet/{codigoconfirmacao},{codoperacao}")
-    Call<List<String>> enviarConfirCodigoPagamento(
-            @Part("codigoconfirmacao") RequestBody codigoconfirmacao,
-            @Part("codoperacao") RequestBody codoperacao);
-
-
-
-
-
 
 
     @GET("/PerfilCliente")
@@ -112,7 +103,7 @@ public interface ApiInterface {
     Call<ResponseBody> facturaTPA(@Body Order order);
 
     @POST("/FacturaReferencia")
-    Call<List<String>> facturaReferencia(@Body Order order);
+    Call<List<ReferenciaRequest>> facturaReferencia(@Body Order order);
 
     @GET("/FacturasActualCliente")
     Call<List<Factura>> getTodasFacturas();
