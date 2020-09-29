@@ -52,8 +52,7 @@
                         android:src="@color/white"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        app:civ_border_color="@color/userphoto_nav_bar_border"
-                        app:civ_border_width="5dp"
+
                         />
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -65,6 +64,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        app:civ_border_color="@color/userphoto_nav_bar_border"
+                        app:civ_border_width="5dp"
                         />
 
 

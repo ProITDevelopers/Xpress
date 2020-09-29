@@ -45,7 +45,7 @@ import retrofit2.Response;
 
 public class LoginTemporarioActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginTemporarioActivity";
+    private static final String TAG = "TAG_LoginTemporarioActivity";
     private RelativeLayout logintemp_root;
     private CircleImageView imgUserPhoto;
     private TextView txtNomeUser,txtUserNameInitial;

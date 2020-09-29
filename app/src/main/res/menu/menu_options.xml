@@ -9,21 +9,16 @@
             app:showAsAction="always"
             android:icon="@drawable/ic_baseline_shopping_cart_white_24" />
 
-<!--    <item-->
-<!--        android:id="@+id/action_settings"-->
-<!--        android:orderInCategory="100"-->
-<!--        android:title="@string/action_settings"-->
-<!--        app:showAsAction="never" />-->
-
-<!--    <item-->
-<!--        android:id="@+id/action_clear_token"-->
-<!--        android:orderInCategory="101"-->
-<!--        android:title="@string/apagar_token"-->
-<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_logout"
-        android:orderInCategory="102"
+        android:orderInCategory="101"
         android:title="@string/terminar_sessao"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="102"
+        android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

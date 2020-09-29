@@ -43,7 +43,7 @@ public class PerfilActivity extends AppCompatActivity {
     private UsuarioPerfil usuarioPerfil;
     private CircleImageView imageView;
     private TextView txtUserNameInitial,txtNomeCompleto,txtTelefone,txtTelefoneAlternativo;
-    private TextView txtEmail,txtSexo,txtProvincia,txtEndereco;
+    private TextView txtEmail,txtSexo,txtUserProv,txtProvincia,txtUserAddress,txtEndereco;
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
@@ -79,8 +79,10 @@ public class PerfilActivity extends AppCompatActivity {
 
         txtEmail = findViewById(R.id.txtEmail);
         txtSexo = findViewById(R.id.txtSexo);
+        txtUserProv = findViewById(R.id.txtUserProv);
         txtProvincia = findViewById(R.id.txtProvincia);
 
+        txtUserAddress = findViewById(R.id.txtUserAddress);
         txtEndereco = findViewById(R.id.txtEndereco);
 
         //-------------------------------------------------------------//
@@ -128,10 +130,12 @@ public class PerfilActivity extends AppCompatActivity {
             txtNomeCompleto.setText(usuarioPerfil.nomeCompleto);
             txtTelefone.setText(usuarioPerfil.contactoMovel);
 
-            if (usuarioPerfil.contactoAlternativo==null)
-                txtTelefoneAlternativo.setText("'não preenchido'");
-            else
+            if (usuarioPerfil.contactoAlternativo==null){
+                txtTelefoneAlternativo.setVisibility(View.GONE);
+                txtTelefoneAlternativo.setText("");
+            } else{
                 txtTelefoneAlternativo.setText(usuarioPerfil.contactoAlternativo);
+            }
 
             txtEmail.setText(usuarioPerfil.email);
 
@@ -140,40 +144,34 @@ public class PerfilActivity extends AppCompatActivity {
             else
                 txtSexo.setText("Masculino");
 
-            if (usuarioPerfil.provincia==null)
-                txtProvincia.setText("'não preenchido'");
-            else
+            if (usuarioPerfil.provincia==null){
+                txtUserProv.setVisibility(View.GONE);
+                txtProvincia.setVisibility(View.GONE);
+                txtProvincia.setText("");
+            }
+            else{
                 txtProvincia.setText(usuarioPerfil.provincia);
+            }
 
 
-            String municipio,bairro,rua,casa="";
-
-            if (usuarioPerfil.municipio==null)
-                municipio = "'não preenchido'";
-            else
-                municipio = usuarioPerfil.municipio;
-
-            if (usuarioPerfil.bairro==null)
-                bairro = "'não preenchido'";
-            else
-                bairro = usuarioPerfil.bairro;
-
-            if (usuarioPerfil.rua==null)
-                rua = "'não preenchido'";
-            else
-                rua = usuarioPerfil.rua;
-
-            if (usuarioPerfil.nCasa==null)
-                casa = "'não preenchido'";
-            else
-                casa = usuarioPerfil.nCasa;
 
 
-            txtEndereco.setText("Município "+
-                    municipio +", "+
-                    "Bairro "+bairro+", "+
-                    "Rua "+rua+", "+
-                    "Casa nº"+casa);
+            if (usuarioPerfil.municipio==null || usuarioPerfil.bairro==null ||
+                    usuarioPerfil.rua==null||usuarioPerfil.nCasa==null){
+
+                txtUserAddress.setVisibility(View.GONE);
+                txtEndereco.setVisibility(View.GONE);
+                txtEndereco.setText("");
+
+            }else{
+                txtEndereco.setText("Município "+
+                        usuarioPerfil.municipio +", "+
+                        "Bairro "+usuarioPerfil.bairro+", "+
+                        "Rua "+usuarioPerfil.rua+", "+
+                        "Casa nº"+usuarioPerfil.nCasa);
+            }
+
+
 
 
         }
@@ -204,6 +202,12 @@ public class PerfilActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditarPerfilActivity.class);
             intent.putExtra("toolbarTitle","Editar perfil");
             startActivityForResult(intent, PROFILE_REQUEST_CODE);
+        }
+
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            startActivity(intent);
+            return true;
         }
 
 

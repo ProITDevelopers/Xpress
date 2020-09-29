@@ -9,6 +9,11 @@
         android:icon="@drawable/account_edit_outline_24dp"
         android:title="@string/editar_perfil" />
 
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="102"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
 
 
 

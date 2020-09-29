@@ -124,7 +124,8 @@ public class EstabelecimentoFragment extends Fragment {
 
 
 
-        gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
+//        gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
+        gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView = view.findViewById(R.id.recyclerViewEstab);
         progressBar = view.findViewById(R.id.progressBar);
 

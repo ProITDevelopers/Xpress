@@ -366,17 +366,29 @@ public class EditarPerfilActivity extends AppCompatActivity implements AdapterVi
 
 
 
-        if (telefoneAlternativo.isEmpty()){
-            editTelefoneAlternativo.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Nº alternativo'");
-            return false;
+//        if (telefoneAlternativo.isEmpty()){
+//            editTelefoneAlternativo.setError(getString(R.string.msg_erro_campo_vazio));
+//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Nº alternativo'");
+//            return false;
+//        }
+//
+//        if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
+//            editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
+//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
+//            return false;
+//        }
+
+        if (!telefoneAlternativo.isEmpty()){
+            if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
+                editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
+                MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
+                return false;
+            }
         }
 
-        if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
-            editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
-            return false;
-        }
+
+
+
 
         
 

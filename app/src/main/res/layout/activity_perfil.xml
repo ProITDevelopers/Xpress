@@ -94,17 +94,19 @@
 
                     <TextView
                         android:id="@+id/txtTelefoneAlternativo"
-                        app:layout_constraintTop_toBottomOf="@+id/txtTelefone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/login_icon_text_color"
+                        app:layout_constraintTop_toBottomOf="@+id/txtTelefone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:paddingTop="5dp"
 
                         />
+
+
 
 
                     <TextView
@@ -166,6 +168,8 @@
                         android:text="@string/gender_male"
                         />
 
+
+
                     <TextView
                         android:id="@+id/txtUserProv"
                         app:layout_constraintTop_toBottomOf="@+id/txtSexo"
@@ -186,14 +190,16 @@
                         app:layout_constraintTop_toBottomOf="@+id/txtUserProv"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:paddingTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/login_icon_text_color"
 
                         />
+
+
 
 
                     <TextView
@@ -222,7 +228,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/login_icon_text_color"
-
                         />
 
 

@@ -1,9 +1,5 @@
 package ao.co.proitconsulting.xpress.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,15 +10,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.adapters.ProdutosAdapter;
+import ao.co.proitconsulting.xpress.adapters.ProductDetailsListener;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
-import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.utilityClasses.AddBadgeCartConverter;
@@ -30,28 +29,30 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-public class ProdutoDetailsActivity extends AppCompatActivity implements ProdutosAdapter.ProductsAdapterListener {
+public class ProdutoDetailsActivity extends AppCompatActivity implements ProductDetailsListener {
 
-    private FloatingActionButton fabCart;
-    int imgCart = R.drawable.ic_baseline_shopping_cart_white_24;
 
-    private String toolbarTitle ="",img="";
-    private ImageView productImg;
+
+
+    private String toolbarTitle ="";
     private Menu menu;
 
-    private Realm realm;
-    private RealmResults<CartItemProdutos> cartItems;
-    private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
-    int cart_count = 0;
-
+    private ImageView productImg;
     private TextView txtProdutoNome,txtProdutoPrice,txtDescricao;
     private ImageView ic_remove,ic_add;
     private TextView product_count;
     private Button btn_add,btn_comprar;
 
+    private FloatingActionButton fabCart;
+    private int imgCart = R.drawable.ic_baseline_shopping_cart_white_24;
+
+    private Realm realm;
+    private RealmResults<CartItemProdutos> cartItems;
+    private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
+    private int cart_count = 0;
     private Produtos produtos;
     private CartItemProdutos cartItem;
-    private ProdutosAdapter.ProductsAdapterListener listener;
+    private ProductDetailsListener listener;
     private int produtoId,position;
     private Drawable btn_addCart_green_bk,btn_addCart_grey_bk;
     private ConstraintLayout product_detail_root;
@@ -62,45 +63,26 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
         showCustomUI();
         if (getIntent()!=null){
             toolbarTitle = getIntent().getStringExtra("toolbarTitle");
-            img = getIntent().getStringExtra("productImg");
             produtoId = getIntent().getIntExtra("produtoId",1);
             position = getIntent().getIntExtra("position",0);
         }
-
         setContentView(R.layout.activity_produto_details);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar()!=null){
-            getSupportActionBar().setTitle(toolbarTitle);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
-        listener = this;
-
-        btn_addCart_green_bk = getResources().getDrawable( R.drawable.button_background );
-        btn_addCart_grey_bk = getResources().getDrawable( R.drawable.button_background_grey );
-
-        productImg = findViewById(R.id.productImg);
-        Picasso.with(this).load(img).placeholder(R.drawable.store_placeholder).into(productImg);
-
-        fabCart = findViewById(R.id.fabCart);
-        fabCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
-                startActivity(intent);
-            }
-        });
-        
         collapseToobar();
-
-
 
         realm = Realm.getDefaultInstance();
         cartItems = realm.where(CartItemProdutos.class).findAllAsync();
-
         produtos = realm.where(Produtos.class).equalTo("idProduto", produtoId).findFirst();
         cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", produtoId).findFirst();
+
+        btn_addCart_green_bk = getResources().getDrawable(R.drawable.button_background) ;
+        btn_addCart_grey_bk = getResources().getDrawable( R.drawable.button_background_grey );
+
+
+        listener = this;
+
+
+        initViews();
 
         cartRealmChangeListener = cartItems -> {
 
@@ -114,7 +96,15 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
 
             invalidateOptionsMenu();
         };
-        initViews();
+
+
+
+        
+
+
+
+
+
     }
 
     private void showCustomUI() {
@@ -125,6 +115,12 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
     }
 
     private void collapseToobar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setTitle(toolbarTitle);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         AppBarLayout mAppBarLayout = findViewById(R.id.appBarLayout);
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -149,6 +145,12 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
     private void initViews(){
 
         product_detail_root = findViewById(R.id.product_detail_root);
+
+        productImg = findViewById(R.id.productImg);
+        Picasso.with(this).load(produtos.imagemProduto).placeholder(R.drawable.store_placeholder).into(productImg);
+
+
+
         txtProdutoNome = findViewById(R.id.txtProdutoNome);
         txtProdutoPrice = findViewById(R.id.txtProdutoPrice);
         txtDescricao = findViewById(R.id.txtDescricao);
@@ -161,9 +163,17 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
         ic_remove = findViewById(R.id.ic_remove);
         product_count = findViewById(R.id.product_count);
         ic_add = findViewById(R.id.ic_add);
-
         btn_add = findViewById(R.id.btn_add);
         btn_comprar = findViewById(R.id.btn_comprar);
+
+        fabCart = findViewById(R.id.fabCart);
+        fabCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ic_remove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,9 +200,18 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                if (cartItem != null) {
+                    Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }else{
+                    listener.onProductAddedCart(position,produtos);
+                    Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
+
 
             }
         });
@@ -246,6 +265,8 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Produto
         }
 
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            startActivity(intent);
             return true;
         }
 

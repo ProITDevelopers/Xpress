@@ -190,6 +190,8 @@ public class MeusPedidosActivity extends AppCompatActivity {
                 }
             });
 
+        }else {
+            MetodosUsados.mostrarMensagem(this,"Não fez nenhum pedido!");
         }
     }
 
@@ -240,6 +242,12 @@ public class MeusPedidosActivity extends AppCompatActivity {
                 coordinatorLayout.setVisibility(View.VISIBLE);
             }
             verifConecxaoPedidos();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            startActivity(intent);
             return true;
         }
 

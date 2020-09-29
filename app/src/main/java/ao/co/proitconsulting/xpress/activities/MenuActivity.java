@@ -392,12 +392,7 @@ public class MenuActivity extends AppCompatActivity implements
 
         int id = item.getItemId();
 
-//        if (item.getItemId() == R.id.action_settings) {
-//            MetodosUsados.mostrarMensagem(this,getString(R.string.action_settings));
-//            return true;
-//        }
-//
-//
+
         if (id == R.id.action_cart) {
             Intent intent = new Intent(this,ShoppingCartActivity.class);
             startActivity(intent);
@@ -409,6 +404,14 @@ public class MenuActivity extends AppCompatActivity implements
             mensagemLogOut();
             return true;
         }
+
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+
 
 
         return super.onOptionsItemSelected(item);

@@ -24,28 +24,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <!-- FOTO_CROP_ACTIVITY -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <activity android:name=".activities.ProdutoDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyCustomAppTheme">
-
+        <activity
+            android:name=".activities.ConfiguracoesActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
+            android:name=".activities.ProdutoDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyCustomAppTheme"></activity>
+        <activity
             android:name=".activities.MeusPedidosActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.EnviarPedidoActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.CheckOutActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ShoppingCartActivity"
             android:screenOrientation="portrait" />

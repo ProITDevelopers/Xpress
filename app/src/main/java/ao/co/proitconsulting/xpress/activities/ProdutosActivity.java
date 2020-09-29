@@ -82,6 +82,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     private Estabelecimento estabelecimento;
     private ImageView imgShopCart;
 
+
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
     private ImageView imgConfirm;
@@ -134,9 +135,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
         recyclerView =  findViewById(R.id.recyclewProdutos);
-        gridLayoutManager = new GridLayoutManager(this, 1);
+        gridLayoutManager = new GridLayoutManager(this, 2);
         progressBar = findViewById(R.id.progressBar);
-
 
 
 //        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -339,7 +339,6 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                     Produtos produto = produtosList.get(position);
                     Intent intent = new Intent(ProdutosActivity.this, ProdutoDetailsActivity.class);
                     intent.putExtra("toolbarTitle",estabelecimento.nomeEstabelecimento);
-                    intent.putExtra("productImg",produto.imagemProduto);
                     intent.putExtra("produtoId",produto.idProduto);
                     intent.putExtra("position",position);
                     startActivity(intent);
@@ -378,6 +377,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
         }
+
 
     }
 

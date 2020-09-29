@@ -291,6 +291,12 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
         }
 
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

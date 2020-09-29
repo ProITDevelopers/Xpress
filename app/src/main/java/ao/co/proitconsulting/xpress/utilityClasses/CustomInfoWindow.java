@@ -28,12 +28,12 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(Marker marker) {
 
 
-        String foto = (String) marker.getTag();
-
         CircleImageView circleImageView = myView.findViewById(R.id.img);
         TextView txtUserNameInitial = myView.findViewById(R.id.txtUserNameInitial);
 
         if (marker.getTitle().equals("Eu")){
+
+            circleImageView.setImageResource(R.color.white);
 
             if (usuarioPerfil!=null){
                 if (usuarioPerfil.imagem.equals(myView.getContext().getString(R.string.sem_imagem))){
@@ -49,15 +49,15 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
 
                 }else {
                     txtUserNameInitial.setVisibility(View.GONE);
-                    Picasso.with(myView.getContext()).load(foto).placeholder(R.drawable.photo_placeholder).into(circleImageView);
+                    Picasso.with(myView.getContext()).load(usuarioPerfil.imagem).placeholder(R.drawable.photo_placeholder).into(circleImageView);
                 }
             }
 
 
 
         } else if (marker.getTitle().equals("Local de entrega")){
-
-           circleImageView.setImageResource(R.drawable.ic_baseline_location_on_24);
+            txtUserNameInitial.setVisibility(View.GONE);
+            circleImageView.setImageResource(R.drawable.ic_baseline_location_on_24);
 
         }
 

@@ -78,11 +78,11 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static int DISPLACEMENT = 10;
 
 
-    Marker mUserMarker, markerDestination;
+    private Marker mUserMarker, markerDestination;
 
-    String getMyEndereco,getMyDestination;
-    String toolbarTitle;
-    private UsuarioPerfil usuarioPerfil;
+    private String getMyEndereco,getMyDestination;
+    private String toolbarTitle;
+
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
@@ -100,7 +100,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         getMyEndereco="";
         getMyDestination="";
 
-        usuarioPerfil =  AppPrefsSettings.getInstance().getUser();
+
 
         toolbarTitle = getIntent().getStringExtra("toolbarTitle");
         if (toolbarTitle==null){
@@ -248,7 +248,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .position(location)
                 .title("Eu")
                 .snippet(getMyEndereco));
-        mUserMarker.setTag(usuarioPerfil.imagem);
+
 
         //Move camera to this position
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
@@ -434,6 +434,12 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (item.getItemId() == R.id.menu_my_location) {
             setUpLocation();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            startActivity(intent);
             return true;
         }
 

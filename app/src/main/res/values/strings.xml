@@ -88,7 +88,6 @@
         <item>Masculino</item>
     </string-array>
     <string-array name="cidade">
-        <item>Luanda</item>
         <item>Bengo</item>
         <item>Benguela</item>
         <item>Bié</item>
@@ -99,6 +98,7 @@
         <item>Cunene</item>
         <item>Huambo</item>
         <item>Huíla</item>
+        <item>Luanda</item>
         <item>Lunda Norte</item>
         <item>Lunda Sul</item>
         <item>Malanje</item>
@@ -117,7 +117,8 @@
 
 
     <string name="apagar_token">Apagar token</string>
-    <string name="xpress.co.ao">xpress.co.ao</string>
+    <string name="xpress.co.ao">xpressentregas.com</string>
+    <string name="enviar_email_client">Enviar email</string>
     <string name="genero_sexo">Sexo:</string>
 
     <!--    <string name="msg_error_unable_select_profile_pic">Unable to set profile image. Please try again!</string>-->
@@ -180,5 +181,7 @@
     <string name="msg_tem_certeza">Tem a certeza?</string>
     <string name="msg_remover_um_item">Essa acção irá remover o item do seu carrinho.</string>
     <string name="msg_remover_todos_items">Essa acção irá remover todos os items do seu carrinho.</string>
+    <string name="sobre_xpress_entregas">Xpress Entregas é um serviço de delivery que permite o usuário realizar os seus pedidos preferidos.</string>
+    <string name="txt_descricao">Descrição</string>
 
 </resources>
