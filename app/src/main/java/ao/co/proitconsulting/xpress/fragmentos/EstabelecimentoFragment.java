@@ -31,7 +31,6 @@ import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
-import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -125,7 +124,7 @@ public class EstabelecimentoFragment extends Fragment {
 
 
 //        gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
-        gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridLayoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView = view.findViewById(R.id.recyclerViewEstab);
         progressBar = view.findViewById(R.id.progressBar);
 
