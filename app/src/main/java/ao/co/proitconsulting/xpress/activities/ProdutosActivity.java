@@ -231,8 +231,11 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         cart_count = cartItems.size();
 
 
-
-        imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,imgCart));
+        try {
+            imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,imgCart));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
