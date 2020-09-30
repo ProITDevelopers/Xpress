@@ -130,7 +130,7 @@ public class PerfilActivity extends AppCompatActivity {
             txtNomeCompleto.setText(usuarioPerfil.nomeCompleto);
             txtTelefone.setText(usuarioPerfil.contactoMovel);
 
-            if (usuarioPerfil.contactoAlternativo==null){
+            if (usuarioPerfil.contactoAlternativo==null || usuarioPerfil.contactoAlternativo.isEmpty()){
                 txtTelefoneAlternativo.setVisibility(View.GONE);
                 txtTelefoneAlternativo.setText("");
             } else{
