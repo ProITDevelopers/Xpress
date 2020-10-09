@@ -134,8 +134,8 @@ public class MetodosUsados {
         shareIntent.setAction(Intent.ACTION_SEND);
         String postData = "Obtenha o aplicativo " + appName +
                 " para ter acesso as melhores " + appCategory + "\n" +
-//                Common.SHARE_URL_PLAYSTORE + appPackageName;
-                Common.SHARE_URL_GOOGLE_DRIVE;
+                Common.SHARE_URL_PLAYSTORE + appPackageName;
+
 
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Baixar Agora!");
         shareIntent.putExtra(Intent.EXTRA_TEXT, postData);

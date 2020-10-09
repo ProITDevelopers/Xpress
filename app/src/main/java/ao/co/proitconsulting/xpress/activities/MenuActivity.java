@@ -132,6 +132,7 @@ public class MenuActivity extends AppCompatActivity implements
 
             invalidateOptionsMenu();
         };
+
     }
 
     private void setCartInfoBar(RealmResults<CartItemProdutos> cartItems) {

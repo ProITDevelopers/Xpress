@@ -113,7 +113,6 @@
 
                                 <ImageView
                                     android:id="@+id/imgShopCart"
-                                    android:src="@drawable/ic_baseline_shopping_cart_24"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     app:layout_constraintTop_toTopOf="parent"

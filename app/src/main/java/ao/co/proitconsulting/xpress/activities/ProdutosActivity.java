@@ -153,7 +153,13 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             } else {
 //                toggleCartBar(false);
                 cart_count = 0;
-                imgShopCart.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
+//                imgShopCart.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
+
+                try {
+                    imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_24));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -230,12 +236,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 //        cart_count = itemCount;
         cart_count = cartItems.size();
 
-
         try {
-            imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,imgCart));
+            imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_24));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
     }
 
