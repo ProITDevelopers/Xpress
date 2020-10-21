@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">Xpress Entregas</string>
+    <string name="app_name">Xpress Lengueno</string>
     <string name="xpress_logo">Xpress Logo</string>
     <string name="hint_email">Seu e-mail</string>
     <string name="hint_password">Palavra-passe</string>
     <string name="hint_forgot_password">Esqueceu a palavra-passe?</string>
     <string name="hint_btn_login">Entrar</string>
-    <string name="hint_nao_tem_conta">Não tem uma conta?</string>
     <string name="hint_registe_se">Não tem uma conta? Registe-se</string>
     <string name="nome_de_usuario">Nome de usuário</string>
     <string name="motoboy_logo">Motoboy Logo</string>
@@ -14,13 +13,11 @@
     <string name="sobrenome">Sobrenome</string>
     <string name="numero_telefone">Nº de telefone</string>
     <string name="telefone_alternativo">Nº alternativo</string>
-    <string name="confirmar_palavra_passe">Confirmar palavra-passe</string>
     <string name="municipio">Município</string>
     <string name="bairro">Bairro</string>
     <string name="rua">Rua</string>
     <string name="numero_da_casa">Nº da casa</string>
     <string name="btn_registar_text">Registar</string>
-    <string name="ja_tenho_uma_conta">Já tenho uma conta.</string>
     <string name="cancelar">Cancelar</string>
     <string name="entrar_com_outra_conta">Entrar com outra conta</string>
     <string name="alterar_palavra_passe">Alterar palavra-passe</string>
@@ -45,22 +42,17 @@
     <string name="msg_confirm_code_short">Termine de inserir o código de confirmação.</string>
     <string name="msg_sucesso_senha_alterada">A sua palavra-passe foi alterada com sucesso!</string>
     <string name="msg_erro_campo_vazio">Preencha o campo.</string>
-    <string name="msg_erro_campo_vazio_sem_espaco">Preencha o campo sem espaço.</string>
     <string name="msg_erro_campo_com_letras">Preencha o campo com letras.</string>
     <string name="msg_erro_campo_com_email_telefone">Preencha o campo com email ou nº de telefone.</string>
     <string name="msg_erro_min_tres_letras">Preencha o campo no mínimo com 3 letras.</string>
     <string name="msg_erro_password_fraca">Palavra-passe fraca.</string>
-    <string name="msg_erro_password_diferente">Palavra-passe diferente.</string>
     <string name="msg_erro_email_invalido">Preencha o campo com email válido.</string>
     <string name="msg_erro_internet">O dispositivo não está conectado a nenhuma rede 3G ou WI-FI.</string>
     <string name="msg_erro_internet_timeout">O tempo de comunicação excedeu. Possivelmente a internet está lenta.</string>
     <string name="msg_erro">Algum problema ocorreu. Relate o problema.</string>
-    <string name="msg_erro_internet_deslizar">Deslize para baixo, para actualizar.</string>
     <string name="msg_login_auth_verification">Verificando…</string>
     <string name="msg_register_quase_pronto">Quase pronto…</string>
-    <string name="msg_register_registrando">Registando…</string>
     <string name="msg_login_auth_carregando_dados">Carregando dados…</string>
-    <string name="msg_carregando">Carregando…</string>
     <string name="xpress_realm_db">xpress_realm_db</string>
     <string name="gender_male">Masculino</string>
     <string name="gender_female">Feminino</string>
@@ -74,7 +66,7 @@
     <string name="msg_login_auth_validando">Validando os dados…</string>
     <string name="terminar_sessao">Terminar a sessão</string>
     <string name="sem_imagem">Sem Imagem</string>
-    <string name="msg_palavra_passe_errada">Palavra-passe errada</string>
+    <string name="msg_email_palavra_passe_errada">As suas credenciais estão erradas</string>
     <string name="criar_conta">Criar conta</string>
     <string name="msg_erro_user_not_found">Este usuário não exite!</string>
     <string name="enviando_num_telefone">A enviar o nº de telefone…</string>
@@ -83,10 +75,6 @@
     <string name="msg_confirm_code_min_three">3 dígitos no mínimo.</string>
     <string name="msg_confirm_code_incorrecto">Código incorrecto.</string>
 
-    <string-array name="genero">
-        <item>Feminino</item>
-        <item>Masculino</item>
-    </string-array>
     <string-array name="cidade">
         <item>Bengo</item>
         <item>Benguela</item>
@@ -116,15 +104,11 @@
     <string name="action_settings">Definições</string>
 
 
-    <string name="apagar_token">Apagar token</string>
     <string name="xpress.co.ao">xpressentregas.com</string>
     <string name="enviar_email_client">Enviar email</string>
     <string name="genero_sexo">Sexo:</string>
 
     <!--    <string name="msg_error_unable_select_profile_pic">Unable to set profile image. Please try again!</string>-->
-    <string name="lbl_set_profile_photo">Definir imagem de perfil</string>
-    <string name="lbl_take_camera_picture">Tirar uma foto</string>
-    <string name="lbl_choose_from_gallery">Escolha da galeria</string>
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
 
     <string name="price_with_currency">%.2f</string>
@@ -137,7 +121,6 @@
     <string name="dialog_permission_message">Este aplicativo precisa de permissão para usar este recurso. Você pode concedê-los nas configurações do aplicativo.</string>
     <string name="go_to_settings">VÁ PARA AS CONFIGURAÇÕES</string>
     <string name="pesquisar">pesquisar</string>
-    <string name="txt_estabelecimentos">Estabelecimentos</string>
     <string name="txt_xpress">Xpress</string>
     <string name="nav_home_title">Início</string>
     <string name="nav_meu_perfil_title">Meu perfil</string>
@@ -167,7 +150,6 @@
     <string name="salvando_foto">Salvando a foto…</string>
     <string name="foto_atualizada_com_sucesso">Foto de perfil atualizada com sucesso!</string>
     <string name="checkout">Checkout</string>
-    <string name="btn_pagamento">Pagamento</string>
     <string name="local_de_entrega">Local de entrega</string>
     <string name="quer_usar_o_seu_n_toque_aqui">Quer usar o seu nº? Toque aqui!</string>
     <string name="continuar">Continuar</string>
@@ -181,7 +163,6 @@
     <string name="msg_tem_certeza">Tem a certeza?</string>
     <string name="msg_remover_um_item">Essa acção irá remover o item do seu carrinho.</string>
     <string name="msg_remover_todos_items">Essa acção irá remover todos os items do seu carrinho.</string>
-    <string name="sobre_xpress_entregas">Xpress Entregas é um serviço de delivery que permite o usuário realizar os seus pedidos preferidos.</string>
     <string name="txt_descricao">Descrição</string>
 
 </resources>

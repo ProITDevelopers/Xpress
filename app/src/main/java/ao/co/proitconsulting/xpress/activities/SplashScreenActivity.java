@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -24,37 +23,33 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void delaySplashScreen() {
-//        mAuth = FirebaseAuth.getInstance();
 
         Completable.timer(2, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
-                .subscribe(new Action() {
-                    @Override
-                    public void run() throws Exception {
+                .subscribe(() -> {
 
-                        if (TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
+                    if (TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
 
-                            if (AppPrefsSettings.getInstance().getUser()!=null){
-                                Intent intent = new Intent(SplashScreenActivity.this, LoginTemporarioActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                                return;
-                            }else {
-                                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                                return;
-                            }
-
-
-
+                        if (AppPrefsSettings.getInstance().getUser()!=null){
+                            Intent intent = new Intent(SplashScreenActivity.this, LoginTemporarioActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                            return;
+                        }else {
+                            Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                            return;
                         }
-                        if (!TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
 
-                            launchHomeScreen();
-                        }
+
+
+                    }
+                    if (!TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
+
+                        launchHomeScreen();
                     }
                 });
     }

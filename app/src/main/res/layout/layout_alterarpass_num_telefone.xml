@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:paddingTop="12dp"
         android:paddingBottom="15dp"
-        android:id="@+id/linearLayout_AlterarPass"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -86,8 +85,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:id="@+id/blur_password">
+                        android:background="@drawable/box_border">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/dialog_editTelefone"

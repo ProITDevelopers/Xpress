@@ -47,7 +47,6 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgBkg"
                         android:layout_gravity="center"
                         android:src="@color/white"
                         android:layout_width="120dp"
@@ -114,7 +113,6 @@
 
 
                 <TextView
-                    android:id="@+id/txtPass"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/hint_password"
@@ -145,8 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="1dp"
                         android:background="@color/white"
-                        android:alpha="0.7"
-                        android:id="@+id/blur_password">
+                        android:alpha="0.7">
 
                         <!--                        android:hint="@string/hint_password"-->
                         <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText

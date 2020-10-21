@@ -48,7 +48,6 @@
                         android:baselineAligned="false">
 
                         <RelativeLayout
-                            android:id="@+id/hint_nome1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/box_border"
@@ -71,7 +70,6 @@
                         </RelativeLayout>
 
                         <RelativeLayout
-                            android:id="@+id/hint_nome2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/box_border"
@@ -271,7 +269,6 @@
                         android:baselineAligned="false">
 
                         <RelativeLayout
-                            android:id="@+id/hint_ncasa"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/box_border"
@@ -292,7 +289,6 @@
                         </RelativeLayout>
 
                         <RelativeLayout
-                            android:id="@+id/hint_provincia"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/box_border"

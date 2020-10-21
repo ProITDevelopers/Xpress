@@ -252,6 +252,7 @@ public class EstabelecimentoFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
+                swipeRefreshEstab.setRefreshing(false);
                 if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
                 }else  if ("timeout".equals(t.getMessage())) {

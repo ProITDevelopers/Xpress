@@ -221,7 +221,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     if (message.equals("\"Password ou Email Errados\"")){
-                        MetodosUsados.mostrarMensagem(LoginActivity.this,getString(R.string.msg_palavra_passe_errada));
+                        MetodosUsados.mostrarMensagem(LoginActivity.this,getString(R.string.msg_email_palavra_passe_errada));
                     }
 
                     if (message.equals("\"Usuario Não Existe\"")){

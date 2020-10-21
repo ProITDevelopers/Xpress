@@ -38,7 +38,8 @@
         <activity
             android:name=".activities.ProdutoDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyCustomAppTheme"></activity>
+            android:theme="@style/MyCustomAppTheme">
+        </activity>
         <activity
             android:name=".activities.MeusPedidosActivity"
             android:screenOrientation="portrait" />
@@ -60,6 +61,7 @@
             android:label="@string/title_activity_perfil"
             android:screenOrientation="portrait" />
 
+        <!-- MAPA DA GOOGLE -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -67,6 +69,7 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+        <!-- MAPA DA GOOGLE -->
 
         <activity
             android:name=".activities.MapaActivity"
@@ -109,7 +112,9 @@
             android:name=".activities.LoginTemporarioActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" /> <!-- cache directory file provider paths -->
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <!-- Photo cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -119,10 +124,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <!-- Photo cache directory file provider paths -->
 
+        <!-- SIGNALR NOTIFICATIONS SERVICE -->
         <service
             android:name=".mySignalR.MySignalRService"
             android:enabled="true" />
+        <!-- SIGNALR NOTIFICATIONS SERVICE -->
     </application>
 
 </manifest>

@@ -17,7 +17,7 @@ import io.reactivex.Single;
 public class MySignalRService extends Service {
 
     //    private static final String BASE_URL_XPRESS_EVENTHUB = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/eventhub";
-    private static final String BASE_URL_XPRESS_EVENTHUB = "https://apivendas.xpressentregas.com/eventhub";
+    private static final String BASE_URL_XPRESS_EVENTHUB = "https://apixpress.lengueno.com/eventhub";
 
     private HubConnection mHubConnection;
     private final IBinder mBinder = new LocalBinder(); // Binder given to clients

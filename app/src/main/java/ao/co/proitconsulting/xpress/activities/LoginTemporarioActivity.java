@@ -45,7 +45,7 @@ import retrofit2.Response;
 
 public class LoginTemporarioActivity extends AppCompatActivity {
 
-    private static final String TAG = "TAG_LoginTemporarioActivity";
+    private static final String TAG = "TAG_LoginTempActivity";
     private RelativeLayout logintemp_root;
     private CircleImageView imgUserPhoto;
     private TextView txtNomeUser,txtUserNameInitial;
@@ -256,7 +256,7 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                         }
 
                         if (message.equals("\"Password ou Email Errados\"")){
-                            MetodosUsados.mostrarMensagem(LoginTemporarioActivity.this,getString(R.string.msg_palavra_passe_errada));
+                            MetodosUsados.mostrarMensagem(LoginTemporarioActivity.this,getString(R.string.msg_email_palavra_passe_errada));
                         }
 
                         if (message.equals("\"Usuario Não Existe\"")){
