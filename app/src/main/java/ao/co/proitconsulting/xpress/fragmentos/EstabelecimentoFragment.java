@@ -217,18 +217,16 @@ public class EstabelecimentoFragment extends Fragment {
                         estabelecimentoList.clear();
                         if (searchView!=null) {
                             for (Estabelecimento estabelecimento:response.body()){
+
                                 if (estabelecimento.nomeEstabelecimento.toLowerCase().startsWith(searchText.toLowerCase()) ||
                                         estabelecimento.nomeEstabelecimento.toLowerCase().contains(searchText.toLowerCase())){
 
                                     txtNotFound.setVisibility(View.GONE);
                                     estabelecimentoList.add(estabelecimento);
                                 }
-                                else {
 
-                                    txtNotFound.setText(getString(R.string.nenhum_estabelecimento_n_encontrado));
-                                    txtNotFound.setVisibility(View.VISIBLE);
-                                }
                             }
+
                         } else{
 
                             estabelecimentoList = response.body();

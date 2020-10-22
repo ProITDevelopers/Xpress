@@ -63,19 +63,19 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             case 2:
 //                MetodosUsados.mostrarMensagem(this,getString(R.string.xpress_co_ao));
                 break;
+//            case 3:
+//                MetodosUsados.mostrarMensagem(this,sobreNos.getDescription());
+//                break;
             case 3:
-                MetodosUsados.mostrarMensagem(this,sobreNos.getDescription());
+//                MetodosUsados.mostrarMensagem(this,sobreNos.getTitle().concat(": "+sobreNos.getDescription()));
                 break;
             case 4:
-                MetodosUsados.mostrarMensagem(this,sobreNos.getTitle().concat(": "+sobreNos.getDescription()));
+//                MetodosUsados.mostrarMensagem(this,sobreNos.getDescription());
                 break;
             case 5:
-                MetodosUsados.mostrarMensagem(this,sobreNos.getDescription());
-                break;
-            case 6:
                 sendFeedback(this);
                 break;
-            case 7:
+            case 6:
                 MetodosUsados.shareTheApp(this);
                 break;
 
