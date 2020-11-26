@@ -10,6 +10,9 @@ public class OrderItem {
     @SerializedName("quantidade")
     public int quantidade;
 
+    @SerializedName("taxaEntrega")
+    public float taxaEntrega;
+
 
     @SerializedName("ideStabelecimento")
     public int ideStabelecimento;

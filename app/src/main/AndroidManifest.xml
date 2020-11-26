@@ -24,22 +24,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".sectionsTests.ShopCartActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
         <!-- FOTO_CROP_ACTIVITY -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".activities.ConfiguracoesActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activities.ProdutoDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyCustomAppTheme">
-        </activity>
+            android:theme="@style/MyCustomAppTheme"></activity>
         <activity
             android:name=".activities.MeusPedidosActivity"
             android:screenOrientation="portrait" />
@@ -59,18 +60,14 @@
         <activity
             android:name=".activities.PerfilActivity"
             android:label="@string/title_activity_perfil"
-            android:screenOrientation="portrait" />
-
-        <!-- MAPA DA GOOGLE -->
+            android:screenOrientation="portrait" /> <!-- MAPA DA GOOGLE -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" />
-        <!-- MAPA DA GOOGLE -->
-
+            android:required="false" /> <!-- MAPA DA GOOGLE -->
         <activity
             android:name=".activities.MapaActivity"
             android:configChanges="orientation|screenSize" />
@@ -112,9 +109,7 @@
             android:name=".activities.LoginTemporarioActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-
-        <!-- Photo cache directory file provider paths -->
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" /> <!-- Photo cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -123,14 +118,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-        <!-- Photo cache directory file provider paths -->
-
+        </provider> <!-- Photo cache directory file provider paths -->
         <!-- SIGNALR NOTIFICATIONS SERVICE -->
         <service
             android:name=".mySignalR.MySignalRService"
             android:enabled="true" />
-        <!-- SIGNALR NOTIFICATIONS SERVICE -->
     </application>
 
 </manifest>

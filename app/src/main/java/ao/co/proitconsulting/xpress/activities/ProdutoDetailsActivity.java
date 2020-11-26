@@ -177,6 +177,7 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+//                Intent intent = new Intent(ProdutoDetailsActivity.this, ShopCartActivity.class);
                 startActivity(intent);
             }
         });
@@ -208,11 +209,13 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
 
                 if (cartItem != null) {
                     Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+//                    Intent intent = new Intent(ProdutoDetailsActivity.this,ShopCartActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }else{
                     listener.onProductAddedCart(position,produtos);
                     Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+//                    Intent intent = new Intent(ProdutoDetailsActivity.this,ShopCartActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
@@ -270,6 +273,7 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
 
         if (id == R.id.action_cart) {
             Intent intent = new Intent(this,ShoppingCartActivity.class);
+//            Intent intent = new Intent(this,ShopCartActivity.class);
             startActivity(intent);
 
             return true;

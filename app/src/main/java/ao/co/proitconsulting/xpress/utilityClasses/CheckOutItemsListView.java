@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
+import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 
 public class CheckOutItemsListView extends ConstraintLayout {
@@ -24,6 +26,7 @@ public class CheckOutItemsListView extends ConstraintLayout {
     private LinearLayout layoutContainer;
 
     private List<CartItemProdutos> items = new ArrayList<>();
+    private List<GetTaxaModel> taxaModelList = new ArrayList<>();
     private LayoutInflater inflater;
 
     public CheckOutItemsListView(Context context) {
@@ -60,13 +63,19 @@ public class CheckOutItemsListView extends ConstraintLayout {
 
     private void renderItems() {
         layoutContainer.removeAllViews();
-        for (CartItemProdutos item : items) {
+
+
+        for (int i = 0; i < items.size(); i++) {
             View view = inflater.inflate(R.layout.item_view_checkout_list_row, null);
+            CartItemProdutos item = items.get(i);
+            float taxaValor = Float.parseFloat(Common.getTaxaModelList.get(i).valorTaxa);
+
             if (item.produtos != null) {
 
                 Picasso.with(getContext())
                         .load(item.produtos.getImagemProduto())
                         .fit()
+                        .centerCrop()
                         .placeholder(R.drawable.store_placeholder)
                         .into((ImageView) view.findViewById(R.id.thumbnail));
 
@@ -76,10 +85,34 @@ public class CheckOutItemsListView extends ConstraintLayout {
                 ((TextView) view.findViewById(R.id.estabelecimento)).setText(item.produtos.getEstabelecimento());
 
                 ((TextView) view.findViewById(R.id.price)).setText(getContext().getString(R.string.lbl_item_price_quantity, getContext().getString(R.string.price_with_currency, item.produtos.getPrecoUnid())+ " AKZ", item.quantity));
+                ((TextView) view.findViewById(R.id.taxa)).setText(getContext().getString(R.string.price_with_currency, taxaValor).concat(" AKZ"));
 
 
             }
+
             layoutContainer.addView(view);
         }
+//        for (CartItemProdutos item : items) {
+//            View view = inflater.inflate(R.layout.item_view_checkout_list_row, null);
+//            if (item.produtos != null) {
+//
+//                Picasso.with(getContext())
+//                        .load(item.produtos.getImagemProduto())
+//                        .fit()
+//                        .centerCrop()
+//                        .placeholder(R.drawable.store_placeholder)
+//                        .into((ImageView) view.findViewById(R.id.thumbnail));
+//
+////                ((CircleImageView) view.findViewById(R.id.thumbnail)).setImageResource(R.drawable.snack_food);
+//
+//                ((TextView) view.findViewById(R.id.name)).setText(item.produtos.getDescricaoProdutoC());
+//                ((TextView) view.findViewById(R.id.estabelecimento)).setText(item.produtos.getEstabelecimento());
+//
+//                ((TextView) view.findViewById(R.id.price)).setText(getContext().getString(R.string.lbl_item_price_quantity, getContext().getString(R.string.price_with_currency, item.produtos.getPrecoUnid())+ " AKZ", item.quantity));
+//
+//
+//            }
+//            layoutContainer.addView(view);
+//        }
     }
 }

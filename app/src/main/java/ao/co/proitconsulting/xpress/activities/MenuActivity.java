@@ -396,6 +396,7 @@ public class MenuActivity extends AppCompatActivity implements
 
         if (id == R.id.action_cart) {
             Intent intent = new Intent(this,ShoppingCartActivity.class);
+//            Intent intent = new Intent(this, ShopCartActivity.class);
             startActivity(intent);
 
             return true;

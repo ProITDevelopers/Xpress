@@ -103,7 +103,7 @@ public interface ApiInterface {
     Call<ResponseBody> facturaTPA(@Body Order order);
 
     @POST("/FacturaReferencia")
-    Call<List<ReferenciaRequest>> facturaReferencia(@Body Order order);
+    Call<List<List<ReferenciaRequest>>> facturaReferencia(@Body Order order);
 
     @GET("/FacturasActualCliente")
     Call<List<Factura>> getTodasFacturas();

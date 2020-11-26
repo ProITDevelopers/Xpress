@@ -12,4 +12,6 @@ public class CartItemProdutos extends RealmObject {
     public int quantity = 0;
 
     public CartItemProdutos() {}
+
+
 }

@@ -39,12 +39,12 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
     private RecyclerViewOnItemClickListener itemClickListener;
 
-    public ProdutosAdapter(Context context, List<Produtos> produtosList, ProductsAdapterListener listener, GridLayoutManager layoutManager,int ideStabelecimento) {
+    public ProdutosAdapter(Context context, List<Produtos> produtosList, ProductsAdapterListener listener, GridLayoutManager layoutManager) {
         this.context = context;
         this.produtosList = produtosList;
         this.listener = listener;
         this.mLayoutManager = layoutManager;
-        this.ideStabelecimento = ideStabelecimento;
+//        this.ideStabelecimento = ideStabelecimento;
 
     }
 
@@ -77,12 +77,14 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
         Produtos produto = produtosList.get(position);
         if (produto!=null){
-            produto.ideStabelecimento = ideStabelecimento;
+//            produto.ideStabelecimento = ideStabelecimento;
 
             Picasso.with(context).load(produto.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
             holder.name.setText(produto.getDescricaoProdutoC());
             String preco = String.valueOf(produto.getPrecoUnid());
             holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
+
+
 
             if (getItemViewType(position) == VIEW_TYPE_LIST) {
                 holder.descricao.setText(produto.getDescricaoProduto());

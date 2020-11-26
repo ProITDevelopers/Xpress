@@ -25,6 +25,7 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
+import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
@@ -137,18 +138,34 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
     private void prepareOrder() {
 
-        List<CartItemProdutos> cartItems = realm.where(CartItemProdutos.class).findAll();
+        List<CartItemProdutos> cartItems = realm.where(CartItemProdutos.class).sort("produtos.estabelecimento").findAll();
 
         orderItems = new ArrayList<>();
-        for (CartItemProdutos cartItem : cartItems) {
+        for (int i = 0; i < cartItems.size(); i++) {
+            CartItemProdutos cartItem = cartItems.get(i);
             OrderItem orderItem = new OrderItem();
-            orderItem.produtoId = cartItem.produtos.getIdProduto();
-            orderItem.quantidade = cartItem.quantity;
-            orderItem.ideStabelecimento = cartItem.produtos.ideStabelecimento;
+            float taxaValor = Float.parseFloat(Common.getTaxaModelList.get(i).valorTaxa);
+            if (cartItem!=null){
+                if(cartItem.produtos!=null){
+                    orderItem.produtoId = cartItem.produtos.getIdProduto();
+                    orderItem.quantidade = cartItem.quantity;
+                    orderItem.taxaEntrega = taxaValor;
+                    orderItem.ideStabelecimento = cartItem.produtos.idEstabelecimento;
+                    orderItems.add(orderItem);
+                }
+            }
 
 
-            orderItems.add(orderItem);
         }
+//        for (CartItemProdutos cartItem : cartItems) {
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.produtoId = cartItem.produtos.getIdProduto();
+//            orderItem.quantidade = cartItem.quantity;
+//            orderItem.ideStabelecimento = cartItem.produtos.idEstabelecimento;
+//
+//
+//            orderItems.add(orderItem);
+//        }
 
         verificarConexao();
         
@@ -249,16 +266,21 @@ public class EnviarPedidoActivity extends AppCompatActivity {
     private void facturacaoReferencia(Order order) {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<ReferenciaRequest>> facturaWallet = apiInterface.facturaReferencia(order);
-        facturaWallet.enqueue(new Callback<List<ReferenciaRequest>>() {
+        Call<List<List<ReferenciaRequest>>> facturaWallet = apiInterface.facturaReferencia(order);
+        facturaWallet.enqueue(new Callback<List<List<ReferenciaRequest>>>() {
             @Override
-            public void onResponse(@NonNull Call<List<ReferenciaRequest>> call, @NonNull Response<List<ReferenciaRequest>> response) {
+            public void onResponse(@NonNull Call<List<List<ReferenciaRequest>>> call, @NonNull Response<List<List<ReferenciaRequest>>> response) {
 
+                List<ReferenciaRequest> referenciaRequestList = new ArrayList<>();
                 if (response.isSuccessful()) {
                     waitingDialog.cancel();
                     if (response.body()!=null){
 
-                        referenciaRequest = response.body().get(0);
+//                        referenciaRequest = response.body().get(0);
+
+                        referenciaRequestList = response.body().get(0);
+
+                        referenciaRequest = referenciaRequestList.get(0);
 
                         mensagemSucesso(getString(R.string.pedido_enviado_com_sucesso), tipoPagamento,true);
 
@@ -279,7 +301,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<ReferenciaRequest>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<List<ReferenciaRequest>>> call, @NonNull Throwable t) {
                 waitingDialog.cancel();
                 if ("timeout".equals(t.getMessage())) {
                     MetodosUsados.mostrarMensagem(EnviarPedidoActivity.this,R.string.msg_erro_internet_timeout);

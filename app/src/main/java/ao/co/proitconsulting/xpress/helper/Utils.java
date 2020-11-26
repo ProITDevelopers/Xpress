@@ -3,7 +3,9 @@ package ao.co.proitconsulting.xpress.helper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.FavoritosItem;
 import io.realm.RealmResults;
@@ -16,6 +18,16 @@ public class Utils {
             price += item.produtos.getPrecoUnid() * item.quantity;
         }
         return price;
+    }
+
+    public static float getCartTaxa(List<GetTaxaModel> taxaModelList, float totalPrice) {
+        float taxa = 0f;
+        for (GetTaxaModel item : taxaModelList) {
+            float valorTaxa = Float.parseFloat(item.valorTaxa);
+            taxa += valorTaxa + totalPrice;
+
+        }
+        return taxa;
     }
 
     public static int getFavoriteQuantity(RealmResults<FavoritosItem> favoritosItems) {

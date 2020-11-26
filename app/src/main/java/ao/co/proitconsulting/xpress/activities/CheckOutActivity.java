@@ -29,6 +29,7 @@ import io.realm.RealmResults;
 
 public class CheckOutActivity extends AppCompatActivity {
 
+
     private LocalEncomenda localEncomenda;
     private String tipoPagamento,totalCart;
     private int totalItems;
@@ -54,6 +55,7 @@ public class CheckOutActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         if (getIntent()!=null){
+
             localEncomenda = (LocalEncomenda) getIntent().getSerializableExtra("localEncomenda");
             tipoPagamento = getIntent().getStringExtra("tipoPagamento");
             totalItems = getIntent().getIntExtra("totalItems",0);
@@ -64,7 +66,7 @@ public class CheckOutActivity extends AppCompatActivity {
         btn_enviar_pedido = findViewById(R.id.btn_enviar_pedido);
 
         realm = Realm.getDefaultInstance();
-        cartItems = realm.where(CartItemProdutos.class).findAllAsync();
+        cartItems = realm.where(CartItemProdutos.class).sort("produtos.estabelecimento").findAllAsync();
 
         checkoutOrder.itens = cartItems;
         checkoutOrder.itens_cart = totalItems;

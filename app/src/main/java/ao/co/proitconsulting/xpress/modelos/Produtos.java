@@ -17,8 +17,9 @@ public class Produtos extends RealmObject {
     @SerializedName("estabelecimento")
     public String estabelecimento;
 
-    @SerializedName("ideStabelecimento")
-    public int ideStabelecimento;
+
+    public int idEstabelecimento;
+
 
     @SerializedName("imagemProduto")
     public String imagemProduto;
@@ -29,6 +30,14 @@ public class Produtos extends RealmObject {
     public int emStock;
 
     public int tempo_de_preparacao;
+
+    @SerializedName("latitude")
+    public String latitude;
+
+    @SerializedName("longitude")
+    public String longitude;
+
+
 
 
     public Produtos() {}
@@ -83,7 +92,6 @@ public class Produtos extends RealmObject {
     public int getTempo_de_preparacao() {
         return tempo_de_preparacao;
     }
-
 
 
 }

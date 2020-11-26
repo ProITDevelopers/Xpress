@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.BuildConfig;
+import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
 import ao.co.proitconsulting.xpress.modelos.SobreNos;
 
 public class Common {
+
+    public static List<GetTaxaModel> getTaxaModelList = new ArrayList<>();
 
     public static Location mLastLocation;
     public static final String SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id=";

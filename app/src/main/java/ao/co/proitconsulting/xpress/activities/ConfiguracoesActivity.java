@@ -53,7 +53,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         });
     }
 
-    private void goToOptionSelected(int id) {
+       private void goToOptionSelected(int id) {
         switch (id){
             case 1:
                 Intent intent = new Intent(this,AlterarPalavraPasseActivity.class);

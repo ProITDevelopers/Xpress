@@ -122,6 +122,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProdutosActivity.this,ShoppingCartActivity.class);
+//                Intent intent = new Intent(ProdutosActivity.this, ShopCartActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -279,8 +280,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
                         produtosList = response.body();
 
-                        setProdutosAdapters(produtosList);
                         AppDatabase.saveProducts(produtosList);
+                        setProdutosAdapters(produtosList);
 
                     } else {
                         Toast.makeText(ProdutosActivity.this, ""+response.message(), Toast.LENGTH_SHORT).show();
@@ -338,7 +339,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
         if (produtosList.size()>0){
 
-            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager,ideStabelecimento);
+            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 

@@ -1,7 +1,6 @@
-package ao.co.proitconsulting.xpress.activities;
+package ao.co.proitconsulting.xpress.sectionsTests;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -27,29 +25,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.adapters.CartProdutosAdapter;
-import ao.co.proitconsulting.xpress.api.ADAO.ApiClientADAO;
-import ao.co.proitconsulting.xpress.api.ADAO.ApiInterfaceADAO;
-import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
-import ao.co.proitconsulting.xpress.api.ADAO.ListTaxaModel;
-import ao.co.proitconsulting.xpress.helper.Common;
+import ao.co.proitconsulting.xpress.activities.CheckOutActivity;
+import ao.co.proitconsulting.xpress.activities.ConfiguracoesActivity;
+import ao.co.proitconsulting.xpress.activities.MapaActivity;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.LocalEncomenda;
-import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.utilityClasses.CartInfoBar;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class ShoppingCartActivity extends AppCompatActivity implements CartProdutosAdapter.CartProductsAdapterListener{
+public class ShopCartActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG_ShoppingCartActivity";
     private static final int PLACE_PICKER_REQ_CODE = 12;
@@ -59,9 +50,10 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     private Button btnCheckout;
 
     private Realm realm;
-    private CartProdutosAdapter mAdapter;
+    private MainRecyclerAdapter mAdapter;
     private RealmResults<CartItemProdutos> cartItems;
-    private RealmChangeListener<RealmResults<CartItemProdutos>> cartItemRealmChangeListener;
+    private List<CartItemProdutosSections> cartItemsSections = new ArrayList<>();
+    private RealmChangeListener<RealmResults<CartItemProdutosSections>> cartItemRealmChangeListener;
 
     float totalPrice;
     int totalItems=0;
@@ -90,7 +82,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_cart);
+        setContentView(R.layout.activity_shop_cart);
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle(getString(R.string.carrinho));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -105,26 +97,25 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
 
         realm = Realm.getDefaultInstance();
-        cartItems = realm.where(CartItemProdutos.class).sort("produtos.estabelecimento").findAllAsync();
-//        cartItems = realm.where(CartItemProdutos.class).findAllAsync();
+        cartItems = realm.where(CartItemProdutos.class).findAllAsync();
+
+//        cartItemRealmChangeListener = cartItems -> {
+//            mAdapter.setData(cartItems);
+//            setTotalPrice();
+//
+//            if (cartItems != null && cartItems.size() > 0) {
+//                setCartInfoBar(cartItems);
+//                toggleCartBar(true);
+//
+//            } else {
+//                toggleCartBar(false);
+//            }
+//        };
+//
+//        cartItems.addChangeListener(cartItemRealmChangeListener);
 
 
 
-        cartItemRealmChangeListener = cartItems -> {
-
-            mAdapter.setData(cartItems);
-            setTotalPrice();
-
-            if (cartItems != null && cartItems.size() > 0) {
-                setCartInfoBar(cartItems);
-                toggleCartBar(true);
-
-            } else {
-                toggleCartBar(false);
-            }
-        };
-
-        cartItems.addChangeListener(cartItemRealmChangeListener);
         init();
 
         btnCheckout.setOnClickListener(new View.OnClickListener() {
@@ -174,18 +165,50 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
         dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
         dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
-
-
     }
 
+
     private void abrirMapaActivity() {
-        Intent intent = new Intent(ShoppingCartActivity.this,MapaActivity.class);
+        Intent intent = new Intent(this, MapaActivity.class);
         intent.putExtra("toolbarTitle","Local de entrega");
         startActivityForResult(intent, PLACE_PICKER_REQ_CODE);
     }
 
     private void init() {
-        mAdapter = new CartProdutosAdapter(this, this);
+
+        List<String> sections = new ArrayList<>();
+        List<String> newSections = new ArrayList<>();
+
+        if (cartItems!=null){
+            for (int i = 0; i < cartItems.size(); i++) {
+
+                sections.add(cartItems.get(i).produtos.estabelecimento);
+
+            }
+        }
+
+
+
+
+        for (String section:sections) {
+            if (!newSections.contains(section)){
+                newSections.add(section);
+            }
+        }
+
+
+
+
+
+        for (String emp:newSections) {
+
+            if (cartItems!=null)
+                cartItemsSections.add(getFilterOutput(emp,cartItems));
+        }
+
+
+
+        mAdapter = new MainRecyclerAdapter(this, cartItemsSections);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -198,6 +221,17 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
     }
 
+
+    private CartItemProdutosSections getFilterOutput(String filter, RealmResults<CartItemProdutos> sectionList) {
+        List<CartItemProdutos> result = new ArrayList<>();
+        for (CartItemProdutos line : sectionList) {
+            if (filter.equals(line.produtos.estabelecimento)) { // we dont like mkyong
+                result.add(line);
+            }
+        }
+
+        return new CartItemProdutosSections(filter,result);
+    }
 
 
     private void setTotalPrice() {
@@ -237,9 +271,9 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (cartItems != null) {
-            cartItems.removeChangeListener(cartItemRealmChangeListener);
-        }
+//        if (cartItems != null) {
+//            cartItems.removeChangeListener(cartItemRealmChangeListener);
+//        }
 
         if (realm != null) {
             realm.close();
@@ -252,28 +286,28 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
     }
 
-    @Override
-    public void onCartItemRemoved(int index, CartItemProdutos cartItem) {
-        AppDatabase.removeCartItem(cartItem);
-    }
-
-    @Override
-    public void onProductAddedCart(int index, Produtos product) {
-        AppDatabase.addItemToCart(this,product);
-        if (cartItems != null) {
-            mAdapter.updateItem(index, cartItems);
-
-        }
-    }
-
-    @Override
-    public void onProductRemovedFromCart(int index, Produtos product) {
-        AppDatabase.removeCartItem(product);
-        if (cartItems != null) {
-            mAdapter.updateItem(index, cartItems);
-
-        }
-    }
+//    @Override
+//    public void onCartItemRemoved(int index, CartItemProdutos cartItem) {
+//        AppDatabase.removeCartItem(cartItem);
+//    }
+//
+//    @Override
+//    public void onProductAddedCart(int index, Produtos product) {
+//        AppDatabase.addItemToCart(this,product);
+//        if (cartItems != null) {
+//            mAdapter.updateItem(index, cartItems);
+//
+//        }
+//    }
+//
+//    @Override
+//    public void onProductRemovedFromCart(int index, Produtos product) {
+//        AppDatabase.removeCartItem(product);
+//        if (cartItems != null) {
+//            mAdapter.updateItem(index, cartItems);
+//
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -313,7 +347,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         }
 
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this,ConfiguracoesActivity.class);
+            Intent intent = new Intent(this, ConfiguracoesActivity.class);
             startActivity(intent);
             return true;
         }
@@ -388,7 +422,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         dialog_btn_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MetodosUsados.esconderTeclado(ShoppingCartActivity.this);
+                MetodosUsados.esconderTeclado(ShopCartActivity.this);
                 limparCampos();
 
 
@@ -449,7 +483,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
     private void escolherTipodePagamento() {
 
-        MetodosUsados.esconderTeclado(ShoppingCartActivity.this);
+        MetodosUsados.esconderTeclado(this);
 
         imgBtnFechar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -464,8 +498,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
             public void onClick(View v) {
                 tipoPagamento = dialog_btn_multicaixa.getText().toString();
                 dialogLayoutTipoPagamento.cancel();
-//                abrirCheckOutActivity();
-                criarLista();
+                abrirCheckOutActivity();
 
             }
         });
@@ -476,102 +509,14 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
                 tipoPagamento = dialog_btn_referencia.getText().toString();
                 dialogLayoutTipoPagamento.cancel();
-//                abrirCheckOutActivity();
-                criarLista();
+                abrirCheckOutActivity();
             }
         });
 
         dialogLayoutTipoPagamento.show();
     }
 
-    private void criarLista(){
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Aguarde...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        List<ListTaxaModel> listTaxaList = new ArrayList<>();
-
-
-        for (int i = 0; i < cartItems.size(); i++) {
-
-            ListTaxaModel listTaxaModel = new ListTaxaModel();
-
-            if (cartItems!=null){
-
-                CartItemProdutos cartItemProdutos = cartItems.get(i);
-
-                if (cartItemProdutos!=null){
-                    Produtos produtos = cartItemProdutos.produtos;
-
-                    listTaxaModel.idEstabelecimento = String.valueOf(produtos.idEstabelecimento);
-                    listTaxaModel.latitudeOrigem = Double.parseDouble(produtos.latitude);
-                    listTaxaModel.longitudeOrigem = Double.parseDouble(produtos.longitude);
-                    listTaxaModel.latitudeDestino = Double.parseDouble(latitude);
-                    listTaxaModel.longitudeDestino = Double.parseDouble(longitude);
-                    listTaxaList.add(listTaxaModel);
-                }
-
-
-            }
-
-
-        }
-
-
-        enviarLista(listTaxaList,progressDialog);
-    }
-
-    private void enviarLista(List<ListTaxaModel> listTaxaModelList,ProgressDialog progressDialog) {
-
-
-
-
-
-        ApiInterfaceADAO apiInterface = ApiClientADAO.getClient().create(ApiInterfaceADAO.class);
-        Call<List<GetTaxaModel>> getTaxaList = apiInterface.sendListTOGETTaxa(listTaxaModelList);
-        getTaxaList.enqueue(new Callback<List<GetTaxaModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<GetTaxaModel>> call, @NonNull Response<List<GetTaxaModel>> response) {
-
-
-
-                if (response.isSuccessful()) {
-                    progressDialog.cancel();
-                    if (response.body()!=null){
-
-                        Common.getTaxaModelList = response.body();
-                        abrirCheckOutActivity();
-
-                    }
-
-                } else {
-
-                    progressDialog.cancel();
-
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<GetTaxaModel>> call, @NonNull Throwable t) {
-                progressDialog.cancel();
-                if ("timeout".equals(t.getMessage())) {
-                    MetodosUsados.mostrarMensagem(ShoppingCartActivity.this,R.string.msg_erro_internet_timeout);
-                }else {
-                    MetodosUsados.mostrarMensagem(ShoppingCartActivity.this,R.string.msg_erro);
-                }
-
-
-            }
-        });
-
-    }
-
     private void abrirCheckOutActivity() {
-
-        totalCart = String.valueOf(Utils.getCartTaxa(Common.getTaxaModelList,totalPrice));
 
         LocalEncomenda localEncomenda = new LocalEncomenda();
         localEncomenda.latitude = latitude;
@@ -579,7 +524,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         localEncomenda.pontodeReferencia = endereco;
         localEncomenda.nTelefone = telefone;
 
-        Intent intent = new Intent(this,CheckOutActivity.class);
+        Intent intent = new Intent(this, CheckOutActivity.class);
         intent.putExtra("localEncomenda",localEncomenda);
         intent.putExtra("tipoPagamento",tipoPagamento);
         intent.putExtra("totalItems",totalItems);
@@ -587,4 +532,5 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         startActivity(intent);
         finish();
     }
+
 }
