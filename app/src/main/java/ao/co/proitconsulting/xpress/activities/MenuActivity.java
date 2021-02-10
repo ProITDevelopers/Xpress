@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -39,7 +40,6 @@ import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
-import ao.co.proitconsulting.xpress.utilityClasses.AddBadgeCartConverter;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -71,6 +71,8 @@ public class MenuActivity extends AppCompatActivity implements
     private RealmResults<CartItemProdutos> cartItems;
     private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
     int cart_count = 0;
+    private NotificationBadge badge;
+    private ImageView cart_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -383,9 +385,38 @@ public class MenuActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_options; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_options, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_cart);
-        menuItem.setIcon(AddBadgeCartConverter.convertLayoutToImage(MenuActivity.this,cart_count,R.drawable.ic_baseline_shopping_cart_white_24));
+        View view = menu.findItem(R.id.action_cart).getActionView();
+        badge = (NotificationBadge)view.findViewById(R.id.badge);
+        cart_icon = (ImageView) view.findViewById(R.id.cart_icon);
+        cart_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MenuActivity.this,ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            Intent intent = new Intent(this, ShopCartActivity.class);
+                startActivity(intent);
+            }
+        });
+        updateCartCount();
+
+//        MenuItem menuItem = menu.findItem(R.id.action_cart);
+//        menuItem.setIcon(AddBadgeCartConverter.convertLayoutToImage(MenuActivity.this,cart_count,R.drawable.ic_baseline_shopping_cart_white_24));
         return true;
+    }
+
+    private void updateCartCount() {
+        if (badge == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (cart_count == 0)
+                    badge.setVisibility(View.INVISIBLE);
+                else{
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(String.valueOf(cart_count));
+                }
+            }
+        });
     }
 
     @Override
@@ -394,13 +425,13 @@ public class MenuActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
 
-        if (id == R.id.action_cart) {
-            Intent intent = new Intent(this,ShoppingCartActivity.class);
-//            Intent intent = new Intent(this, ShopCartActivity.class);
-            startActivity(intent);
-
-            return true;
-        }
+//        if (id == R.id.action_cart) {
+//            Intent intent = new Intent(this,ShoppingCartActivity.class);
+////            Intent intent = new Intent(this, ShopCartActivity.class);
+//            startActivity(intent);
+//
+//            return true;
+//        }
 
         if (id == R.id.action_logout) {
             mensagemLogOut();
@@ -421,6 +452,8 @@ public class MenuActivity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
+
+        updateCartCount();
 
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);

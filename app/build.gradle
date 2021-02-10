@@ -2,17 +2,19 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "ao.co.proitconsulting.xpress"
         minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 3
-        versionName "1.0.3"
+        targetSdkVersion 30
+        versionCode 7
+        versionName "1.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //NEW CODE
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -32,10 +34,10 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.0'
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.2'
+    implementation 'androidx.navigation:navigation-ui:2.3.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -69,6 +71,12 @@ dependencies {
 
     //LOADING_DIALOG
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
+    //NEX3Z_NOTIFICATIONBADGE
+    implementation 'com.nex3z:notification-badge:1.0.4'
+
+    //MULTIDEX (NEX3Z_NOTIFICATIONBADGE)
+    implementation "androidx.multidex:multidex:2.0.1"
 
 
     // Reactivex is a project which provides implementations

@@ -7,6 +7,7 @@
         android:top="2dp"
         android:right="2dp"
         android:bottom="2dp" />
+    <solid android:color="@android:color/transparent"/>
 
     <corners android:radius="5dp" />
 

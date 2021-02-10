@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.annotations.SerializedName;
+import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,7 +41,6 @@ import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
-import ao.co.proitconsulting.xpress.utilityClasses.AddBadgeCartConverter;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -81,6 +81,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     private TextView txtEstabNome,txtEstabAddress;
     private Estabelecimento estabelecimento;
     private ImageView imgShopCart;
+    private NotificationBadge badge;
 
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
@@ -117,6 +118,9 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         txtEstabNome = findViewById(R.id.txtEstabNome);
         txtEstabAddress = findViewById(R.id.txtEstabAddress);
         imgShopCart = findViewById(R.id.imgShopCart);
+        badge = findViewById(R.id.badge);
+
+
 
         imgShopCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,11 +160,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
                 cart_count = 0;
 //                imgShopCart.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
 
-                try {
-                    imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_24));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                updateCartCount();
 
             }
 
@@ -237,13 +237,24 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 //        cart_count = itemCount;
         cart_count = cartItems.size();
 
-        try {
-            imgShopCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_24));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        updateCartCount();
 
 
+    }
+
+    private void updateCartCount() {
+        if (badge == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (cart_count == 0)
+                    badge.setVisibility(View.INVISIBLE);
+                else{
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(String.valueOf(cart_count));
+                }
+            }
+        });
     }
 
     @Override

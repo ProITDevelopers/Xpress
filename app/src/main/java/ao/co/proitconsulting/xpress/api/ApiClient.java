@@ -19,7 +19,6 @@ public class ApiClient {
     private static OkHttpClient okHttpClient;
 
 
-
     public static Retrofit getClient() {
 
         if (okHttpClient == null)
@@ -49,6 +48,7 @@ public class ApiClient {
                 .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS);
 
         httpClient.interceptors().add(new AddTokenInterceptor());
+
 
 
         okHttpClient = httpClient.build();

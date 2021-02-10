@@ -5,7 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.http.SslError;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.util.Patterns;
@@ -13,10 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -164,40 +161,13 @@ public class MetodosUsados {
     //======================TRAFEGO_INTERNET===============================================//
 
     public static boolean conexaoInternetTrafego(Context context, String TAG){
-        String site = "www.google.com";
-        WebView webViewInternet = new WebView(context);
-        final boolean[] valorRetorno = new boolean[1];
-
-        webViewInternet.setWebViewClient(new WebViewClient());
-        webViewInternet.loadUrl(site);
-
-        webViewInternet.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-                super.onReceivedSslError(view, handler, error);
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String descricaoErro, String failingUrl) {
-                super.onReceivedError(view, errorCode, descricaoErro, failingUrl);
-                if (errorCode == -2) {
-                    valorRetorno[0] = false;
-                    Log.i(TAG,"webView ERROR " + descricaoErro );
-                    Log.i(TAG,"webView ERROR " + errorCode );
-                }
-            }
-        });
-
-        webViewInternet.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                valorRetorno[0] = true;
-                Log.i(TAG,"webView " + progress );
-            }
-        });
-        Log.i(TAG,"webView " + valorRetorno[0]);
-
-        return valorRetorno[0];
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo !=null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import androidx.multidex.MultiDex;
+
 import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -27,6 +29,12 @@ public class XpressEntregasApplication extends Application {
         Intent intent = new Intent();
         intent.setClass(this, MySignalRService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static XpressEntregasApplication getInstance() {

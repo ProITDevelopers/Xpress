@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
 
 import ao.co.proitconsulting.xpress.R;
@@ -24,7 +26,6 @@ import ao.co.proitconsulting.xpress.adapters.ProductDetailsListener;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
-import ao.co.proitconsulting.xpress.utilityClasses.AddBadgeCartConverter;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -43,8 +44,9 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
     private TextView product_count;
     private Button btn_add,btn_comprar;
 
+    private FrameLayout frameLayoutFab;
     private FloatingActionButton fabCart;
-    private int imgCart = R.drawable.ic_baseline_shopping_cart_white_24;
+
 
     private Realm realm;
     private RealmResults<CartItemProdutos> cartItems;
@@ -56,6 +58,8 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
     private int produtoId,position;
     private Drawable btn_addCart_green_bk,btn_addCart_grey_bk;
     private ConstraintLayout product_detail_root;
+    private NotificationBadge badge,fabBadge;
+    private ImageView cart_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +95,8 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
             } else {
                 cart_count = 0;
                 invalidateOptionsMenu();
-//                fabCart.setImageResource(R.drawable.ic_baseline_shopping_cart_white_24);
-                try {
-                    fabCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_white_24));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
+                updateFabCartCount();
             }
 
             invalidateOptionsMenu();
@@ -172,11 +171,17 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
         btn_add = findViewById(R.id.btn_add);
         btn_comprar = findViewById(R.id.btn_comprar);
 
+
+
+        frameLayoutFab = findViewById(R.id.frameLayoutFab);
         fabCart = findViewById(R.id.fabCart);
+        fabBadge = findViewById(R.id.fabBadge);
+
         fabCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                Intent intent = new Intent(ProdutoDetailsActivity.this, ShopCartActivity.class);
                 startActivity(intent);
             }
@@ -231,6 +236,7 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
 
 
 
+
     private void setCartInfoBar(RealmResults<CartItemProdutos> cartItems) {
 
         int itemCount = 0;
@@ -240,13 +246,39 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
 
         cart_count = cartItems.size();
 
-        try {
-            fabCart.setImageDrawable(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_white_24));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        updateFabCartCount();
 
 
+    }
+
+    private void updateCartCount() {
+        if (badge == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (cart_count == 0)
+                    badge.setVisibility(View.INVISIBLE);
+                else{
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(String.valueOf(cart_count));
+                }
+            }
+        });
+    }
+
+    private void updateFabCartCount() {
+        if (fabBadge == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (cart_count == 0)
+                    fabBadge.setVisibility(View.INVISIBLE);
+                else{
+                    fabBadge.setVisibility(View.VISIBLE);
+                    fabBadge.setText(String.valueOf(cart_count));
+                }
+            }
+        });
     }
 
     @Override
@@ -256,8 +288,21 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
         getMenuInflater().inflate(R.menu.menu_produto_details, menu);
         hideOption(R.id.action_cart);
 
-        MenuItem menuItem = menu.findItem(R.id.action_cart);
-        menuItem.setIcon(AddBadgeCartConverter.convertLayoutToImage(this,cart_count,R.drawable.ic_baseline_shopping_cart_white_24));
+        View view = menu.findItem(R.id.action_cart).getActionView();
+        badge = (NotificationBadge)view.findViewById(R.id.badge);
+        cart_icon = (ImageView) view.findViewById(R.id.cart_icon);
+        cart_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProdutoDetailsActivity.this,ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            Intent intent = new Intent(this, ShopCartActivity.class);
+                startActivity(intent);
+            }
+        });
+        updateCartCount();
+
+
 
         return true;
     }
@@ -294,15 +339,19 @@ public class ProdutoDetailsActivity extends AppCompatActivity implements Product
     private void hideOption(int id) {
         MenuItem item = menu.findItem(id);
         item.setVisible(false);
+        frameLayoutFab.setVisibility(View.VISIBLE);
+
     }
 
     private void showOption(int id) {
         MenuItem item = menu.findItem(id);
         item.setVisible(true);
+        frameLayoutFab.setVisibility(View.GONE);
     }
 
     @Override
     protected void onResume() {
+        updateCartCount();
         checkIfCartAsItems();
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
