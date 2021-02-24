@@ -1,27 +1,32 @@
 package ao.co.proitconsulting.xpress.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
@@ -45,16 +50,20 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG_LoginActivity";
-    private RelativeLayout login_root;
-    private ImageView imgAppLogo;
+    private LinearLayout login_root;
+    private FloatingActionButton fabPrevious;
     private AppCompatEditText editEmail;
     private ShowHidePasswordEditText editPassword;
+    private TextView txtRemember;
+    private SwitchCompat switchRemember;
     private TextView txtForgotPassword,txtRegister;
     private Button btnLogin;
     private String emailTelefone,password;
     private LoginRequest loginRequest = new LoginRequest();
     private NotificationHelper notificationHelper;
     private UsuarioPerfil usuarioPerfil;
+    //DIALOG_LAYOUT_COVID_19
+    private Dialog dialogLayoutCOVID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,27 +82,34 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initViews(){
 
+        loginRequest.rememberMe = false;
+
         login_root = findViewById(R.id.login_root);
-        imgAppLogo = findViewById(R.id.imgAppLogo);
+        fabPrevious = findViewById(R.id.fabPrevious);
         editEmail = findViewById(R.id.editEmail);
         editPassword = findViewById(R.id.editPassword);
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
         txtRegister = findViewById(R.id.txtRegister);
         btnLogin = findViewById(R.id.btnLogin);
 
-        SpannableString spannableString = new SpannableString(getString(R.string.hint_registe_se));
-        ForegroundColorSpan fcsGreen = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.login_register_text_color));
-        spannableString.setSpan(fcsGreen,19,29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        txtRemember = findViewById(R.id.txtRemember);
+        switchRemember = findViewById(R.id.switchRemember);
+
+        SpannableString spannableString = new SpannableString(getString(R.string.splash_sign_up_hint));
+        ForegroundColorSpan fcsGreen = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.btn_login_start_color));
+//        spannableString.setSpan(fcsGreen,19,29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(fcsGreen,22,29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new UnderlineSpan(),22,29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         txtRegister.setText(spannableString);
 
 
-
-        imgAppLogo.setOnClickListener(new View.OnClickListener() {
+        fabPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                MetodosUsados.mostrarMensagem(LoginActivity.this,getString(R.string.xpress_co_ao));
+            public void onClick(View view) {
+               finish();
             }
         });
+
 
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +138,41 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        txtRemember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!switchRemember.isChecked()){
+                    switchRemember.setChecked(true);
+                    loginRequest.rememberMe = true;
+                }else{
+                    switchRemember.setChecked(false);
+                    loginRequest.rememberMe = false;
+                }
+            }
+        });
+
+
+
+         //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_COVID_19
+        dialogLayoutCOVID = new Dialog(this);
+        dialogLayoutCOVID.setContentView(R.layout.layout_covid);
+        dialogLayoutCOVID.setCancelable(false);
+        if (dialogLayoutCOVID.getWindow()!=null)
+            dialogLayoutCOVID.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        ImageView imgBtnFecharTelef = dialogLayoutCOVID.findViewById(R.id.imgBtnFecharTelef);
+        imgBtnFecharTelef.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogLayoutCOVID.dismiss();
+                dialogLayoutCOVID.cancel();
+            }
+        });
+
+        dialogLayoutCOVID.show();
 
     }
 
@@ -175,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
                 MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet);
             } else {
                 loginRequest.password = password;
-                loginRequest.rememberMe = true;
+
                 autenticacaoLogin(loginRequest);
             }
         }
@@ -198,9 +249,14 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     UsuarioAuth userToken = response.body();
 
-
                     AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
                     AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
+
+                    if (loginRequest.rememberMe){
+                        AppPrefsSettings.getInstance().setLoggedIn(true);
+                    }
+
+
 
 
                     carregarMeuPerfil(userToken.tokenuser);
@@ -343,4 +399,6 @@ public class LoginActivity extends AppCompatActivity {
         MetodosUsados.hideLoadingDialog();
         super.onDestroy();
     }
+
+
 }

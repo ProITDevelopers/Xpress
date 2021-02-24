@@ -282,14 +282,6 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
                 waitingDialog.cancel();
-                if (!MetodosUsados.conexaoInternetTrafego(PerfilActivity.this,TAG)){
-                    MetodosUsados.mostrarMensagem(PerfilActivity.this,R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
-                    MetodosUsados.mostrarMensagem(PerfilActivity.this,R.string.msg_erro_internet_timeout);
-                }else {
-                    MetodosUsados.mostrarMensagem(PerfilActivity.this,R.string.msg_erro);
-                }
-
 
             }
         });

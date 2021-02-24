@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -50,6 +51,8 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     private CircleImageView imgUserPhoto;
     private TextView txtNomeUser,txtUserNameInitial;
     private ShowHidePasswordEditText editPassword;
+    private TextView txtRemember;
+    private SwitchCompat switchRemember;
     private TextView txtForgotPassword,txtOutraConta;
     private Button btnLogin;
 
@@ -62,7 +65,7 @@ public class LoginTemporarioActivity extends AppCompatActivity {
     private ImageView imgConfirm;
     private TextView txtConfirmTitle,txtConfirmMsg;
     private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
-
+    private LoginRequest loginRequest = new LoginRequest();
     private NotificationHelper notificationHelper;
 
     @Override
@@ -96,6 +99,9 @@ public class LoginTemporarioActivity extends AppCompatActivity {
         txtOutraConta = findViewById(R.id.txtOutraConta);
         btnLogin = findViewById(R.id.btnLogin);
 
+        txtRemember = findViewById(R.id.txtRemember);
+        switchRemember = findViewById(R.id.switchRemember);
+
 
 
         carregarDadosOffline(usuarioPerfil);
@@ -123,6 +129,19 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                 finish();
             }else{
                 mensagemLogOut();
+            }
+        });
+
+        txtRemember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!switchRemember.isChecked()){
+                    switchRemember.setChecked(true);
+                    loginRequest.rememberMe = true;
+                }else{
+                    switchRemember.setChecked(false);
+                    loginRequest.rememberMe = false;
+                }
             }
         });
 
@@ -217,10 +236,10 @@ public class LoginTemporarioActivity extends AppCompatActivity {
 
         MetodosUsados.showLoadingDialog(getString(R.string.msg_login_auth_verification));
 
-        LoginRequest loginRequest = new LoginRequest();
+
         loginRequest.email = emailTelefone;
         loginRequest.password = password;
-        loginRequest.rememberMe = true;
+
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<UsuarioAuth> call = apiInterface.autenticarCliente(loginRequest);
@@ -232,10 +251,13 @@ public class LoginTemporarioActivity extends AppCompatActivity {
                 MetodosUsados.changeMessageDialog(getString(R.string.msg_login_auth_validando));
                 if (response.isSuccessful() && response.body() != null) {
                     UsuarioAuth userToken = response.body();
-
-
                     AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
                     AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
+
+                    if (loginRequest.rememberMe){
+
+                        AppPrefsSettings.getInstance().setLoggedIn(true);
+                    }
 
 
                     carregarMeuPerfil(userToken.tokenuser);

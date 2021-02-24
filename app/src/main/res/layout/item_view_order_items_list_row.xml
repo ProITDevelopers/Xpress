@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Item:"
-        android:textColor="@color/login_icon_text_color"
+        android:textColor="@color/xpress_purple"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintEnd_toStartOf="@+id/txtQuantidade"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/login_icon_text_color"
+        android:textColor="@color/xpress_purple"
         />
 
     <TextView

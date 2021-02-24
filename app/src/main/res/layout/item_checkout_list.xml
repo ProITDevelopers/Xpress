@@ -23,7 +23,7 @@
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_background"
+        android:background="@drawable/cart_total_bkg"
         android:padding="8dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -85,6 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_monetization_on_24"
+        app:tint="@color/xpress_purple"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
@@ -101,7 +102,7 @@
         android:layout_marginTop="17dp"
         android:text="Pagamento:"
         android:textStyle="bold"
-        android:textColor="@color/login_icon_text_color"
+        android:textColor="@color/xpress_purple"
         app:layout_constraintStart_toEndOf="@+id/imgMoney"
         app:layout_constraintTop_toBottomOf="@+id/view_separator" />
 
@@ -126,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_phone_android_24"
-        app:tint="@color/login_register_text_color"
+        app:tint="@color/xpress_purple"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
@@ -144,7 +145,7 @@
         android:layout_marginTop="10dp"
         android:text="Nº telefone:"
         android:textStyle="bold"
-        android:textColor="@color/login_icon_text_color"
+        android:textColor="@color/xpress_purple"
         app:layout_constraintStart_toEndOf="@+id/imgPhoneIcon"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -167,6 +168,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_location_on_24"
+        app:tint="@color/xpress_purple"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
@@ -183,7 +185,7 @@
         android:layout_marginTop="10dp"
         android:text="Endereço:"
         android:textStyle="bold"
-        android:textColor="@color/login_icon_text_color"
+        android:textColor="@color/xpress_purple"
         app:layout_constraintStart_toEndOf="@+id/imgAddressIcon"
         app:layout_constraintTop_toBottomOf="@+id/textViewContacto" />
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -34,7 +34,7 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.fragmentos.EstabelecimentoFragment;
+import ao.co.proitconsulting.xpress.fragmentos.MenuCategoryFragment;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
@@ -102,8 +102,8 @@ public class MenuActivity extends AppCompatActivity implements
 
 
 
-        Fragment fragment = new EstabelecimentoFragment();
-        goToEstabelecimentoFragment(fragment);
+
+        goToEstabelecimentoFragment();
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -143,14 +143,14 @@ public class MenuActivity extends AppCompatActivity implements
 
     }
 
-    private void goToEstabelecimentoFragment(Fragment fragment) {
+    private void goToEstabelecimentoFragment() {
         if (getSupportActionBar()!=null)
             toolbar.setTitle(getString(R.string.txt_xpress));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frameLayout, fragment);
+        transaction.replace(R.id.frameLayout, new MenuCategoryFragment());
         transaction.addToBackStack(BACK_STACK_ROOT_TAG);
         transaction.commit();
     }
@@ -263,15 +263,6 @@ public class MenuActivity extends AppCompatActivity implements
             @Override
             public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
 
-                if (!MetodosUsados.conexaoInternetTrafego(MenuActivity.this,TAG)){
-                    MetodosUsados.mostrarMensagem(MenuActivity.this,R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
-                    MetodosUsados.mostrarMensagem(MenuActivity.this,R.string.msg_erro_internet_timeout);
-                }else {
-                    MetodosUsados.mostrarMensagem(MenuActivity.this,R.string.msg_erro);
-                }
-
-
             }
         });
     }
@@ -317,6 +308,9 @@ public class MenuActivity extends AppCompatActivity implements
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            if (getSupportActionBar()!=null)
+                toolbar.setTitle(getString(R.string.txt_xpress));
+
             int fragments = getSupportFragmentManager().getBackStackEntryCount();
             if (fragments == 1) {
                 finish();
@@ -325,6 +319,7 @@ public class MenuActivity extends AppCompatActivity implements
             } else {
                 super.onBackPressed();
             }
+
 
         }
 
@@ -339,7 +334,8 @@ public class MenuActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_menu_home) {
-            MetodosUsados.mostrarMensagem(this,"nav_home");
+            toolbar.setTitle(getString(R.string.txt_xpress));
+            goToEstabelecimentoFragment();
 
         }
         else if (id == R.id.nav_menu_perfil) {
@@ -463,7 +459,7 @@ public class MenuActivity extends AppCompatActivity implements
         carregarDadosOffline(usuarioPerfil);
 
         checkNavigationViewSelection();
-        verificaoPerfil();
+//        verificaoPerfil();
         super.onResume();
     }
 
@@ -490,7 +486,15 @@ public class MenuActivity extends AppCompatActivity implements
             realm.close();
         }
         dialogLayoutConfirmarProcesso.cancel();
+
+        if (!AppPrefsSettings.getInstance().getLoggedIn()){
+            AppDatabase.clearData();
+            AppPrefsSettings.getInstance().clearAppPrefs();
+        }
+
         super.onDestroy();
+
+
     }
 
 

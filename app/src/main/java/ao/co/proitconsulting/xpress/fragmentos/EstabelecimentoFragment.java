@@ -2,18 +2,21 @@ package ao.co.proitconsulting.xpress.fragmentos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -31,6 +34,7 @@ import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,6 +56,7 @@ public class EstabelecimentoFragment extends Fragment {
     private ProgressBar progressBar;
 
     private List<Estabelecimento> estabelecimentoList = new ArrayList<>();
+    private EstabelecimentoAdapter estabelecimentoAdapter;
 
 
     private RecyclerView recyclerView;
@@ -65,7 +70,9 @@ public class EstabelecimentoFragment extends Fragment {
     private TextView txtNotFound;
 
     private SearchView searchView;
-    private SwipeRefreshLayout swipeRefreshEstab;
+
+    private int idTipoEstabelecimento;
+    private String categoriaNome;
 
 
     public EstabelecimentoFragment() {
@@ -95,12 +102,12 @@ public class EstabelecimentoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//            idTipoEstabelecimento = getArguments().getInt("categoriaID", 0);
-//            categoriaNome = getArguments().getString("categoria");
-//        }
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+            idTipoEstabelecimento = getArguments().getInt("categoriaID", 0);
+            categoriaNome = getArguments().getString("categoria");
+        }
 
 
     }
@@ -111,8 +118,9 @@ public class EstabelecimentoFragment extends Fragment {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_estabelecimento, container, false);
 
-        if (getActivity()!=null)
-            getActivity().setTitle(getString(R.string.txt_xpress));
+        ((AppCompatActivity)getActivity())
+                .getSupportActionBar()
+                .setTitle(categoriaNome);
 
         txtNotFound = view.findViewById(R.id.txtNotFound);
 
@@ -124,27 +132,25 @@ public class EstabelecimentoFragment extends Fragment {
 
 
 //        gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
-        gridLayoutManager = new GridLayoutManager(getContext(), 1);
+        gridLayoutManager = new GridLayoutManager(getContext(), AppPrefsSettings.getInstance().getListGridViewMode());
         recyclerView = view.findViewById(R.id.recyclerViewEstab);
         progressBar = view.findViewById(R.id.progressBar);
 
-        swipeRefreshEstab = view.findViewById(R.id.swipeRefreshEstab);
-        swipeRefreshEstab.setColorSchemeResources(R.color.swipe_refresh_green_light_color,
-                R.color.swipe_refresh_grey_color,R.color.swipe_refresh_green_color);
 
         searchView = view.findViewById(R.id.search_bar);
         searchView.setQueryHint(getString(R.string.pesquisar));
 //        searchView.onActionViewExpanded();
-        searchView.setIconifiedByDefault(true);
+        //searchView.setIconifiedByDefault(true);
+
+        SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
+        theTextArea.setHintTextColor(Color.WHITE);
+        theTextArea.setTextColor(Color.WHITE);
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
 
-        if (searchView==null) {
+//        verifConecxaoEstabelecimentos();
 
-            verifConecxaoEstabelecimentos("");
 
-        } else {
-            verifConecxaoEstabelecimentos(searchView.getQuery().toString());
-        }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -154,7 +160,8 @@ public class EstabelecimentoFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                verifConecxaoEstabelecimentos(newText);
+                if (estabelecimentoAdapter!=null)
+                    estabelecimentoAdapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -164,17 +171,16 @@ public class EstabelecimentoFragment extends Fragment {
         return view;
     }
 
-    private void verifConecxaoEstabelecimentos(String searchText) {
+    private void verifConecxaoEstabelecimentos() {
 
         if (getActivity()!=null) {
             ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
-                    swipeRefreshEstab.setRefreshing(false);
                     mostarMsnErro();
                 } else {
-                    carregarListaEstabelicimentos(searchText);
+                    carregarListaEstabelicimentos();
                 }
             }
         }
@@ -195,42 +201,36 @@ public class EstabelecimentoFragment extends Fragment {
             public void onClick(View view) {
                 coordinatorLayout.setVisibility(View.VISIBLE);
                 errorLayout.setVisibility(View.GONE);
-                verifConecxaoEstabelecimentos("");
+                verifConecxaoEstabelecimentos();
             }
         });
     }
 
-    private void carregarListaEstabelicimentos(String searchText) {
+    private void carregarListaEstabelicimentos() {
         progressBar.setVisibility(View.VISIBLE);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Estabelecimento>> rv = apiInterface.getAllEstabelecimentos();
+//        Call<List<Estabelecimento>> rv = apiInterface.getAllEstabelecimentos();
+        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentosPorTipo(idTipoEstabelecimento);
         rv.enqueue(new Callback<List<Estabelecimento>>() {
             @Override
             public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
 
                 if (response.isSuccessful()) {
-                    swipeRefreshEstab.setRefreshing(false);
 
-                    if (response.body()!=null){
-
-
+                    if (estabelecimentoList!=null)
                         estabelecimentoList.clear();
-                        if (searchView!=null) {
-                            for (Estabelecimento estabelecimento:response.body()){
 
-                                if (estabelecimento.nomeEstabelecimento.toLowerCase().startsWith(searchText.toLowerCase()) ||
-                                        estabelecimento.nomeEstabelecimento.toLowerCase().contains(searchText.toLowerCase())){
+                    if (response.body()!=null && response.body().size()>0){
 
-                                    txtNotFound.setVisibility(View.GONE);
-                                    estabelecimentoList.add(estabelecimento);
+
+                        for (Estabelecimento estab: response.body()) {
+                            if (estab!=null){
+                                if (estab.estadoEstabelecimento!=null){
+                                    estabelecimentoList.add(estab);
                                 }
-
                             }
-
-                        } else{
-
-                            estabelecimentoList = response.body();
                         }
+
 
                         progressBar.setVisibility(View.GONE);
                         setAdapters(estabelecimentoList);
@@ -239,8 +239,7 @@ public class EstabelecimentoFragment extends Fragment {
                     }
 
                 } else {
-                    swipeRefreshEstab.setRefreshing(false);
-                    Toast.makeText(getContext(), ""+response.message(), Toast.LENGTH_SHORT).show();
+
                     progressBar.setVisibility(View.GONE);
                 }
 
@@ -250,7 +249,7 @@ public class EstabelecimentoFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                swipeRefreshEstab.setRefreshing(false);
+
                 if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
                 }else  if ("timeout".equals(t.getMessage())) {
@@ -266,49 +265,45 @@ public class EstabelecimentoFragment extends Fragment {
 
     private void setAdapters(List<Estabelecimento> estabelecimentoList) {
 
-        if (estabelecimentoList.size()>0){
-            EstabelecimentoAdapter estabelecimentoAdapter = new EstabelecimentoAdapter(getContext(), estabelecimentoList, gridLayoutManager);
-            recyclerView.setAdapter(estabelecimentoAdapter);
-            recyclerView.setLayoutManager(gridLayoutManager);
+        estabelecimentoAdapter = new EstabelecimentoAdapter(getContext(), estabelecimentoList, gridLayoutManager);
+        recyclerView.setAdapter(estabelecimentoAdapter);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
-            estabelecimentoAdapter.setItemClickListener(new RecyclerViewOnItemClickListener() {
-                @Override
-                public void onItemClickListener(int position) {
-                    Estabelecimento estabelecimento = estabelecimentoList.get(position);
+        estabelecimentoAdapter.setItemClickListener(new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onItemClickListener(int position) {
+                Estabelecimento estabelecimento = estabelecimentoList.get(position);
 
-                    if (estabelecimento.estadoEstabelecimento!=null){
+                if (estabelecimento.estadoEstabelecimento!=null){
 
-                        if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
-                            Intent intent = new Intent(getContext(), ProdutosActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("estabelecimento",estabelecimento);
-                            startActivity(intent);
-                        }else{
-                            MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
-                        }
-
+                    if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
+                        Intent intent = new Intent(getContext(), ProdutosActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("estabelecimento",estabelecimento);
+                        startActivity(intent);
+                    }else{
+                        MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
                     }
 
-
-
-
                 }
-            });
 
-        }
 
+
+
+            }
+        });
 
     }
 
     @Override
     public void onResume() {
-        //handling swipe refresh
-        swipeRefreshEstab.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                verifConecxaoEstabelecimentos("");
-            }
-        });
+
+        if (errorLayout.getVisibility() == View.VISIBLE){
+            coordinatorLayout.setVisibility(View.VISIBLE);
+            errorLayout.setVisibility(View.GONE);
+        }
+        verifConecxaoEstabelecimentos();
+
 
         MetodosUsados.esconderTeclado(getActivity());
         super.onResume();

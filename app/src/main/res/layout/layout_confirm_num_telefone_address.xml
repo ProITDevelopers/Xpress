@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardElevation="8dp"
-    app:cardCornerRadius="40dp">
+    app:cardCornerRadius="20dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
-                    android:textColor="@color/login_register_text_color"
+                    android:textColor="@color/xpress_purple"
                     android:text="@string/local_de_entrega"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -152,7 +153,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="15dp"
-                    android:textColor="@color/login_register_text_color"
+                    android:textColor="@color/xpress_green"
                     android:text="@string/quer_usar_o_seu_n_toque_aqui"
                     android:textSize="16sp"
                     android:textStyle="bold"

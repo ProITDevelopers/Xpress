@@ -22,15 +22,14 @@
             android:layout_height="70dp"
             android:layout_marginTop="5dp"
             app:cardElevation="8dp"
-            app:cardCornerRadius="27dp">
+            app:cardCornerRadius="8dp">
 
             <ImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/store_placeholder"
                 android:scaleType="fitXY"
-
 
                 />
 
@@ -55,7 +54,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:lineSpacingExtra="2sp"
                 android:text="Fossil FS4552 MACHINE Watch"
-                android:textColor="@color/login_icon_text_color"
+                android:textColor="@color/xpress_purple"
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
@@ -66,7 +65,7 @@
                 android:fontFamily="sans-serif"
                 android:lineSpacingExtra="2sp"
                 android:text="₹3,500 x 2"
-                android:textColor="@color/login_register_text_color"
+                android:textColor="@color/xpress_green"
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
@@ -81,7 +80,7 @@
                     android:fontFamily="sans-serif"
                     android:lineSpacingExtra="2sp"
                     android:text="Taxa entrega:"
-                    android:textColor="@color/login_icon_text_color"
+                    android:textColor="@color/xpress_purple"
                     android:textSize="14sp"
                     android:textStyle="normal" />
 
@@ -92,7 +91,7 @@
                     android:fontFamily="sans-serif"
                     android:lineSpacingExtra="2sp"
                     android:text="₹3,500"
-                    android:textColor="@color/login_register_text_color"
+                    android:textColor="@color/xpress_green"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:layout_marginStart="10dp"
@@ -127,7 +126,7 @@
             android:layout_below="@+id/cardView"
             android:layout_toRightOf="@id/cardView"
             android:layout_toEndOf="@id/cardView"
-            android:background="@color/login_register_text_color"
+            android:background="@color/login_icon_text_color"
             android:layout_width="match_parent"
             android:layout_height="2dp"/>
 

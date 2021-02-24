@@ -9,8 +9,9 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+<!--        <item name="android:windowBackground">@drawable/splash_screen</item>-->
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
 
@@ -28,6 +29,9 @@
     </style>
 
 
+    <style name="SwitchCompatTheme">
+        <item name="colorControlActivated">@color/xpress_green</item>
+    </style>
 
 
     <style name="AppTheme.NoActionBar">

@@ -5,6 +5,7 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
+import ao.co.proitconsulting.xpress.modelos.MenuCategory;
 import ao.co.proitconsulting.xpress.modelos.Order;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.ReferenciaRequest;
@@ -112,11 +113,15 @@ public interface ApiInterface {
 //    @GET("/ListarEstabA24h2")
 //    Call<List<Estabelecimento>> getAltasHorasEstabelecimentos();
 //
+
+    @GET("/ListarTodosTipoEstabelecimento")
+    Call<List<MenuCategory>> getMenuCategories();
+
     @GET("/ListagemEstabelecimentoA")
     Call<List<Estabelecimento>> getAllEstabelecimentos();
 //
-//    @GET("/ListarEstabPorTipo/{IdTipoEstabelecimento}")
-//    Call<List<Estabelecimento>> getEstabelecimentosPorTipo(@Path("IdTipoEstabelecimento") int idTipoEstabelecimento);
+    @GET("/ListarEstabPorTipo/{IdTipoEstabelecimento}")
+    Call<List<Estabelecimento>> getEstabelecimentosPorTipo(@Path("IdTipoEstabelecimento") int idTipoEstabelecimento);
 //
 //
     @GET("/ListarProdutosEstab/{idE}")

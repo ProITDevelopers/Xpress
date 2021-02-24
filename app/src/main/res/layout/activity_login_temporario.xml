@@ -9,9 +9,11 @@
     tools:context=".activities.LoginTemporarioActivity">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/splash_background"/>
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/xpress_logo"/>
 
 
     <ImageView
@@ -64,7 +66,7 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         app:civ_border_color="@color/userphoto_nav_bar_border"
-                        app:civ_border_width="5dp"
+                        app:civ_border_width="2dp"
                         />
 
 
@@ -112,25 +114,7 @@
 
 
 
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hint_password"
-                    android:textColor="@color/white"
-                    android:padding="4dp"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/cardView2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
-
-                <RelativeLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/cardView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -139,40 +123,99 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginEnd="20dp"
-                    android:background="@drawable/box_border"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtNomeUser">
 
-                    <RelativeLayout
+                    <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
+                        android:id="@+id/editPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
-                        android:background="@color/white"
-                        android:alpha="0.7">
+                        android:inputType="textPassword"
+                       android:backgroundTint="@color/xpress_green"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/xpress_green"
 
-                        <!--                        android:hint="@string/hint_password"-->
-                        <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
-                            android:id="@+id/editPassword"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:alpha="1"
-                            android:inputType="textPassword"
-                            android:padding="15dp"
-                            android:drawableStart="@drawable/ic_baseline_lock_open_24"
-                            android:drawableLeft="@drawable/ic_baseline_lock_open_24"
-                            android:drawableTint="@color/login_icon_text_color"
-                            android:drawablePadding="15dp"
-                            android:textColorHint="@color/login_icon_text_color"
-                            android:maxLines="1"
-                            />
+                        android:hint="@string/hint_password"
+                        app:tint_color="@color/xpress_green"
+                        android:maxLines="1"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchRemember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:theme="@style/SwitchCompatTheme"/>
+
+                <TextView android:id="@+id/txtRemember"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_lembrar_me"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="6dp"
+                    android:paddingStart="60dp"
+                    android:paddingLeft="60dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:textColor="@color/white"/>
 
 
 
-                    </RelativeLayout>
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="80dp"
+                    android:text="@string/hint_btn_login"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@drawable/button_background"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
 
-                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/txtOutraConta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/entrar_com_outra_conta"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:padding="4dp"
+                    android:textSize="14sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+                    app:layout_constraintStart_toStartOf="@+id/btnLogin"
+                    app:layout_constraintEnd_toEndOf="@+id/btnLogin"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    />
 
                 <TextView
                     android:id="@+id/txtForgotPassword"
@@ -186,50 +229,13 @@
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:layout_marginTop="8dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
-
-                <Button
-                    android:id="@+id/btnLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="30dp"
-                    android:text="@string/hint_btn_login"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:background="@drawable/button_background"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/txtForgotPassword"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintTop_toBottomOf="@+id/txtOutraConta"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-
-
-                <TextView
-                    android:id="@+id/txtOutraConta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/entrar_com_outra_conta"
-                    android:textColor="@color/white"
-                    android:padding="4dp"
-                    android:textSize="14sp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-                    app:layout_constraintStart_toStartOf="@+id/btnLogin"
-                    app:layout_constraintEnd_toEndOf="@+id/btnLogin"
-                    android:gravity="center"
                     />
 
 

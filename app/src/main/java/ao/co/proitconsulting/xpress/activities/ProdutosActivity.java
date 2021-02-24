@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,7 +70,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     ImageView header;
 
     int cart_count = 0;
-    int imgCart = R.drawable.ic_baseline_shopping_cart_24;
+
 
     private Realm realm;
     private RealmResults<CartItemProdutos> cartItems;
@@ -80,7 +82,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
     private TextView txtEstabNome,txtEstabAddress;
     private Estabelecimento estabelecimento;
-    private ImageView imgShopCart;
+    private RelativeLayout relativeImgShopCart;
     private NotificationBadge badge;
 
 
@@ -117,12 +119,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         header = findViewById(R.id.imgHeader);
         txtEstabNome = findViewById(R.id.txtEstabNome);
         txtEstabAddress = findViewById(R.id.txtEstabAddress);
-        imgShopCart = findViewById(R.id.imgShopCart);
+        relativeImgShopCart = findViewById(R.id.relativeImgShopCart);
         badge = findViewById(R.id.badge);
 
 
 
-        imgShopCart.setOnClickListener(new View.OnClickListener() {
+        relativeImgShopCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProdutosActivity.this,ShoppingCartActivity.class);
@@ -140,7 +142,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
         recyclerView =  findViewById(R.id.recyclewProdutos);
-        gridLayoutManager = new GridLayoutManager(this, 1);
+        gridLayoutManager = new GridLayoutManager(this, AppPrefsSettings.getInstance().getListGridViewMode());
         progressBar = findViewById(R.id.progressBar);
 
 
@@ -148,7 +150,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        verifConecxaoProdutos();
+//        verifConecxaoProdutos();
 
         cartRealmChangeListener = cartItems -> {
 //            Timber.d("Cart items changed! " + this.cartItems.size());
@@ -214,6 +216,7 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             errorLayout.setVisibility(View.VISIBLE);
 
             coordinatorLayout.setVisibility(View.GONE);
+
 
         }
 
@@ -393,6 +396,12 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
     @Override
     protected void onResume() {
+
+        if (errorLayout.getVisibility() == View.VISIBLE){
+            coordinatorLayout.setVisibility(View.VISIBLE);
+            errorLayout.setVisibility(View.GONE);
+        }
+        verifConecxaoProdutos();
         super.onResume();
 
         if (cartItems != null) {

@@ -1,310 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/register_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".activities.RegisterActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/previous_arrow"
+        app:backgroundTint="@color/white"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <FrameLayout
-            android:background="@drawable/register_green_bkg"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="20dp">
 
-
-            <RelativeLayout
+            <TextView
+                android:id="@+id/textView"
+                android:text="@string/hint_produtos_tua_disposicao"
+                android:textColor="@color/black"
+                android:textSize="42sp"
+                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="150dp"
-                android:background="@drawable/register_border">
-
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_marginTop="60dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:paddingBottom="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-
-
-                    <LinearLayout
-                        android:weightSum="2"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="50dp"
-                        android:paddingTop="5dp"
-                        android:id="@+id/hint_nome"
-                        android:baselineAligned="false">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_border"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_weight="1">
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editPrimeiroNome"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/primeiro_nome"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                android:background="@android:color/transparent"
-                                android:padding="12dp"
-                                />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_border"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1">
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editUltimoNome"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/sobrenome"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                android:background="@android:color/transparent"
-                                android:padding="12dp"
-                                />
-
-                        </RelativeLayout>
-
-
-
-                    </LinearLayout>
-
-
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_nome"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_telefone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editTelefone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/numero_telefone"
-                            android:maxLength="9"
-                            android:inputType="phone"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_telefone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_email">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_email"
-                            android:maxLines="1"
-                            android:inputType="textEmailAddress"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_email"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_pass">
-
-                        <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
-                            android:id="@+id/editPass"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_password"
-                            android:maxLines="1"
-                            android:inputType="textPassword"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_pass"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_genero">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_gravity="center"
-                            android:padding="12dp">
-
-                            <TextView
-                                android:text="@string/genero_sexo"
-                                android:textSize="18sp"
-                                android:textColor="@color/transparentBlack"
-                                android:gravity="center_vertical"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"/>
-
-
-                            <RadioGroup
-                                android:id="@+id/radioGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginEnd="8dp"
-
-                                android:orientation="horizontal">
-
-                                <RadioButton
-                                    android:id="@+id/radioBtnFem"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:checked="false"
-                                    android:layout_marginRight="12dp"
-                                    android:layout_marginEnd="12dp"
-                                    android:text="@string/gender_female"
-                                    android:textColor="@color/transparentBlack"
-                                    android:textSize="16sp"
-                                    android:maxLines="1"/>
-
-                                <RadioButton
-                                    android:id="@+id/radioBtnMasc"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:checked="false"
-                                    android:text="@string/gender_male"
-                                    android:textColor="@color/transparentBlack"
-                                    android:textSize="16sp"
-                                    android:maxLines="1"/>
-                            </RadioGroup>
-
-
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-
-
-
-
-
-
-
-                    <Button
-                        android:id="@+id/btnRegistro"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_genero"
-                        app:layout_constraintStart_toStartOf="@+id/hint_genero"
-                        app:layout_constraintEnd_toEndOf="@+id/hint_genero"
-                        android:text="@string/btn_registar_text"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:background="@drawable/button_background"
-                        android:textColor="@android:color/white"
-                        android:layout_marginTop="30dp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        />
-
-                    <TextView
-                        android:id="@+id/txtCancelar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cancelar"
-                        android:textColor="@color/login_icon_text_color"
-                        android:padding="4dp"
-                        android:textSize="14sp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:layout_marginTop="12dp"
-                        app:layout_constraintTop_toBottomOf="@+id/btnRegistro"
-                        app:layout_constraintStart_toStartOf="@+id/btnRegistro"
-                        app:layout_constraintEnd_toEndOf="@+id/btnRegistro"
-                        android:gravity="center"
-                        />
-
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </RelativeLayout>
+                android:paddingTop="28dp"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
             <RelativeLayout
+                android:id="@+id/relativeImg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="80dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_marginTop="90dp"
                     android:src="@color/white"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgUserPhoto"
-                    android:layout_marginTop="90dp"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@color/white"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:contentDescription="@string/foto_de_usuario"
                     app:civ_border_color="@color/userphoto_nav_bar_border"
-                    app:civ_border_width="5dp"
+                    app:civ_border_width="2dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -313,11 +81,267 @@
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/relativeImg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:paddingTop="5dp"
+                android:id="@+id/hint_nome"
+                android:baselineAligned="false"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/editPrimeiroNome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/primeiro_nome"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:textColorHint="@color/black"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_weight="1">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/editUltimoNome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/sobrenome"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:textColorHint="@color/black"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
 
-        </FrameLayout>
+            </LinearLayout>
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_nome"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/hint_telefone"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editTelefone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/numero_telefone"
+                    android:maxLength="9"
+                    android:inputType="phone"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:textColorHint="@color/black"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_telefone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/hint_email"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    android:maxLines="1"
+                    android:inputType="textEmailAddress"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:textColorHint="@color/black"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_email"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/hint_pass"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
+                    android:id="@+id/editPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_password"
+                    android:maxLines="1"
+                    android:inputType="textPassword"
+                    app:tint_color="@color/xpress_green"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:textColorHint="@color/black"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <RelativeLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_pass"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/hint_genero"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    >
+
+                    <TextView
+                        android:text="@string/genero_sexo"
+                        android:textSize="18sp"
+                        android:textColor="@color/transparentBlack"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginEnd="8dp"
+
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioBtnFem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:checked="false"
+                            android:layout_marginRight="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:text="@string/gender_female"
+                            android:textColor="@color/transparentBlack"
+                            android:textSize="16sp"
+                            android:maxLines="1"/>
+
+                        <RadioButton
+                            android:id="@+id/radioBtnMasc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:checked="false"
+                            android:text="@string/gender_male"
+                            android:textColor="@color/transparentBlack"
+                            android:textSize="16sp"
+                            android:maxLines="1"/>
+                    </RadioGroup>
+
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkboxAcceptTerms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/hint_genero"
+                app:layout_constraintEnd_toStartOf="@+id/txtTermsCondicoes"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                />
+
+            <TextView
+                android:id="@+id/txtTermsCondicoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_termos_e_condicoes"
+                android:padding="6dp"
+                android:textSize="14sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/hint_genero"
+                app:layout_constraintStart_toStartOf="@+id/hint_genero"
+                app:layout_constraintEnd_toEndOf="@+id/hint_genero"
+                />
+
+
+            <Button
+                android:id="@+id/btnRegistro"
+                app:layout_constraintTop_toBottomOf="@+id/txtTermsCondicoes"
+                app:layout_constraintStart_toStartOf="@+id/hint_genero"
+                app:layout_constraintEnd_toEndOf="@+id/hint_genero"
+                android:text="@string/btn_registar_text"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:background="@drawable/button_background"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="30dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</LinearLayout>

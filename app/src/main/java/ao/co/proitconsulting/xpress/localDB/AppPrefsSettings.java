@@ -12,6 +12,7 @@ public class AppPrefsSettings {
 
     private static final String APP_SHARED_PREF_NAME = "XPRESS_SHAREDPREF";
     private static final String KEY_USER = "USUARIO_KEY";
+    private static final String KEY_SESSION = "USER_LOGGEDIN";
     private static final String KEY_AUTH_TOKEN = "USER_AUTH_TOKEN";
     private static final String KEY_AUTH_TOKEN_TIME = "AUTH_TOKEN_TIME";
     private static final String KEY_CHANGE_VIEW = "CHANGE_VIEW";
@@ -35,6 +36,19 @@ public class AppPrefsSettings {
         editor = sharedPreferences.edit();
         editor.apply();
         gson = new Gson();
+    }
+
+
+    //SAVE USER SESSION
+    public void setLoggedIn(boolean loggedIn){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_SESSION, loggedIn);
+        editor.apply();
+    }
+
+    //GET USER SESSION
+    public boolean getLoggedIn() {
+        return sharedPreferences.getBoolean(KEY_SESSION, false);
     }
 
 

@@ -265,7 +265,7 @@
                     android:layout_centerHorizontal="true"
                     android:contentDescription="@string/foto_de_usuario"
                     app:civ_border_color="@color/userphoto_nav_bar_border"
-                    app:civ_border_width="5dp"
+                    app:civ_border_width="2dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"

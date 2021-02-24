@@ -82,7 +82,7 @@
 
                                 <TextView
                                     android:id="@+id/txtEstabNome"
-                                    android:textColor="@color/login_icon_text_color"
+                                    android:textColor="@color/xpress_purple"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
                                     android:layout_width="0dp"
@@ -128,10 +128,14 @@
                             >
 
                             <RelativeLayout
+                                android:id="@+id/relativeImgShopCart"
                                 style="@android:style/Widget.ActionButton"
                                 android:layout_marginTop="2dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?android:attr/selectableItemBackground"
 
                                 >
                                 <ImageView
@@ -139,9 +143,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/ic_baseline_shopping_cart_24"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:foreground="?android:attr/selectableItemBackground"
+
                                     />
 
                                 <com.nex3z.notificationbadge.NotificationBadge
@@ -176,6 +178,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/frameLayoutProduct"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

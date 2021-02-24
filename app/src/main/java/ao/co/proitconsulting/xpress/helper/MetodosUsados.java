@@ -162,12 +162,17 @@ public class MetodosUsados {
 
     public static boolean conexaoInternetTrafego(Context context, String TAG){
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo !=null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
+        if (cm!=null) {
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo !=null) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
             return false;
         }
+
     }
 
 }

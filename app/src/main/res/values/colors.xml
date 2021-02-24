@@ -4,16 +4,18 @@
 <!--    <color name="colorPrimaryDark">#3700B3</color>-->
 <!--    <color name="colorAccent">#03DAC5</color>-->
 
-    <color name="colorPrimary">#136548</color>
-    <color name="colorPrimaryDark">#0f4f38</color>
-    <color name="colorAccent">#1c966a</color>
+    <color name="colorPrimary">#19d3c5</color>
+    <color name="colorPrimaryDark">#19d3c5</color>
+    <color name="colorAccent">#19d3c5</color>
 
 
     <color name="login_icon_text_color">#282041</color>
-    <color name="login_register_text_color">#1c966a</color>
-    <color name="btn_login_start_color">#136548</color>
-    <color name="btn_login_end_color">#0f4f38</color>
-    <color name="box_border_color">#1c966a</color>
+    <color name="login_register_text_color">#19d3c5</color>
+    <color name="btn_login_start_color">#19d3c5</color>
+    <color name="btn_login_end_color">#19d3c5</color>
+    <color name="xpress_green">#19d3c5</color>
+    <color name="xpress_purple">#270089</color>
+    <color name="box_border_color">#19d3c5</color>
     <color name="register_statusbar_color">#0e4e37</color>
 
     <color name="white">#ffffff</color>
@@ -21,17 +23,19 @@
     <color name="transparentBlack">#80000000</color>
     <color name="yellow">#d7a900</color>
 
-    <color name="userphoto_nav_bar_border">#1c9468</color>
+    <color name="userphoto_nav_bar_border">#19d3c5</color>
 
-    <color name="register_bkg_start_color">#0e4e37</color>
-    <color name="register_bkg_center_color">#136548</color>
-    <color name="register_bkg_end_color">#0f4f38</color>
-    <color name="side_nav_bar_start_color">#1c966a</color>
-    <color name="side_nav_bar_center_color">#136548</color>
-    <color name="side_nav_bar_end_color">#0e4e37</color>
+    <color name="register_bkg_start_color">#19d3c5</color>
+    <color name="register_bkg_center_color">#19d3c5</color>
+    <color name="register_bkg_end_color">#19d3c5</color>
+    <color name="side_nav_bar_start_color">#19d3c5</color>
+    <color name="side_nav_bar_center_color">#19d3c5</color>
+    <color name="side_nav_bar_end_color">#19d3c5</color>
 
-    <color name="swipe_refresh_green_light_color">#1c966a</color>
+    <color name="swipe_refresh_green_light_color">#19d3c5</color>
     <color name="swipe_refresh_grey_color">#80000000</color>
-    <color name="swipe_refresh_green_color">#0e4e37</color>
+    <color name="swipe_refresh_green_color">#270089</color>
     <color name="colorDarkSemiTransparent">#C6000000</color>
+    <color name="btn_gray_border">#d1d1d1</color>
+    <color name="splash_view_separator">#575757</color>
 </resources>

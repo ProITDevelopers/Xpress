@@ -21,7 +21,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginBottom="12dp"
             app:cardElevation="10dp"
-            app:cardCornerRadius="27dp">
+            app:cardCornerRadius="8dp">
 
             <ImageView
                 android:id="@+id/imgProdList"
@@ -50,7 +50,7 @@
                 android:id="@+id/titleProdList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/login_icon_text_color"
+                android:textColor="@color/xpress_purple"
                 android:textStyle="bold"
                 android:textSize="17sp"
                 android:maxLines="1"
@@ -80,6 +80,7 @@
                 android:textColor="@color/login_icon_text_color"
                 android:textSize="14sp"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_marginTop="2dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
@@ -121,7 +122,8 @@
                         android:id="@+id/ic_remove"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
-                        android:src="@drawable/ic_baseline_remove_circle_outline_24"
+                        android:src="@drawable/ic_baseline_remove_box_24"
+                        app:tint="@color/xpress_purple"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -138,7 +140,7 @@
                         android:text="@string/one"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:textColor="@color/login_register_text_color"
+                        android:textColor="@color/xpress_purple"
                         android:textSize="14sp"
                         android:textStyle="normal" />
 
@@ -146,7 +148,8 @@
                         android:id="@+id/ic_add"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
-                        android:src="@drawable/ic_baseline_add_circle_outline_24"
+                        android:src="@drawable/ic_baseline_add_box_24"
+                        app:tint="@color/xpress_purple"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"

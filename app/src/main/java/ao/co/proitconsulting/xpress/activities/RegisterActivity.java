@@ -22,9 +22,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -70,8 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG_RegisterActivity";
     public static final int REQUEST_IMAGE = 100;
-
-    private RelativeLayout register_root;
+    private LinearLayout register_root;
+    private FloatingActionButton fabPrevious;
     private CircleImageView imgUserPhoto;
     private AppCompatEditText editPrimeiroNome,editUltimoNome;
     private AppCompatEditText editTelefone,editEmail;
@@ -80,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioBtnFem,radioBtnMasc;
     private Button btnRegistro;
-    private TextView txtCancelar;
+
 
     private String primeiroNome,sobreNome,email,telefone,senha;
     private String valorGeneroItem;
@@ -102,10 +103,16 @@ public class RegisterActivity extends AppCompatActivity {
     private String textlistenerNome, textlistenerSobreNome;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //showBackground in status bar
+        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_register);
+
+
 
         initViews();
     }
@@ -114,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         register_root = findViewById(R.id.register_root);
+        fabPrevious = findViewById(R.id.fabPrevious);
         imgUserPhoto = findViewById(R.id.imgUserPhoto);
 
         editPrimeiroNome = findViewById(R.id.editPrimeiroNome);
@@ -133,8 +141,14 @@ public class RegisterActivity extends AppCompatActivity {
         radioBtnMasc = findViewById(R.id.radioBtnMasc);
 
         btnRegistro = findViewById(R.id.btnRegistro);
-        txtCancelar = findViewById(R.id.txtCancelar);
 
+
+        fabPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               finish();
+            }
+        });
 
         editPrimeiroNome.addTextChangedListener(new TextWatcher() {
             @Override
@@ -190,7 +204,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    radioBtnFem.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.login_register_text_color));
+                    radioBtnFem.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.xpress_green));
                     radioBtnFem.setError(null);
                     radioBtnMasc.setError(null);
                 }else{
@@ -203,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    radioBtnMasc.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.login_register_text_color));
+                    radioBtnMasc.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.xpress_green));
                     radioBtnMasc.setError(null);
                     radioBtnFem.setError(null);
                 }else{
@@ -230,12 +244,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-        txtCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+
 
 
         //-------------------------------------------------------------//
@@ -701,5 +710,11 @@ public class RegisterActivity extends AppCompatActivity {
         dialogLayoutConfirmarProcesso.cancel();
         dialogLayoutSuccess.cancel();
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }
