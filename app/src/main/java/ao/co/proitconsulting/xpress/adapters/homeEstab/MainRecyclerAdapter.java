@@ -11,9 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
+import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
+import ao.co.proitconsulting.xpress.EventBus.CategoryClick;
+import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 
@@ -43,10 +49,15 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         List<Estabelecimento> items = section.getEstabelecimentoList();
 
         holder.sectionNameTextView.setText(sectionName);
-        holder.sectionNameTextView.setOnClickListener(new View.OnClickListener() {
+
+        //Event
+        holder.setListener(new IRecyclerClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(context, ""+sectionName, Toast.LENGTH_SHORT).show();
+            public void onItemClickListener(View view, int position) {
+                Common.selectedCategoryEstab = sectionList.get(position);
+                Common.selectedCategoryEstabPosition = position;
+                EventBus.getDefault().postSticky(new CategoryClick(true, sectionList.get(position)));
+
             }
         });
 
@@ -62,16 +73,28 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         return sectionList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView sectionNameTextView;
-        RecyclerView childRecyclerView;
+        private TextView sectionNameTextView;
+        private RecyclerView childRecyclerView;
+        private IRecyclerClickListener listener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             sectionNameTextView = itemView.findViewById(R.id.sectionNameTextView);
             childRecyclerView = itemView.findViewById(R.id.childRecyclerView);
+
+            sectionNameTextView.setOnClickListener(this);
+        }
+
+        public void setListener(IRecyclerClickListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onClick(View view) {
+            listener.onItemClickListener(view,getAdapterPosition());
         }
     }
 }

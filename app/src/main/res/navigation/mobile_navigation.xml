@@ -11,6 +11,11 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/nav_catestab"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.estab.CategoryEstabFragment"
+        tools:layout="@layout/fragment_categoryestab" />
+
+    <fragment
         android:id="@+id/nav_estabelecimento"
         android:name="ao.co.proitconsulting.xpress.fragmentos.estab.EstabelecimentoFragment"
         tools:layout="@layout/fragment_estabelecimento" />

@@ -6,42 +6,51 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.asksira.loopingviewpager.LoopingPagerAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.modelos.HomeTopSlide;
+import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 
-public class MenuBannerAdapter extends LoopingPagerAdapter<HomeTopSlide> {
+public class MenuBannerAdapter extends LoopingPagerAdapter<TopSlideImages> {
 
 
-    private ImageView img_top_banner;
-
-    public MenuBannerAdapter(Context context, List<? extends HomeTopSlide> itemList, boolean isInfinite) {
+    public MenuBannerAdapter(Context context, List<? extends TopSlideImages> itemList, boolean isInfinite) {
         super(context, itemList, isInfinite);
     }
 
 
 
+    @NonNull
     @Override
-    protected View inflateView(int viewType, ViewGroup container, int listPosition) {
+    protected View inflateView(int viewType, @NonNull ViewGroup container, int listPosition) {
 
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_menu_banner,container,false);
-
-        img_top_banner = view.findViewById(R.id.img_top_banner);
-
-        return view;
+        return LayoutInflater.from(getContext()).inflate(R.layout.item_menu_banner,container,false);
     }
 
     @Override
     protected void bindView(View convertView, int listPosition, int viewType) {
 
+        ImageView img_top_banner = convertView.findViewById(R.id.img_top_banner);
+        TopSlideImages topSlideImages = getItemList().get(listPosition);
+
         //Set data
-        Picasso.with(convertView.getContext()).load(getItemList().get(listPosition).getImage())
-                .placeholder(R.drawable.store_placeholder)
-                .into(img_top_banner);
+
+        if (topSlideImages.mImagesLinks!=null){
+            Picasso.with(convertView.getContext()).load(topSlideImages.mImagesLinks)
+                    .placeholder(R.drawable.store_placeholder)
+                    .into(img_top_banner);
+        }else{
+            Picasso.with(convertView.getContext()).load(topSlideImages.mImagesRes)
+                    .placeholder(R.drawable.store_placeholder)
+                    .into(img_top_banner);
+        }
+
+
 
     }
 }

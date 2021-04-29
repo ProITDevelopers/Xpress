@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.adapters.MenuCategoryAdapter;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
 import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
@@ -31,7 +30,7 @@ import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
-import ao.co.proitconsulting.xpress.modelos.HomeTopSlide;
+import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import ao.co.proitconsulting.xpress.modelos.MenuCategory;
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -41,6 +40,7 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "TAG_HomeFragment";
+    private HomeViewModel homeViewModel;
     private View view;
 
     private LoopingViewPager loopingViewPager;
@@ -59,20 +59,21 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
         loopingViewPager = view.findViewById(R.id.loopingViewPager);
         recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
 
 
-        List<HomeTopSlide> homeTopSlideList = new ArrayList<>();
-        homeTopSlideList.add(new HomeTopSlide(R.drawable.img_top1));
-        homeTopSlideList.add(new HomeTopSlide(R.drawable.img_top2));
-
-
-        MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(getContext(),homeTopSlideList,false);
-        loopingViewPager.setAdapter(menuBannerAdapter);
-
+        homeViewModel.getListMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {
+            @Override
+            public void onChanged(List<TopSlideImages> topSlideImages) {
+                MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(getContext(),topSlideImages,true);
+                loopingViewPager.setAdapter(menuBannerAdapter);
+            }
+        });
         waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
         waitingDialog.setMessage("Carregando...");
         waitingDialog.setCancelable(false);
@@ -185,6 +186,7 @@ public class HomeFragment extends Fragment {
                         fillList();
 
 
+
                     }
 
                 } else {
@@ -210,6 +212,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 
     private void fillList() {
 

@@ -126,7 +126,7 @@
     <string name="pesquisar">pesquisar</string>
     <string name="txt_xpress">Xpress</string>
     <string name="nav_home_title">Início</string>
-    <string name="nav_meu_perfil_title">Meu perfil</string>
+    <string name="nav_meu_perfil_title">Meu Perfil</string>
     <string name="nav_encomendas_title">Encomendas</string>
     <string name="nav_mapa_title">Mapa</string>
     <string name="nav_carteira_title">Carteira Xpress</string>
@@ -150,7 +150,7 @@
     <string name="provincia">Província</string>
     <string name="endereco">Endereço</string>
     <string name="endereco_caps">LOCALIDADE</string>
-    <string name="editar_perfil">Editar perfil</string>
+    <string name="editar_perfil">Editar Perfil</string>
     <string name="salvar">Salvar</string>
     <string name="dados_salvos_com_sucesso">Seus dados foram salvos com sucesso!</string>
     <string name="salvando_foto">Salvando a foto…</string>

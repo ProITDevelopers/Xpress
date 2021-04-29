@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.gson.annotations.SerializedName;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
@@ -35,6 +36,7 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.ProdutosAdapter;
 import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
+import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
@@ -43,6 +45,7 @@ import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
+import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -67,7 +70,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
     private ProgressBar progressBar;
 
 
-    ImageView header;
+
+    private LoopingViewPager loopingViewPager;
 
     int cart_count = 0;
 
@@ -116,7 +120,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
         cartItems = realm.where(CartItemProdutos.class).findAllAsync();
 
 
-        header = findViewById(R.id.imgHeader);
+
+        loopingViewPager = findViewById(R.id.loopingViewPager);
         txtEstabNome = findViewById(R.id.txtEstabNome);
         txtEstabAddress = findViewById(R.id.txtEstabAddress);
         relativeImgShopCart = findViewById(R.id.relativeImgShopCart);
@@ -134,8 +139,13 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
             }
         });
 
+        List<TopSlideImages> topSlideImages = new ArrayList<>();
+        topSlideImages.add(new TopSlideImages(estabelecimento.logotipo));
+        topSlideImages.add(new TopSlideImages(estabelecimento.imagemCapa));
+        MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(this,topSlideImages,true);
+        loopingViewPager.setAdapter(menuBannerAdapter);
 
-        Picasso.with(this).load(estabelecimento.imagemCapa).fit().placeholder(R.drawable.store_placeholder).into(header);
+
         txtEstabNome.setText(estabelecimento.nomeEstabelecimento);
         txtEstabAddress.setText(estabelecimento.endereco);
 
@@ -388,15 +398,17 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
 
+
     @Override
     protected void onPause() {
+        loopingViewPager.pauseAutoScroll();
         super.onPause();
 
     }
 
     @Override
     protected void onResume() {
-
+        loopingViewPager.resumeAutoScroll();
         if (errorLayout.getVisibility() == View.VISIBLE){
             coordinatorLayout.setVisibility(View.VISIBLE);
             errorLayout.setVisibility(View.GONE);

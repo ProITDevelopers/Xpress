@@ -41,6 +41,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import ao.co.proitconsulting.xpress.EventBus.CategoryClick;
 import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
@@ -94,7 +95,7 @@ public class MenuActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_menu_home, R.id.nav_estabelecimento, R.id.nav_menu_perfil, R.id.nav_editar_perfil)
+                R.id.nav_menu_home, R.id.nav_catestab, R.id.nav_estabelecimento, R.id.nav_menu_perfil, R.id.nav_editar_perfil)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -316,6 +317,15 @@ public class MenuActivity extends AppCompatActivity {
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onCategoryItemClick(CategoryClick event){
+        if (event.isSuccess()){
+
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_catestab);
+        }
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

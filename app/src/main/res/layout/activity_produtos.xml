@@ -32,12 +32,15 @@
                     android:layout_height="250dp"
                     android:fillViewport="true"
                     >
-                    <ImageView
-                        android:id="@+id/imgHeader"
+
+                    <com.asksira.loopingviewpager.LoopingViewPager
+                        android:id="@+id/loopingViewPager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
-                        />
+                        app:isInfinite="true"
+                        app:autoScroll="true"
+                        app:scrollInterval="8000"
+                        app:viewpagerAspectRatio="1.33" />
 
                     <ImageView
                         android:layout_width="match_parent"
