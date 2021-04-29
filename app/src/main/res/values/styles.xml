@@ -15,16 +15,34 @@
     </style>
 
 
-    <style name="RegisterTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@color/register_statusbar_color</item>
+    <style name="AlterarPassTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="MyCustomAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/xpress_green</item>
+        <item name="colorPrimaryDark">@color/xpress_green</item>
+        <item name="colorAccent">@color/xpress_green</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+    <style name="XpressGreenAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/xpress_green</item>
+        <item name="colorPrimaryDark">@color/xpress_green</item>
+        <item name="colorAccent">@color/xpress_green</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+    <style name="XpressWhiteAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/xpress_green</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
 
@@ -41,7 +59,9 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MyCustomAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="MyCustomAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.PerfilActivity">
@@ -12,7 +13,6 @@
         android:fillViewport="true">
 
         <FrameLayout
-            android:background="@drawable/register_green_bkg"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -20,11 +20,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="90dp"
-                android:background="@drawable/register_border">
+                android:layout_marginTop="220dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_marginTop="60dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
@@ -44,7 +42,7 @@
                         android:paddingTop="5dp"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:text="@string/nome_completo"
+                        android:text="@string/primeiro_nome_caps"
                         android:textColor="@color/login_register_text_color"
                         />
 
@@ -62,11 +60,8 @@
                         />
 
 
-
-
-
                     <TextView
-                        android:id="@+id/txtContactos"
+                        android:id="@+id/txtNome2"
                         app:layout_constraintTop_toBottomOf="@+id/txtNomeCompleto"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +71,66 @@
                         android:paddingTop="5dp"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:text="@string/contactos"
+                        android:text="@string/sobrenome_caps"
+                        android:textColor="@color/login_register_text_color"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtSobrenome"
+                        app:layout_constraintTop_toBottomOf="@+id/txtNome2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/login_icon_text_color"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/txtUserMail"
+                        app:layout_constraintTop_toBottomOf="@+id/txtSobrenome"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="5dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="@string/hint_email_caps"
+                        android:textColor="@color/login_register_text_color"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtEmail"
+                        app:layout_constraintTop_toBottomOf="@+id/txtUserMail"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/login_icon_text_color"
+                        android:text="@string/nav_header_subtitle"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/txtContactos"
+                        app:layout_constraintTop_toBottomOf="@+id/txtEmail"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="5dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="@string/contactos_caps"
                         android:textColor="@color/login_register_text_color"
                         />
 
@@ -105,14 +159,16 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:paddingTop="5dp"
-
                         />
 
 
 
 
+
+
+
                     <TextView
-                        android:id="@+id/txtUserMail"
+                        android:id="@+id/txtUserGender"
                         app:layout_constraintTop_toBottomOf="@+id/txtTelefoneAlternativo"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -122,37 +178,7 @@
                         android:paddingTop="5dp"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:text="@string/hint_email"
-                        android:textColor="@color/login_register_text_color"
-                        />
-
-                    <TextView
-                        android:id="@+id/txtEmail"
-                        app:layout_constraintTop_toBottomOf="@+id/txtUserMail"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/login_icon_text_color"
-                        android:text="@string/nav_header_subtitle"
-                        />
-
-
-                    <TextView
-                        android:id="@+id/txtUserGender"
-                        app:layout_constraintTop_toBottomOf="@+id/txtEmail"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="5dp"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="@string/genero"
+                        android:text="@string/genero_caps"
                         android:textColor="@color/login_register_text_color"
                         />
 
@@ -172,8 +198,10 @@
 
 
 
+
+
                     <TextView
-                        android:id="@+id/txtUserProv"
+                        android:id="@+id/txtUserAddress"
                         app:layout_constraintTop_toBottomOf="@+id/txtSexo"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -183,39 +211,7 @@
                         android:paddingTop="5dp"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:text="@string/provincia"
-                        android:textColor="@color/login_register_text_color"
-                        />
-
-                    <TextView
-                        android:id="@+id/txtProvincia"
-                        app:layout_constraintTop_toBottomOf="@+id/txtUserProv"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:paddingTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/login_icon_text_color"
-
-                        />
-
-
-
-
-                    <TextView
-                        android:id="@+id/txtUserAddress"
-                        app:layout_constraintTop_toBottomOf="@+id/txtProvincia"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="5dp"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="@string/endereco"
+                        android:text="@string/endereco_caps"
                         android:textColor="@color/login_register_text_color"
                         />
 
@@ -248,24 +244,30 @@
                 android:layout_height="wrap_content"
                 >
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_marginTop="30dp"
-                    android:src="@color/white"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:layout_width="171dp"
+                    android:layout_height="198dp"
+                    android:adjustViewBounds="true"
+                    app:riv_corner_radius="12dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
                     android:layout_centerHorizontal="true"
+                    android:src="@color/white"
+                    android:scaleType="fitCenter"
                     />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/imgUserPhoto"
-                    android:layout_marginTop="30dp"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@color/white"
+                    android:layout_width="171dp"
+                    android:layout_height="198dp"
+                    android:adjustViewBounds="true"
+                    app:riv_corner_radius="12dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:scaleType="fitCenter"
                     android:layout_centerHorizontal="true"
-                    android:contentDescription="@string/foto_de_usuario"
-                    app:civ_border_color="@color/userphoto_nav_bar_border"
-                    app:civ_border_width="2dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -279,13 +281,13 @@
                     android:layout_gravity="center"
                     android:padding="5dp"
                     android:gravity="center"
-                    android:maxLines="1"
-                    android:maxLength="1"
-                    android:layout_marginTop="45dp"
+                    android:layout_centerVertical="true"
+                    android:maxLines="2"
+                    android:maxLength="2"
                     android:visibility="gone"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/login_register_text_color"
-                    android:textSize="60sp"
+                    android:textSize="90sp"
                     />
 
 

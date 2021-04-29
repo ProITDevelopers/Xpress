@@ -1,40 +1,56 @@
 package ao.co.proitconsulting.xpress.modelos;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Estabelecimento implements Serializable {
 
 
+    @SerializedName("estabelecimentoID")
     public int estabelecimentoID;
 
-
+    @SerializedName("nomeEstabelecimento")
     public String nomeEstabelecimento;
 
+    @SerializedName("descricao")
     public String descricao;
+
+    @SerializedName("contacto1")
     public String contacto1;
+
+    @SerializedName("contacto2")
     public String contacto2;
-    public int valorMinimoEncomenda;
-    public String website;
+
+    @SerializedName("logotipo")
     public String logotipo;
+
+    @SerializedName("imagemCapa")
     public String imagemCapa;
+
+    @SerializedName("latitude")
     public String latitude;
+
+    @SerializedName("longitude")
     public String longitude;
 
-    public String provincia;
-    public String municipio;
-    public String bairro;
-    public String rua;
-    public String nCasa;
+    @SerializedName("tipoDeEstabelecimento")
+    public TipoDeEstabelecimento tipoDeEstabelecimento;
 
-    public boolean take_away,bloqueio,delivery;
-    public int popularidade;
-//    public TipoDeEstabelecimento tipoDeEstabelecimento;
-    public int tipoDeEstabelecimentoID;
+
+    @SerializedName("endereco")
     public String endereco;
+
+    @SerializedName("estadoEstabelecimento")
     public String estadoEstabelecimento;
 
+
+    @SerializedName("estadoAtendimento")
+    public String estadoAtendimento;
+
     public Estabelecimento() {}
+
 
 
 }

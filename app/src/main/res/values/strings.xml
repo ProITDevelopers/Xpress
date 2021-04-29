@@ -2,6 +2,7 @@
     <string name="app_name">Xpress Lengueno</string>
     <string name="xpress_logo">Xpress Logo</string>
     <string name="hint_email">Email</string>
+    <string name="hint_email_caps">EMAIL</string>
     <string name="hint_password">Palavra-passe</string>
     <string name="hint_forgot_password">Esqueceu a palavra-passe?</string>
     <string name="hint_btn_login">Entrar</string>
@@ -10,7 +11,9 @@
     <string name="motoboy_logo">Motoboy Logo</string>
     <string name="foto_de_usuario">Foto de usuario</string>
     <string name="primeiro_nome">Primeiro nome</string>
+    <string name="primeiro_nome_caps">PRIMEIRO NOME</string>
     <string name="sobrenome">Sobrenome</string>
+    <string name="sobrenome_caps">ÚLTIMO NOME</string>
     <string name="numero_telefone">Nº de telefone</string>
     <string name="telefone_alternativo">Nº alternativo</string>
     <string name="municipio">Município</string>
@@ -126,6 +129,7 @@
     <string name="nav_meu_perfil_title">Meu perfil</string>
     <string name="nav_encomendas_title">Encomendas</string>
     <string name="nav_mapa_title">Mapa</string>
+    <string name="nav_carteira_title">Carteira Xpress</string>
     <string name="group_redes_sociais_title">Redes Sociais</string>
     <string name="nav_partilhar_title">Partilhar</string>
     <string name="email_ou_num_de_telefone">Email /Nº de telefone</string>
@@ -140,9 +144,12 @@
 
     <string name="nome_completo">Nome Completo</string>
     <string name="contactos">Contactos</string>
+    <string name="contactos_caps">TELEFONE</string>
     <string name="genero">Género</string>
+    <string name="genero_caps">GÉNERO</string>
     <string name="provincia">Província</string>
     <string name="endereco">Endereço</string>
+    <string name="endereco_caps">LOCALIDADE</string>
     <string name="editar_perfil">Editar perfil</string>
     <string name="salvar">Salvar</string>
     <string name="dados_salvos_com_sucesso">Seus dados foram salvos com sucesso!</string>
@@ -171,6 +178,6 @@
     <string name="hint_termos_e_condicoes">ACEITO OS TERMOS E CONDIÇÕES</string>
     <string name="hint_prioridade_da_xpress_tua_saude">A maior prioridade da Xpress é a tua saúde e a tua segurança</string>
     <string name="hint_principais_medidas_de_prevencao">Queremos recordar-te das principais medidas de prevenção recomendadas pela organização</string>
-    <string name="hint_lava_maos">1º Lava as tuas mãos com frequência</string>
+    <string name="hint_lava_maos">Lava as tuas mãos com frequência</string>
 
 </resources>

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,13 +25,23 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
+import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
@@ -48,17 +59,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MenuActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+public class MenuActivity extends AppCompatActivity {
 
 
-    private static final String TAG = "TAG_MenuActivity";
-    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-
+    private AppBarConfiguration mAppBarConfiguration;
     private UsuarioPerfil usuarioPerfil;
-    private CircleImageView imgUserPhoto;
+//    private CircleImageView imgUserPhoto;
+    private RoundedImageView imgUserPhoto;
     private TextView txtUserNameInitial, txtUserName, txtUserEmail;
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
@@ -78,18 +85,22 @@ public class MenuActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_menu_home, R.id.nav_estabelecimento, R.id.nav_menu_perfil, R.id.nav_editar_perfil)
+                .setDrawerLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
 
 
         View view = navigationView.getHeaderView(0);
@@ -99,11 +110,9 @@ public class MenuActivity extends AppCompatActivity implements
         txtUserEmail = view.findViewById(R.id.txtUserEmail);
 
 
+        usuarioPerfil = AppPrefsSettings.getInstance().getUser();
+        carregarDadosOffline(usuarioPerfil);
 
-
-
-
-        goToEstabelecimentoFragment();
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -143,31 +152,19 @@ public class MenuActivity extends AppCompatActivity implements
 
     }
 
-    private void goToEstabelecimentoFragment() {
-        if (getSupportActionBar()!=null)
-            toolbar.setTitle(getString(R.string.txt_xpress));
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frameLayout, new MenuCategoryFragment());
-        transaction.addToBackStack(BACK_STACK_ROOT_TAG);
-        transaction.commit();
-    }
 
     private void carregarDadosOffline(UsuarioPerfil usuarioPerfil) {
         if (usuarioPerfil!=null){
             txtUserName.setText(usuarioPerfil.primeiroNome.concat(" "+usuarioPerfil.ultimoNome));
             txtUserEmail.setText(usuarioPerfil.email);
-            if (usuarioPerfil.imagem.equals(getString(R.string.sem_imagem))){
-                if (!usuarioPerfil.primeiroNome.isEmpty()){
+            if (usuarioPerfil.imagem.equals(getString(R.string.sem_imagem)) || usuarioPerfil.imagem == null){
+                if (usuarioPerfil.primeiroNome != null && usuarioPerfil.ultimoNome != null){
                     String userNameInitial = String.valueOf(usuarioPerfil.primeiroNome.charAt(0));
-                    txtUserNameInitial.setText(userNameInitial.toUpperCase());
+                    String userLastNameInitial = String.valueOf(usuarioPerfil.ultimoNome.charAt(0));
+                    txtUserNameInitial.setText(userNameInitial.toUpperCase().concat(userLastNameInitial.toUpperCase()));
                     txtUserNameInitial.setVisibility(View.VISIBLE);
 
-                }else {
-                    String userNameInitial = String.valueOf(usuarioPerfil.email.charAt(0));
-                    txtUserNameInitial.setText(userNameInitial.toUpperCase());
                 }
 
             }else {
@@ -303,76 +300,33 @@ public class MenuActivity extends AppCompatActivity implements
 
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (getSupportActionBar()!=null)
-                toolbar.setTitle(getString(R.string.txt_xpress));
-
-            int fragments = getSupportFragmentManager().getBackStackEntryCount();
-            if (fragments == 1) {
-                finish();
-            } else if (getFragmentManager().getBackStackEntryCount() > 1) {
-                getFragmentManager().popBackStack();
-            } else {
-                super.onBackPressed();
-            }
-
-
-        }
-
-
-
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
-
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_menu_home) {
-            toolbar.setTitle(getString(R.string.txt_xpress));
-            goToEstabelecimentoFragment();
-
-        }
-        else if (id == R.id.nav_menu_perfil) {
-
-            Intent intent = new Intent(this,PerfilActivity.class);
-            startActivity(intent);
-
-        }
-
-        else if (id == R.id.nav_menu_pedidos) {
-
-            Intent intent = new Intent(this,MeusPedidosActivity.class);
-            startActivity(intent);
-
-        }
-
-        else if (id == R.id.nav_menu_mapa) {
-            Intent intent = new Intent(this,MapaActivity.class);
-            startActivity(intent);
-        }
-
-//        else if (id == R.id.nav_menu_favoritos) {
-//            if (getSupportActionBar()!=null)
-//                toolbar.setTitle(getString(R.string.nav_menu_favoritos));
-//            FavoritosFragment favoritosFragment = new FavoritosFragment();
-//            gotoFragment(favoritosFragment);
-//        }
-
-        else if (id == R.id.nav_menu_share) {
-            MetodosUsados.shareTheApp(this);
-        }
-
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEstabelecimentoItemClick(EstabelecimentoClick event){
+        if (event.isSuccess()){
+            Toast.makeText(this, "Click to: "+event.getEstabelecimento().nomeEstabelecimento, Toast.LENGTH_SHORT).show();
+//            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//            navController.navigate(R.id.nav_revista_detail);
+        }
+    }
+
 
 
 
@@ -458,24 +412,11 @@ public class MenuActivity extends AppCompatActivity implements
         usuarioPerfil = AppPrefsSettings.getInstance().getUser();
         carregarDadosOffline(usuarioPerfil);
 
-        checkNavigationViewSelection();
+//        checkNavigationViewSelection();
 //        verificaoPerfil();
         super.onResume();
     }
 
-    private void checkNavigationViewSelection() {
-        if (getSupportActionBar()!=null){
-
-            if (toolbar.getTitle().equals(getString(R.string.txt_xpress))){
-                navigationView.setCheckedItem(R.id.nav_menu_home);
-            }
-
-        }
-        navigationView.getMenu().getItem(1).setCheckable(false);
-        navigationView.getMenu().getItem(2).setCheckable(false);
-        navigationView.getMenu().getItem(3).setCheckable(false);
-
-    }
 
     @Override
     protected void onDestroy() {

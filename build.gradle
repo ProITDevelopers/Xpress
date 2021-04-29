@@ -19,6 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral() //ASKSIRA_LOOPINGVIEWPAGER
         maven { url "https://jitpack.io" } //SHOW_HIDE_PASSWORD, NAIKSOFT_STOMPANDROID, YALANTIS_UCROP
     }
 }

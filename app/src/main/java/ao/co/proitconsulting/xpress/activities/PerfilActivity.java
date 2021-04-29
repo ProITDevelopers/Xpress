@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -41,9 +42,10 @@ public class PerfilActivity extends AppCompatActivity {
     private static final int PROFILE_REQUEST_CODE = 13;
 
     private UsuarioPerfil usuarioPerfil;
-    private CircleImageView imageView;
-    private TextView txtUserNameInitial,txtNomeCompleto,txtTelefone,txtTelefoneAlternativo;
-    private TextView txtEmail,txtSexo,txtUserProv,txtProvincia,txtUserAddress,txtEndereco;
+//    private CircleImageView imageView;
+    private RoundedImageView imageView;
+    private TextView txtUserNameInitial,txtNomeCompleto,txtSobrenome,txtTelefone,txtTelefoneAlternativo;
+    private TextView txtEmail,txtSexo,txtUserAddress,txtEndereco;
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
@@ -74,13 +76,13 @@ public class PerfilActivity extends AppCompatActivity {
 
         txtUserNameInitial = findViewById(R.id.txtUserNameInitial);
         txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
+        txtSobrenome = findViewById(R.id.txtSobrenome);
         txtTelefone = findViewById(R.id.txtTelefone);
         txtTelefoneAlternativo = findViewById(R.id.txtTelefoneAlternativo);
 
         txtEmail = findViewById(R.id.txtEmail);
         txtSexo = findViewById(R.id.txtSexo);
-        txtUserProv = findViewById(R.id.txtUserProv);
-        txtProvincia = findViewById(R.id.txtProvincia);
+
 
         txtUserAddress = findViewById(R.id.txtUserAddress);
         txtEndereco = findViewById(R.id.txtEndereco);
@@ -103,18 +105,16 @@ public class PerfilActivity extends AppCompatActivity {
 
     private void carregarMeuPerfilOffline(UsuarioPerfil usuarioPerfil) {
 
-        String userNameInitial;
+        String userNameInitial, userLastNameInitial;
         if (usuarioPerfil!=null){
 
-            if (usuarioPerfil.imagem.equals(getString(R.string.sem_imagem))){
-                if (!usuarioPerfil.primeiroNome.isEmpty()){
+            if (usuarioPerfil.imagem.equals(getString(R.string.sem_imagem)) || usuarioPerfil.imagem == null){
+                if (usuarioPerfil.primeiroNome != null && usuarioPerfil.ultimoNome != null){
                     userNameInitial = String.valueOf(usuarioPerfil.primeiroNome.charAt(0));
-                    txtUserNameInitial.setText(userNameInitial.toUpperCase());
+                    userLastNameInitial = String.valueOf(usuarioPerfil.ultimoNome.charAt(0));
+                    txtUserNameInitial.setText(userNameInitial.toUpperCase().concat(userLastNameInitial.toUpperCase()));
                     txtUserNameInitial.setVisibility(View.VISIBLE);
 
-                }else {
-                    userNameInitial = String.valueOf(usuarioPerfil.email.charAt(0));
-                    txtUserNameInitial.setText(userNameInitial.toUpperCase());
                 }
 
             }else {
@@ -127,7 +127,8 @@ public class PerfilActivity extends AppCompatActivity {
                         .into(imageView);
             }
 
-            txtNomeCompleto.setText(usuarioPerfil.nomeCompleto);
+            txtNomeCompleto.setText(usuarioPerfil.primeiroNome);
+            txtSobrenome.setText(usuarioPerfil.ultimoNome);
             txtTelefone.setText(usuarioPerfil.contactoMovel);
 
             if (usuarioPerfil.contactoAlternativo==null || usuarioPerfil.contactoAlternativo.isEmpty()){
@@ -144,19 +145,11 @@ public class PerfilActivity extends AppCompatActivity {
             else
                 txtSexo.setText("Masculino");
 
-            if (usuarioPerfil.provincia==null){
-                txtUserProv.setVisibility(View.GONE);
-                txtProvincia.setVisibility(View.GONE);
-                txtProvincia.setText("");
-            }
-            else{
-                txtProvincia.setText(usuarioPerfil.provincia);
-            }
 
 
 
 
-            if (usuarioPerfil.municipio==null || usuarioPerfil.bairro==null ||
+            if (usuarioPerfil.provincia==null || usuarioPerfil.municipio==null || usuarioPerfil.bairro==null ||
                     usuarioPerfil.rua==null||usuarioPerfil.nCasa==null){
 
                 txtUserAddress.setVisibility(View.GONE);
@@ -164,7 +157,8 @@ public class PerfilActivity extends AppCompatActivity {
                 txtEndereco.setText("");
 
             }else{
-                txtEndereco.setText("Município "+
+                txtEndereco.setText("Província "+
+                        usuarioPerfil.provincia +", Município "+
                         usuarioPerfil.municipio +", "+
                         "Bairro "+usuarioPerfil.bairro+", "+
                         "Rua "+usuarioPerfil.rua+", "+

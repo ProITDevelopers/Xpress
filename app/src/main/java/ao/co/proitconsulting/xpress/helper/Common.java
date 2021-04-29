@@ -7,9 +7,13 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.BuildConfig;
 import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
+import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.SobreNos;
 
 public class Common {
+
+    public static int selectedEstabPosition;
+    public static Estabelecimento selectedEstab;
 
     public static List<GetTaxaModel> getTaxaModelList = new ArrayList<>();
 

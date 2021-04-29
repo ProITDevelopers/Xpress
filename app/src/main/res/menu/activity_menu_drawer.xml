@@ -6,13 +6,13 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_menu_home"
-            android:icon="@drawable/ic_baseline_home_24"
-            app:iconTint="@color/login_register_text_color"
+            android:icon="@drawable/ic_baseline_home_outline_24"
+            app:iconTint="@color/xpress_purple"
             android:title="@string/nav_home_title"/>
 
         <item android:id="@+id/nav_menu_perfil"
             android:icon="@drawable/ic_baseline_person_outline_24"
-            app:iconTint="@color/login_register_text_color"
+            app:iconTint="@color/xpress_purple"
             android:title="@string/nav_meu_perfil_title"/>
 
         <!--        <item android:id="@+id/nav_menu_favoritos"
@@ -20,27 +20,21 @@
         android:title="Favoritos"/>-->
 
         <item android:id="@+id/nav_menu_pedidos"
-            android:icon="@drawable/ic_baseline_restaurant_24"
-            app:iconTint="@color/login_register_text_color"
+            android:icon="@drawable/ic_baseline_shopping_cart_outline_24"
+            app:iconTint="@color/xpress_purple"
             android:title="@string/nav_encomendas_title"/>
 
         <item android:id="@+id/nav_menu_mapa"
-            android:icon="@drawable/ic_baseline_map_24"
-            app:iconTint="@color/login_register_text_color"
+            android:icon="@drawable/ic_baseline_location_on_outline_24"
+            app:iconTint="@color/xpress_purple"
             android:title="@string/nav_mapa_title"/>
 
-    </group>
-    <item android:title="@string/group_redes_sociais_title">
-        <menu>
-            <group android:checkableBehavior="none"
-                >
-                <item android:id="@+id/nav_menu_share"
-                    android:icon="@drawable/ic_baseline_share_24"
-                    app:iconTint="@color/login_register_text_color"
-                    android:title="@string/nav_partilhar_title"/>
+        <item android:id="@+id/nav_menu_wallet"
+            android:icon="@drawable/ic_baseline_account_balance_wallet_24"
+            app:iconTint="@color/xpress_purple"
+            android:title="@string/nav_carteira_title"/>
 
-            </group>
-        </menu>
-    </item>
+    </group>
+
 
 </menu>

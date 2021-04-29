@@ -28,9 +28,9 @@
     <color name="register_bkg_start_color">#19d3c5</color>
     <color name="register_bkg_center_color">#19d3c5</color>
     <color name="register_bkg_end_color">#19d3c5</color>
-    <color name="side_nav_bar_start_color">#19d3c5</color>
-    <color name="side_nav_bar_center_color">#19d3c5</color>
-    <color name="side_nav_bar_end_color">#19d3c5</color>
+    <color name="side_nav_bar_start_color">@color/white</color>
+    <color name="side_nav_bar_center_color">@color/white</color>
+    <color name="side_nav_bar_end_color">@color/white</color>
 
     <color name="swipe_refresh_green_light_color">#19d3c5</color>
     <color name="swipe_refresh_grey_color">#80000000</color>

@@ -36,11 +36,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activities.ConfiguracoesActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.ProdutoDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyCustomAppTheme"></activity>
+            android:theme="@style/MyCustomAppTheme">
+        </activity>
         <activity
             android:name=".activities.MeusPedidosActivity"
             android:screenOrientation="portrait" />
@@ -104,7 +105,7 @@
         <activity
             android:name=".activities.AlterarPalavraPasseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AlterarPassTheme" />
         <activity
             android:name=".activities.LoginTemporarioActivity"
             android:screenOrientation="portrait"

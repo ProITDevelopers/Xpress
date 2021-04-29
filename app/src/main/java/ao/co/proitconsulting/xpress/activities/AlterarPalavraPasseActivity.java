@@ -17,7 +17,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
 import ao.co.proitconsulting.xpress.R;
@@ -62,7 +64,8 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showCustomUI();
+        //showBackground in status bar
+        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_alterar_palavra_passe);
 
         initViews();
@@ -78,6 +81,14 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
     }
 
     private void initViews() {
+
+        FloatingActionButton fabPrevious = findViewById(R.id.fabPrevious);
+        fabPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//

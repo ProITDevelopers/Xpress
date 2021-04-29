@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
-    android:gravity="bottom"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -15,30 +15,28 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        >
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@color/white"
-            android:layout_gravity="center"
 
-            />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imgUserPhoto"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:contentDescription="@string/nav_header_desc"
-            android:layout_gravity="center"
+            android:layout_width="220dp"
+            android:layout_height="280dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="12dp"
+            android:paddingTop="25dp"
+            android:paddingBottom="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_gravity="center_horizontal"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            app:civ_border_color="@color/userphoto_nav_bar_border"
-            app:civ_border_width="2dp"
             />
+
+
 
         <TextView
             android:id="@+id/txtUserNameInitial"
@@ -48,11 +46,11 @@
             android:padding="5dp"
             android:gravity="center"
             android:maxLines="1"
-            android:maxLength="1"
+            android:maxLength="2"
             android:visibility="gone"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/login_register_text_color"
-            android:textSize="50sp" />
+            android:textColor="@color/xpress_purple"
+            android:textSize="150sp" />
 
     </FrameLayout>
 
@@ -64,8 +62,10 @@
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="#969fa9"
+        android:textSize="22sp"
         android:maxLines="1"
+
         />
 
     <TextView
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle"
         android:layout_gravity="center"
-        android:textColor="@color/white"
+        android:textColor="#969fa9"
         android:maxLines="1"
         />
 </LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/nav_menu_home">
+
+    <fragment
+        android:id="@+id/nav_menu_home"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.home.HomeFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_estabelecimento"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.estab.EstabelecimentoFragment"
+        tools:layout="@layout/fragment_estabelecimento" />
+
+    <fragment
+        android:id="@+id/nav_menu_perfil"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.perfil.PerfilFragment"
+        android:label="@string/nav_meu_perfil_title"
+        tools:layout="@layout/fragment_perfil">
+        <action
+            android:id="@+id/action_nav_perfil_to_nav_editar_perfil"
+            app:destination="@id/nav_editar_perfil" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_editar_perfil"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.perfil.EditarPerfilFragment"
+        android:label="@string/editar_perfil"
+        tools:layout="@layout/fragment_editar_perfil">
+
+        <action
+            android:id="@+id/action_nav_editar_perfil_to_nav_perfil"
+            app:destination="@id/nav_menu_perfil" />
+    </fragment>
+
+</navigation>
