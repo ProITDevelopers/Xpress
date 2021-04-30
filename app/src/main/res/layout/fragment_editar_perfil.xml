@@ -1,379 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/editPerfil_root">
+    android:id="@+id/editPerfil_root"
+    >
 
-    <androidx.core.widget.NestedScrollView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <FrameLayout
-            android:background="@drawable/register_green_bkg"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="350dp"
+            android:fitsSystemWindows="true"
+            android:background="@color/white"
+            app:contentScrim="@color/xpress_green"
+            app:expandedTitleTextAppearance="@android:color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
 
-
-            <RelativeLayout
+            <FrameLayout
+                android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="90dp"
-                android:background="@drawable/register_border">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_marginTop="60dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:paddingBottom="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-
-
-                    <LinearLayout
-                        android:weightSum="2"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:paddingTop="5dp"
-                        android:id="@+id/hint_nome"
-                        android:baselineAligned="false">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_border"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_weight="1">
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editPrimeiroNome"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/primeiro_nome"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                android:background="@android:color/transparent"
-                                android:padding="12dp"
-                                />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_border"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1">
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editUltimoNome"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/sobrenome"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                android:background="@android:color/transparent"
-                                android:padding="12dp"
-                                />
-
-                        </RelativeLayout>
-
-
-
-                    </LinearLayout>
-
-
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_nome"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_telefone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editTelefoneAlternativo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/telefone_alternativo"
-                            android:maxLength="9"
-                            android:inputType="phone"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_telefone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_genero">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_gravity="center"
-                            android:padding="12dp">
-
-                            <TextView
-                                android:text="@string/genero_sexo"
-                                android:textSize="18sp"
-                                android:textColor="@color/transparentBlack"
-                                android:gravity="center_vertical"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"/>
-
-
-                            <RadioGroup
-                                android:id="@+id/radioGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginEnd="8dp"
-
-                                android:orientation="horizontal">
-
-                                <RadioButton
-                                    android:id="@+id/radioBtnFem"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:checked="false"
-                                    android:layout_marginRight="12dp"
-                                    android:layout_marginEnd="12dp"
-                                    android:text="@string/gender_female"
-                                    android:textColor="@color/transparentBlack"
-                                    android:textSize="16sp"
-                                    android:maxLines="1"/>
-
-                                <RadioButton
-                                    android:id="@+id/radioBtnMasc"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:checked="false"
-                                    android:text="@string/gender_male"
-                                    android:textColor="@color/transparentBlack"
-                                    android:textSize="16sp"
-                                    android:maxLines="1"/>
-                            </RadioGroup>
-
-
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_genero"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_municipio">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editMunicipio"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/municipio"
-                            android:maxLines="1"
-                            android:inputType="textCapSentences"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_municipio"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_bairro">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editBairro"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/bairro"
-                            android:maxLines="1"
-                            android:inputType="textCapSentences"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        app:layout_constraintTop_toBottomOf="@+id/hint_bairro"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/box_border"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/hint_rua">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/editRua"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/rua"
-                            android:maxLines="1"
-                            android:inputType="textCapSentences"
-                            android:background="@android:color/transparent"
-                            android:padding="12dp"
-                            />
-
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:weightSum="2"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_rua"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingTop="5dp"
-                        android:id="@+id/hint_provincia_ncasa"
-                        android:baselineAligned="false">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_border"
-                            android:layout_weight="1">
-
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/editNCasa"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/numero_da_casa"
-                                android:maxLength="20"
-                                android:maxLines="1"
-                                android:inputType="textCapSentences|textPersonName"
-                                android:background="@android:color/transparent"
-                                android:padding="12dp"
-                                />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_border"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1"
-                            android:layout_gravity="center">
-
-                            <Spinner android:id="@+id/editCidadeSpiner"
-                                android:layout_width="match_parent"
-                                app:backgroundTint="#1c966a"
-                                android:popupBackground="#0f4f38"
-                                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                                android:layout_height="46dp"/>
-
-                        </RelativeLayout>
-
-
-
-
-
-                    </LinearLayout>
-
-
-
-
-
-
-
-
-                    <Button
-                        android:id="@+id/btnSalvar"
-                        app:layout_constraintTop_toBottomOf="@+id/hint_provincia_ncasa"
-                        app:layout_constraintStart_toStartOf="@+id/hint_genero"
-                        app:layout_constraintEnd_toEndOf="@+id/hint_genero"
-                        android:text="@string/salvar"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:background="@drawable/button_background"
-                        android:textColor="@android:color/white"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        />
-
-
-
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="parallax"
+                android:layout_gravity="center_horizontal"
                 >
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_marginTop="30dp"
-                    android:src="@color/white"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerHorizontal="true"
-                    />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+
+
+                <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/imgUserPhoto"
-                    android:layout_marginTop="30dp"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@color/white"
-                    android:layout_centerHorizontal="true"
-                    android:contentDescription="@string/foto_de_usuario"
-                    app:civ_border_color="@color/userphoto_nav_bar_border"
-                    app:civ_border_width="2dp"
+                    android:layout_width="250dp"
+                    android:layout_height="320dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    app:riv_corner_radius="12dp"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_gravity="center"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     />
-
 
                 <TextView
                     android:id="@+id/txtUserNameInitial"
@@ -383,28 +63,383 @@
                     android:padding="5dp"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:maxLength="1"
-                    android:layout_marginTop="45dp"
+                    android:maxLength="2"
                     android:visibility="gone"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/login_register_text_color"
-                    android:textSize="60sp"
+                    android:textColor="@color/xpress_purple"
+                    android:textSize="150sp"
                     />
 
                 <ImageView
                     android:src="@drawable/btn_camera"
-                    android:layout_marginTop="55dp"
-                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
+            </FrameLayout>
+
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="8dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp"
+            android:paddingBottom="15dp"
+
+            >
+
+            <TextView
+                android:id="@+id/txtNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/primeiro_nome_caps"
+                android:textColor="#1a1824"
+                android:alpha="0.5"
+                />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editPrimeiroNome"
+                android:layout_width="155dp"
+                android:layout_height="wrap_content"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:textColor="@color/xpress_purple"
+                android:inputType="textCapWords"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                />
+
+
+            <TextView
+                android:id="@+id/txtNome2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="@string/sobrenome_caps"
+                android:textColor="#1a1824"
+                android:alpha="0.5"
+                />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editUltimoNome"
+                android:layout_width="155dp"
+                android:layout_height="wrap_content"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:textColor="@color/xpress_purple"
+                android:inputType="textCapWords"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                />
+
+
+            <TextView
+                android:id="@+id/txtUserMail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="@string/hint_email_caps"
+                android:textColor="#1a1824"
+                android:alpha="0.5"
+
+                />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/xpress_purple"
+                android:inputType="textEmailAddress"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+
+                />
+
+
+            <TextView
+                android:id="@+id/txtContactos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="@string/contactos_caps"
+                android:textColor="#1a1824"
+                android:alpha="0.5"
+                />
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editTelefone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/numero_telefone"
+                    android:maxLength="9"
+                    android:inputType="phone"
+                    android:textColor="@color/xpress_purple"
+                    android:paddingTop="12dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    />
+
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editTelefoneAlternativo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/telefone_alternativo"
+                    android:maxLength="9"
+                    android:inputType="phone"
+                    android:textColor="@color/xpress_purple"
+                    android:paddingTop="12dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    />
+
+
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/txtUserGender"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:text="@string/genero_caps"
+                android:textColor="#1a1824"
+                android:alpha="0.5"
+                android:layout_weight="1.80"
+                />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:gravity="center_vertical|center"
+                android:orientation="horizontal"
+                android:layout_weight="0.20">
+
+                <RadioButton
+                    android:id="@+id/radioBtnMasc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:checked="false"
+                    android:text="@string/gender_male"
+                    android:textColor="@color/transparentBlack"
+                    app:buttonTint="@color/xpress_purple"
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"/>
+
+                <RadioButton
+                    android:id="@+id/radioBtnFem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:buttonTint="@color/xpress_purple"
+                    android:checked="false"
+                    android:text="@string/gender_female"
+                    android:textColor="@color/transparentBlack"
+                    android:textSize="16sp"
+                    android:maxLines="1"/>
+
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+
+
+
+
+
+            <TextView
+                android:id="@+id/txtUserAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:textSize="20sp"
+                android:text="@string/endereco_caps"
+                android:textColor="#1a1824"
+                android:alpha="0.5"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border"
+                android:paddingTop="5dp"
+                android:layout_marginTop="10dp"
+                >
+
+                <Spinner android:id="@+id/editCidadeSpiner"
+                    android:layout_width="match_parent"
+                    app:backgroundTint="@color/xpress_purple"
+                    android:popupBackground="@color/xpress_green"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:layout_height="46dp"/>
 
             </RelativeLayout>
 
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border"
+                android:layout_marginTop="10dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editMunicipio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/municipio"
+                    android:maxLines="1"
+                    android:textColor="@color/xpress_purple"
+                    android:background="@android:color/transparent"
+                    android:inputType="textCapWords"
+                    android:padding="12dp"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border"
+                android:layout_marginTop="10dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editBairro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/bairro"
+                    android:maxLines="1"
+                    android:textColor="@color/xpress_purple"
+                    android:background="@android:color/transparent"
+                    android:inputType="textCapWords"
+                    android:padding="12dp"
+                    />
+
+            </RelativeLayout>
 
 
-        </FrameLayout>
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/box_border"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/editRua"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/rua"
+                        android:maxLines="1"
+                        android:textColor="@color/xpress_purple"
+                        android:inputType="textCapWords"
+                        android:background="@android:color/transparent"
+                        android:padding="12dp"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/box_border"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/editNCasa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/numero_da_casa"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:textColor="@color/xpress_purple"
+                        android:inputType="textCapWords"
+                        android:background="@android:color/transparent"
+                        android:padding="12dp"
+                        />
+
+                </RelativeLayout>
+
+
+
+
+
+
+
+            </LinearLayout>
+
+
+
+            <Button
+                android:id="@+id/btnSalvar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_margin="25dp"
+                android:text="@string/salvar"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:background="@drawable/button_background"
+                android:textColor="@android:color/white"
+                />
+
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

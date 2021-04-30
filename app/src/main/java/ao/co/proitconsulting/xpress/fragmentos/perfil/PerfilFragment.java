@@ -33,6 +33,9 @@ public class PerfilFragment extends Fragment {
     private Button btnEditPerfil;
     private UsuarioPerfil usuarioPerfil;
 
+    public PerfilFragment(){
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

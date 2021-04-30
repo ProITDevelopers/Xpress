@@ -42,6 +42,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,7 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -87,13 +89,15 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     public static final int REQUEST_IMAGE = 100;
     private UsuarioPerfil usuarioPerfil;
 
-    private ConstraintLayout editPerfil_root;
+//    private ConstraintLayout editPerfil_root;
+    private CoordinatorLayout editPerfil_root;
     private TextView txtUserNameInitial;
-    private CircleImageView imageView;
+//    private CircleImageView imageView;
+    private RoundedImageView imageView;
     private AppCompatEditText editPrimeiroNome,editUltimoNome;
     private RadioGroup radioGroup;
     private RadioButton radioBtnFem,radioBtnMasc;
-    private AppCompatEditText editTelefoneAlternativo;
+    private AppCompatEditText editEmail,editTelefone, editTelefoneAlternativo;
     private Spinner editCidadeSpiner;
     private AppCompatEditText editMunicipio,editBairro,editRua,editNCasa;
     private Button btnSalvar;
@@ -139,6 +143,8 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         editPrimeiroNome = view.findViewById(R.id.editPrimeiroNome);
         editUltimoNome = view.findViewById(R.id.editUltimoNome);
 
+        editEmail = view.findViewById(R.id.editEmail);
+        editTelefone = view.findViewById(R.id.editTelefone);
         editTelefoneAlternativo = view.findViewById(R.id.editTelefoneAlternativo);
 
         radioGroup = view.findViewById(R.id.radioGroup);
@@ -156,7 +162,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    radioBtnFem.setTextColor(ContextCompat.getColor(getContext(),R.color.login_register_text_color));
+                    radioBtnFem.setTextColor(ContextCompat.getColor(getContext(),R.color.xpress_purple));
                     radioBtnFem.setError(null);
                     radioBtnMasc.setError(null);
                 }else{
@@ -169,7 +175,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    radioBtnMasc.setTextColor(ContextCompat.getColor(getContext(),R.color.login_register_text_color));
+                    radioBtnMasc.setTextColor(ContextCompat.getColor(getContext(),R.color.xpress_purple));
                     radioBtnMasc.setError(null);
                     radioBtnFem.setError(null);
                 }else{
@@ -262,7 +268,8 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
 
             editPrimeiroNome.setText(usuarioPerfil.primeiroNome);
             editUltimoNome.setText(usuarioPerfil.ultimoNome);
-
+            editEmail.setText(usuarioPerfil.email);
+            editTelefone.setText(usuarioPerfil.contactoMovel);
             if (usuarioPerfil.contactoAlternativo==null)
                 editTelefoneAlternativo.setText("");
             else
@@ -753,7 +760,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.login_register_text_color));
+        ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.xpress_purple));
         if (parent.getId() == R.id.editCidadeSpiner) {
             valorCidadeItem = parent.getItemAtPosition(position).toString();
         }

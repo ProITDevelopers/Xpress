@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -47,7 +48,12 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.itemTextView.setText(items.get(position).nomeEstabelecimento);
-        Picasso.with(context).load(items.get(position).logotipo).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.imgEstab);
+        Picasso.with(context).load(items.get(position).logotipo).fit().centerCrop()
+                .placeholder(R.drawable.store_placeholder).into(holder.imgEstab);
+
+        if (!items.get(position).estadoEstabelecimento.equals("Aberto")){
+            holder.cardViewEstab.setAlpha(0.5f);
+        }
 
         //Event
         holder.setListener(new IRecyclerClickListener() {

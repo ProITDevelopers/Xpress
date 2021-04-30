@@ -15,7 +15,7 @@
     <color name="btn_login_end_color">#19d3c5</color>
     <color name="xpress_green">#19d3c5</color>
     <color name="xpress_purple">#270089</color>
-    <color name="box_border_color">#19d3c5</color>
+    <color name="box_border_color">#dddddd</color>
     <color name="register_statusbar_color">#0e4e37</color>
 
     <color name="white">#ffffff</color>

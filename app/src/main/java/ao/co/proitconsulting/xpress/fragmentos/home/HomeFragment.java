@@ -20,7 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.asksira.loopingviewpager.LoopingViewPager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
@@ -49,7 +52,7 @@ public class HomeFragment extends Fragment {
     private AlertDialog waitingDialog;
 
 
-    private List<MenuCategory> menuCategoryList = new ArrayList<>();
+//    private List<MenuCategory> menuCategoryList = new ArrayList<>();
     private List<Estabelecimento> estabelecimentoList = new ArrayList<>();
     private List<CategoriaEstabelecimento> categoriaEstabelecimentoList = new ArrayList<>();
 
@@ -75,16 +78,16 @@ public class HomeFragment extends Fragment {
             }
         });
         waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
-        waitingDialog.setMessage("Carregando...");
+        waitingDialog.setMessage("Por favor aguarde...");
         waitingDialog.setCancelable(false);
 
 
-        verifConecxaoMenuCategory();
+        verifConecxaoCategoryEstabelecimento();
 
         return view;
     }
 
-    private void verifConecxaoMenuCategory() {
+    private void verifConecxaoCategoryEstabelecimento() {
 
         if (getActivity()!=null) {
             ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -93,68 +96,70 @@ public class HomeFragment extends Fragment {
                 if (netInfo == null){
 //                    mostarMsnErro();
                 } else {
-                    carregarListaMenuCategory();
+//                    carregarListaMenuCategory();
+                    carregarListaEstabelicimentos();
                 }
             }
         }
 
     }
 
-    private void carregarListaMenuCategory() {
-        waitingDialog.show();
-
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<MenuCategory>> rv = apiInterface.getMenuCategories();
-        rv.enqueue(new Callback<List<MenuCategory>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<MenuCategory>> call, @NonNull Response<List<MenuCategory>> response) {
-
-                if (response.isSuccessful()) {
-
-                    if (menuCategoryList!=null)
-                        menuCategoryList.clear();
-
-                    if (response.body()!=null){
-
-                        if (response.body().size()>0){
-                            for (MenuCategory menuCategory: response.body()) {
-                                if (menuCategory!=null){
-                                    menuCategoryList.add(menuCategory);
-                                    Log.d(TAG, "onResponseMenuCategory: "+menuCategory.getDescricao());
-                                }
-                            }
-
-                            carregarListaEstabelicimentos();
-
-
-                        }
-
-                    }
-
-                } else {
-
-                    waitingDialog.dismiss();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<MenuCategory>> call, @NonNull Throwable t) {
-                waitingDialog.dismiss();
-                if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet_timeout);
-                }else {
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro);
-                }
-            }
-        });
-    }
+//    private void carregarListaMenuCategory() {
+//        waitingDialog.show();
+//
+//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//        Call<List<MenuCategory>> rv = apiInterface.getMenuCategories();
+//        rv.enqueue(new Callback<List<MenuCategory>>() {
+//            @Override
+//            public void onResponse(@NonNull Call<List<MenuCategory>> call, @NonNull Response<List<MenuCategory>> response) {
+//
+//                if (response.isSuccessful()) {
+//
+//                    if (menuCategoryList!=null)
+//                        menuCategoryList.clear();
+//
+//                    if (response.body()!=null){
+//
+//                        if (response.body().size()>0){
+//                            for (MenuCategory menuCategory: response.body()) {
+//                                if (menuCategory!=null){
+//                                    menuCategoryList.add(menuCategory);
+//                                    Log.d(TAG, "onResponseMenuCategory: "+menuCategory.getDescricao());
+//                                }
+//                            }
+//
+//                            carregarListaEstabelicimentos();
+//
+//
+//                        }
+//
+//                    }
+//
+//                } else {
+//
+//                    waitingDialog.dismiss();
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<List<MenuCategory>> call, @NonNull Throwable t) {
+//                waitingDialog.dismiss();
+//                if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
+//                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
+//                }else  if ("timeout".equals(t.getMessage())) {
+//                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet_timeout);
+//                }else {
+//                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro);
+//                }
+//            }
+//        });
+//    }
 
     private void carregarListaEstabelicimentos() {
 
+        waitingDialog.show();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<List<Estabelecimento>> rv = apiInterface.getAllEstabelecimentos();
         rv.enqueue(new Callback<List<Estabelecimento>>() {
@@ -162,7 +167,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
 
                 if (response.isSuccessful()) {
-
+                    waitingDialog.setMessage("Carregando...");
                     if (estabelecimentoList!=null)
                         estabelecimentoList.clear();
 
@@ -180,10 +185,7 @@ public class HomeFragment extends Fragment {
                         }
 
 
-//                        progressBar.setVisibility(View.GONE);
-//                        setAdapters(estabelecimentoList);
-
-                        fillList();
+                        getCategoriesFromEstabelecimento();
 
 
 
@@ -200,7 +202,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
-//                progressBar.setVisibility(View.GONE);
                 waitingDialog.dismiss();
                 if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
@@ -213,8 +214,41 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void getCategoriesFromEstabelecimento() {
+        List<MenuCategory> menuCategoryList = new ArrayList<>();
 
-    private void fillList() {
+        for (int i = 0; i <estabelecimentoList.size() ; i++) {
+            Estabelecimento estab = estabelecimentoList.get(i);
+            MenuCategory menuCategory = new MenuCategory();
+            menuCategory.setIdTipo(estab.tipoDeEstabelecimento.idTipo);
+            menuCategory.setDescricao(estab.tipoDeEstabelecimento.descricao);
+            menuCategoryList.add(menuCategory);
+        }
+
+//        // Order the list by regist date.
+//        Collections.sort(menuCategories, new MenuCategory());
+
+//        List<MenuCategory> allEvents = new ArrayList<>(menuCategoryList);
+        List<MenuCategory> noRepeat = new ArrayList<>();
+
+        for (MenuCategory event : menuCategoryList) {
+            boolean isFound = false;
+            // check if the event name exists in noRepeat
+            for (MenuCategory e : noRepeat) {
+                if (e.getDescricao().equals(event.getDescricao()) || (e.equals(event))) {
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound) noRepeat.add(event);
+        }
+
+
+        menuCategoryList.clear();
+        fillList(noRepeat);
+    }
+
+    private void fillList(List<MenuCategory> menuCategoryList) {
 
         if (categoriaEstabelecimentoList!=null)
             categoriaEstabelecimentoList.clear();
@@ -232,6 +266,7 @@ public class HomeFragment extends Fragment {
             categoriaEstabelecimentoList.add(new CategoriaEstabelecimento(menuCategoryList.get(i), newEstab));
         }
 
+        menuCategoryList.clear();
         setUpAdapters();
 
 

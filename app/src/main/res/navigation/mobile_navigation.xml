@@ -41,4 +41,22 @@
             app:destination="@id/nav_menu_perfil" />
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_menu_encomendas"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.encomenda.EncomendasFragment"
+        android:label="@string/nav_encomendas_title"
+        tools:layout="@layout/fragment_encomendas" />
+
+    <fragment
+        android:id="@+id/nav_menu_mapa"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.mapa.MapaFragment"
+        android:label="@string/nav_mapa_title"
+        tools:layout="@layout/fragment_mapa" />
+
+    <fragment
+        android:id="@+id/nav_menu_wallet"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.wallet.CarteiraXpressFragment"
+        android:label="@string/nav_carteira_title"
+        tools:layout="@layout/fragment_carteira_xpress" />
+
 </navigation>

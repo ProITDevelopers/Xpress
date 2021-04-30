@@ -687,6 +687,8 @@ public class RegisterActivity extends AppCompatActivity {
     private void loadProfile(String url) {
         Log.d(TAG, "Image cache path: " + url);
 
+        imgUserPhoto.setBorderWidth(2);
+        imgUserPhoto.setBorderColor(ContextCompat.getColor(this, R.color.userphoto_nav_bar_border));
         Picasso.with(this).load(url).fit().centerCrop().into(imgUserPhoto);
 
     }

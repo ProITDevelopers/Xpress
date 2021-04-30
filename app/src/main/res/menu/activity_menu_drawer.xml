@@ -19,7 +19,7 @@
         android:icon="@drawable/ic_favorite_orange_24dp"
         android:title="Favoritos"/>-->
 
-        <item android:id="@+id/nav_menu_pedidos"
+        <item android:id="@+id/nav_menu_encomendas"
             android:icon="@drawable/ic_baseline_shopping_cart_outline_24"
             app:iconTint="@color/xpress_purple"
             android:title="@string/nav_encomendas_title"/>

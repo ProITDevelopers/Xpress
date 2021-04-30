@@ -50,7 +50,7 @@
             android:visibility="gone"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/xpress_purple"
-            android:textSize="150sp" />
+            android:textSize="100sp" />
 
     </FrameLayout>
 

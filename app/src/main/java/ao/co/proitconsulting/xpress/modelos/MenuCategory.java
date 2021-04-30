@@ -1,6 +1,9 @@
 package ao.co.proitconsulting.xpress.modelos;
 
-public class MenuCategory {
+import java.util.Comparator;
+
+//public class MenuCategory implements Comparator<MenuCategory> {
+public class MenuCategory  {
     private int idTipo;
     private String descricao;
 
@@ -27,4 +30,14 @@ public class MenuCategory {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+//    @Override
+//    public int compare(MenuCategory menuCategory1, MenuCategory menuCategory2) {
+//        // Order ascending.
+////        int ret = menuCategory1.getDescricao().compareTo(menuCategory2.getDescricao());
+//
+//        int ret = menuCategory1.getIdTipo() > menuCategory2.getIdTipo() ? -1 : (menuCategory1.getIdTipo() < menuCategory2.getIdTipo()) ? 1 : 0;
+//
+//        return ret;
+//    }
 }
