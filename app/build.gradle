@@ -46,6 +46,9 @@ dependencies {
     //DESIGN UI
     implementation 'com.google.android.material:material:1.2.1'
 
+    //BUTTON_FOR_CART
+    implementation 'com.github.andremion:counterfab:1.2.2-alpha1'
+
     //FOR MANAGING REQUEST PERMISSIONS: camera/gallery photo/location/phonecall
     implementation 'com.karumi:dexter:6.2.1'
 

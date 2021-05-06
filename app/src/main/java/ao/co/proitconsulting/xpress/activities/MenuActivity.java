@@ -26,7 +26,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.andremion.counterfab.CounterFab;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
@@ -75,6 +77,7 @@ public class MenuActivity extends AppCompatActivity {
     int cart_count = 0;
     private NotificationBadge badge;
     private ImageView cart_icon;
+    private CounterFab fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,15 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -374,11 +386,15 @@ public class MenuActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (cart_count == 0)
+                if (cart_count == 0){
                     badge.setVisibility(View.INVISIBLE);
+                    fab.setCount(0);
+                    fab.setVisibility(View.INVISIBLE);
+                }
                 else{
                     badge.setVisibility(View.VISIBLE);
                     badge.setText(String.valueOf(cart_count));
+                    fab.setCount(cart_count);
                 }
             }
         });
