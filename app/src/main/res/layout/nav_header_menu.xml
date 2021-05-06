@@ -62,9 +62,10 @@
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:gravity="center"
-        android:textColor="#969fa9"
+        android:textColor="@color/nav_header_menu_text_color"
         android:textSize="22sp"
         android:maxLines="1"
+
 
         />
 
@@ -74,7 +75,8 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle"
         android:layout_gravity="center"
-        android:textColor="#969fa9"
+        android:textColor="@color/nav_header_menu_text_color"
         android:maxLines="1"
+        android:alpha="0.8"
         />
 </LinearLayout>

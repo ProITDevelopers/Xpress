@@ -16,9 +16,9 @@
         tools:layout="@layout/fragment_categoryestab" />
 
     <fragment
-        android:id="@+id/nav_estabelecimento"
-        android:name="ao.co.proitconsulting.xpress.fragmentos.estab.EstabelecimentoFragment"
-        tools:layout="@layout/fragment_estabelecimento" />
+        android:id="@+id/nav_produtos_estab"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.produtos_estab.ProdutosEstabFragment"
+        tools:layout="@layout/fragment_produtos_estab" />
 
     <fragment
         android:id="@+id/nav_menu_perfil"

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Xpress Lengueno</string>
+    <string name="facebook_app_id">412893576490727</string>
+    <string name="fb_login_protocol_scheme">fb412893576490727</string>
+
     <string name="xpress_logo">Xpress Logo</string>
     <string name="hint_email">Email</string>
     <string name="hint_email_caps">EMAIL</string>
@@ -32,6 +35,7 @@
     <string name="hit_codigo_confirm">Código de confirmação</string>
     <string name="hit_nova_senha">Nova palavra-passe</string>
     <string name="hit_btn_enviar_cod">Continuar</string>
+    <string name="msg_erro_password_diferentes">Palavra-passe diferente.</string>
     <string name="enviar">Enviar</string>
     <string name="ok">OK</string>
     <string name="sucesso">Sucesso!</string>

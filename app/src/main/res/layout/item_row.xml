@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="180dp"
+    android:layout_width="190dp"
     android:layout_height="wrap_content"
     android:padding="8dp"
     >
@@ -38,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="17sp"
-        android:textStyle="bold"
         android:textColor="@color/xpress_purple"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"

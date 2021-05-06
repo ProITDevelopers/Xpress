@@ -35,6 +35,7 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.ProdutosAdapter;
+import ao.co.proitconsulting.xpress.adapters.ProdutosViewAdapter;
 import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
 import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
@@ -53,7 +54,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapter.ProductsAdapterListener{
+//public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapter.ProductsAdapterListener{
+public class ProdutosActivity extends AppCompatActivity implements ProdutosViewAdapter.ProductsAdapterListener{
 
     private static final String TAG = "TAG_ProdutosActivity";
 
@@ -65,7 +67,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
     private RecyclerView recyclerView;
-    private ProdutosAdapter itemAdapter;
+//    private ProdutosAdapter itemAdapter;
+    private ProdutosViewAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
     private ProgressBar progressBar;
 
@@ -152,7 +155,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
 
         recyclerView =  findViewById(R.id.recyclewProdutos);
-        gridLayoutManager = new GridLayoutManager(this, AppPrefsSettings.getInstance().getListGridViewMode());
+//        gridLayoutManager = new GridLayoutManager(this, AppPrefsSettings.getInstance().getListGridViewMode());
+        gridLayoutManager = new GridLayoutManager(this, 1);
         progressBar = findViewById(R.id.progressBar);
 
 
@@ -363,7 +367,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapt
 
         if (produtosList.size()>0){
 
-            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
+//            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
+            itemAdapter = new ProdutosViewAdapter(this, produtosList,this);
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 

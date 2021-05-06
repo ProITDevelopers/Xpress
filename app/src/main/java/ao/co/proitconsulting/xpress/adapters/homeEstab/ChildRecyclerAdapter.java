@@ -59,24 +59,9 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
         holder.setListener(new IRecyclerClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-//                Common.selectedEstab = items.get(position);
-//                Common.selectedEstabPosition = position;
-//                EventBus.getDefault().postSticky(new EstabelecimentoClick(true, items.get(position)));
-
-                Estabelecimento estabelecimento = items.get(position);
-
-                if (estabelecimento.estadoEstabelecimento!=null){
-
-                    if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
-                        Intent intent = new Intent(context, ProdutosActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("estabelecimento",estabelecimento);
-                        context.startActivity(intent);
-                    }else{
-                        MetodosUsados.mostrarMensagem(context,"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
-                    }
-
-                }
+                Common.selectedEstab = items.get(position);
+                Common.selectedEstabPosition = position;
+                EventBus.getDefault().postSticky(new EstabelecimentoClick(true, items.get(position)));
 
             }
         });

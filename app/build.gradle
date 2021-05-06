@@ -103,6 +103,9 @@ dependencies {
     //REALM DB
 //    implementation "io.realm:android-adapters:2.1.1"
 
+    //FACEBOOK
+    implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
+
     //MAPA
     implementation 'com.google.maps.android:android-maps-utils:0.6.2'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'

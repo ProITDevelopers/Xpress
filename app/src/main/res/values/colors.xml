@@ -9,7 +9,8 @@
     <color name="colorAccent">#19d3c5</color>
 
 
-    <color name="login_icon_text_color">#282041</color>
+    <color name="login_icon_text_color">#1a1824</color>
+    <color name="perfil_text_color">#1a1824</color>
     <color name="login_register_text_color">#19d3c5</color>
     <color name="btn_login_start_color">#19d3c5</color>
     <color name="btn_login_end_color">#19d3c5</color>
@@ -38,4 +39,6 @@
     <color name="colorDarkSemiTransparent">#C6000000</color>
     <color name="btn_gray_border">#d1d1d1</color>
     <color name="splash_view_separator">#575757</color>
+    <color name="navigateview_text_color">#77838f</color>
+    <color name="nav_header_menu_text_color">#969fa9</color>
 </resources>

@@ -26,14 +26,17 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 
+import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
@@ -41,11 +44,19 @@ import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
+import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import android.util.Base64;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -64,6 +75,8 @@ public class LoginActivity extends AppCompatActivity {
     private UsuarioPerfil usuarioPerfil;
     //DIALOG_LAYOUT_COVID_19
     private Dialog dialogLayoutCOVID;
+    private LoopingViewPager loopingViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +84,28 @@ public class LoginActivity extends AppCompatActivity {
         //showBackground in status bar
         MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_login);
+//        printKeyHash();
 
         notificationHelper = new NotificationHelper(this);
 
         //InitViews
         initViews();
+    }
+
+    private void printKeyHash() {
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("ao.co.proitconsulting.xpress", PackageManager.GET_SIGNATURES);
+            for (Signature signature:info.signatures) {
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA");
+                messageDigest.update(signature.toByteArray());
+                Log.e("KEYHASH", Base64.encodeToString(messageDigest.digest(),Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -162,6 +192,14 @@ public class LoginActivity extends AppCompatActivity {
         dialogLayoutCOVID.setCancelable(false);
         if (dialogLayoutCOVID.getWindow()!=null)
             dialogLayoutCOVID.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        loopingViewPager = dialogLayoutCOVID.findViewById(R.id.loopingViewPager);
+        List<TopSlideImages> topSlideImages = new ArrayList<>();
+        topSlideImages.add(new TopSlideImages(R.drawable.img_lavar_maos2));
+        topSlideImages.add(new TopSlideImages(R.drawable.img_lavar_maos));
+        MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(this,topSlideImages,true);
+        loopingViewPager.setAdapter(menuBannerAdapter);
+
 
         ImageView imgBtnFecharTelef = dialogLayoutCOVID.findViewById(R.id.imgBtnFecharTelef);
         imgBtnFecharTelef.setOnClickListener(new View.OnClickListener() {
@@ -381,8 +419,8 @@ public class LoginActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
-        String title = "Olá, ".concat(usuarioPerfil.primeiroNome);
-        String message = "Seja bem-vindo(a) ao Xpress!";
+        String title = "Olá, ".concat(usuarioPerfil.primeiroNome+" "+usuarioPerfil.ultimoNome);
+        String message = "Seja bem-vindo(a) ao Xpress Lengueno!";
         notificationHelper.createNotification(title,message,false);
 
         finish();
@@ -390,6 +428,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        loopingViewPager.resumeAutoScroll();
         MetodosUsados.spotsDialog(this);
         super.onResume();
     }
@@ -399,6 +438,14 @@ public class LoginActivity extends AppCompatActivity {
         MetodosUsados.hideLoadingDialog();
         super.onDestroy();
     }
+
+    @Override
+    protected void onPause() {
+        loopingViewPager.pauseAutoScroll();
+        super.onPause();
+
+    }
+
 
 
 }

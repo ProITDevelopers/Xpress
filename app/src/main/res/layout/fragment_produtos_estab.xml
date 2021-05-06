@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".fragmentos.estab.CategoryEstabFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/coordinatorLayout"
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -106,16 +103,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -130,8 +117,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <com.asksira.loopingviewpager.LoopingViewPager
                     android:id="@+id/loopingViewPager"
@@ -145,9 +131,8 @@
                     app:scrollInterval="5000"
                     app:viewpagerAspectRatio="1.33" />
 
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewEstab"
+                    android:id="@+id/recyclewProdutos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/loopingViewPager"
@@ -161,29 +146,8 @@
 
         </androidx.core.widget.NestedScrollView>
 
-
-
-
-
-
-
-        <TextView
-            android:id="@+id/txtNotFound"
-            android:visibility="gone"
-            android:textSize="18sp"
-            android:textColor="@color/xpress_purple"
-            android:gravity="center"
-            android:padding="12dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </RelativeLayout>

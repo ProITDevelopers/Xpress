@@ -76,14 +76,13 @@ public class RegisterActivity extends AppCompatActivity {
     private CircleImageView imgUserPhoto;
     private AppCompatEditText editPrimeiroNome,editUltimoNome;
     private AppCompatEditText editTelefone,editEmail;
-    private ShowHidePasswordEditText editPass;
+    private ShowHidePasswordEditText editPass,editConfirmPass;
 
-    private RadioGroup radioGroup;
-    private RadioButton radioBtnFem,radioBtnMasc;
+
     private Button btnRegistro;
 
 
-    private String primeiroNome,sobreNome,email,telefone,senha;
+    private String primeiroNome,sobreNome,email,telefone,senha,confirmSenha;
     private String valorGeneroItem;
 
     private Uri selectedImage;
@@ -130,15 +129,12 @@ public class RegisterActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
 
         editPass = findViewById(R.id.editPass);
+        editConfirmPass = findViewById(R.id.editConfirmPass);
 
 
         editTelefone = findViewById(R.id.editTelefone);
 
 
-
-        radioGroup = findViewById(R.id.radioGroup);
-        radioBtnFem = findViewById(R.id.radioBtnFem);
-        radioBtnMasc = findViewById(R.id.radioBtnMasc);
 
         btnRegistro = findViewById(R.id.btnRegistro);
 
@@ -199,32 +195,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-
-        radioBtnFem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    radioBtnFem.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.xpress_green));
-                    radioBtnFem.setError(null);
-                    radioBtnMasc.setError(null);
-                }else{
-                    radioBtnFem.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.transparentBlack));
-                }
-            }
-        });
-
-        radioBtnMasc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    radioBtnMasc.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.xpress_green));
-                    radioBtnMasc.setError(null);
-                    radioBtnFem.setError(null);
-                }else{
-                    radioBtnMasc.setTextColor(ContextCompat.getColor(RegisterActivity.this,R.color.transparentBlack));
-                }
-            }
-        });
 
 
         Picasso.with(this).load(R.drawable.photo_placeholder).into(imgUserPhoto);
@@ -420,6 +390,8 @@ public class RegisterActivity extends AppCompatActivity {
         email = editEmail.getText().toString().trim();
         telefone = editTelefone.getText().toString().trim();
         senha = editPass.getText().toString().trim();
+        confirmSenha = editConfirmPass.getText().toString().trim();
+        valorGeneroItem = "M";
 
 
 
@@ -502,27 +474,19 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-
-
-        if (!radioBtnMasc.isChecked() && !radioBtnFem.isChecked()){
-            radioBtnMasc.setError(getString(R.string.msg_selecione_genero));
-            radioBtnFem.setError(getString(R.string.msg_selecione_genero));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Sexo', selecione o género");
+        if (confirmSenha.isEmpty()){
+            editConfirmPass.setError(getString(R.string.msg_erro_campo_vazio));
+            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Repita a palavra-passe'");
             return false;
-        }else{
-            radioBtnMasc.setError(null);
-            radioBtnFem.setError(null);
-            switch (radioGroup.getCheckedRadioButtonId()) {
-                case R.id.radioBtnFem:
-                    valorGeneroItem = radioBtnFem.getText().toString().trim();
-                    break;
-                case R.id.radioBtnMasc:
-                    valorGeneroItem= radioBtnMasc.getText().toString().trim();
-                    break;
-
-            }
-
         }
+
+        if (!confirmSenha.equals(senha)){
+            editConfirmPass.setError(getString(R.string.msg_erro_password_diferentes));
+            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Palavra-passe' diferente");
+            return false;
+        }
+
+
 
 
 
@@ -636,8 +600,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     editEmail.setText("");
                                     editTelefone.setText("");
                                     editPass.setText("");
-                                    radioBtnFem.setChecked(false);
-                                    radioBtnMasc.setChecked(false);
 
 
 

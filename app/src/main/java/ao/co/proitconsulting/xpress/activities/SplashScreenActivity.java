@@ -28,9 +28,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private Animation topAnim, bottomAnim;
+    private Animation topAnim, bottomAnim, leftAnim;
 
-    private ImageView imgAppLogo;
+    private ImageView imgAppLogoHands, imgAppLogo;
     private RelativeLayout relative_Start;
     private FloatingActionButton fabStart;
     private TextView txt_SignUp;
@@ -49,7 +49,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void initViews() {
         topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation_splash);
         bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_splash);
+        leftAnim = AnimationUtils.loadAnimation(this, R.anim.left_animation_splash);
 
+        imgAppLogoHands = findViewById(R.id.imgAppLogoHands);
         imgAppLogo = findViewById(R.id.imgAppLogo);
         relative_Start = findViewById(R.id.relative_Start);
         fabStart = findViewById(R.id.fabStart);
@@ -62,6 +64,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         txt_SignUp.setText(spannableString);
 
         imgAppLogo.setAnimation(topAnim);
+        imgAppLogoHands.setAnimation(leftAnim);
         delaySplashScreen();
 
 

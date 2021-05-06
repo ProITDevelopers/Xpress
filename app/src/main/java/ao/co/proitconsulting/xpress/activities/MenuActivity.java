@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,13 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -46,13 +42,11 @@ import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.fragmentos.MenuCategoryFragment;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -85,6 +79,8 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //showBackground in status bar
+        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +93,7 @@ public class MenuActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_menu_home,
                 R.id.nav_catestab,
-                R.id.nav_estabelecimento,
+                R.id.nav_produtos_estab,
                 R.id.nav_menu_perfil,
                 R.id.nav_editar_perfil,
                 R.id.nav_menu_encomendas,
@@ -341,8 +337,8 @@ public class MenuActivity extends AppCompatActivity {
     public void onEstabelecimentoItemClick(EstabelecimentoClick event){
         if (event.isSuccess()){
             Toast.makeText(this, "Click to: "+event.getEstabelecimento().nomeEstabelecimento, Toast.LENGTH_SHORT).show();
-//            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//            navController.navigate(R.id.nav_revista_detail);
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_produtos_estab);
         }
     }
 
