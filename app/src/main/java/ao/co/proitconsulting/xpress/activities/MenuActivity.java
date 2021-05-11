@@ -41,6 +41,7 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.EventBus.CategoryClick;
 import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
+import ao.co.proitconsulting.xpress.EventBus.ProdutoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
@@ -60,6 +61,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
     private AppBarConfiguration mAppBarConfiguration;
+    private NavigationView navigationView;
     private UsuarioPerfil usuarioPerfil;
 //    private CircleImageView imgUserPhoto;
     private RoundedImageView imgUserPhoto;
@@ -75,8 +77,8 @@ public class MenuActivity extends AppCompatActivity {
     private RealmResults<CartItemProdutos> cartItems;
     private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
     int cart_count = 0;
-    private NotificationBadge badge;
-    private ImageView cart_icon;
+//    private NotificationBadge badge;
+//    private ImageView cart_icon;
     private CounterFab fab;
 
     @Override
@@ -92,13 +94,14 @@ public class MenuActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MenuActivity.this, ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -106,6 +109,7 @@ public class MenuActivity extends AppCompatActivity {
                 R.id.nav_menu_home,
                 R.id.nav_catestab,
                 R.id.nav_produtos_estab,
+                R.id.nav_produto_detail,
                 R.id.nav_menu_perfil,
                 R.id.nav_editar_perfil,
                 R.id.nav_menu_encomendas,
@@ -194,6 +198,20 @@ public class MenuActivity extends AppCompatActivity {
                         .placeholder(R.drawable.photo_placeholder)
                         .into(imgUserPhoto);
             }
+        }else{
+            Picasso.with(this)
+                    .load(R.drawable.photo_placeholder)
+                    .fit().centerCrop()
+                    .into(imgUserPhoto);
+            txtUserName.setText("Convidado");
+            txtUserEmail.setText("convidado@xpresslengueno.co.ao");
+
+            navigationView.getMenu().getItem(1).setVisible(false);
+            navigationView.getMenu().getItem(2).setVisible(false);
+            navigationView.getMenu().getItem(3).setVisible(false);
+            navigationView.getMenu().getItem(4).setVisible(false);
+
+
         }
     }
 
@@ -348,13 +366,21 @@ public class MenuActivity extends AppCompatActivity {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEstabelecimentoItemClick(EstabelecimentoClick event){
         if (event.isSuccess()){
-            Toast.makeText(this, "Click to: "+event.getEstabelecimento().nomeEstabelecimento, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Click to: "+event.getEstabelecimento().nomeEstabelecimento, Toast.LENGTH_SHORT).show();
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
             navController.navigate(R.id.nav_produtos_estab);
         }
     }
 
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onProdutoItemClick(ProdutoClick event){
+        if (event.isSuccess()){
+//            Toast.makeText(this, "Click to: "+event.getProduto().getDescricaoProdutoC(), Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_produto_detail);
+        }
+    }
 
 
 
@@ -362,18 +388,18 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_options; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_options, menu);
-        View view = menu.findItem(R.id.action_cart).getActionView();
-        badge = (NotificationBadge)view.findViewById(R.id.badge);
-        cart_icon = (ImageView) view.findViewById(R.id.cart_icon);
-        cart_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MenuActivity.this,ShoppingCartActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            Intent intent = new Intent(this, ShopCartActivity.class);
-                startActivity(intent);
-            }
-        });
+//        View view = menu.findItem(R.id.action_cart).getActionView();
+//        badge = (NotificationBadge)view.findViewById(R.id.badge);
+//        cart_icon = (ImageView) view.findViewById(R.id.cart_icon);
+//        cart_icon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MenuActivity.this,ShoppingCartActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////            Intent intent = new Intent(this, ShopCartActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         updateCartCount();
 
 //        MenuItem menuItem = menu.findItem(R.id.action_cart);
@@ -382,18 +408,18 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void updateCartCount() {
-        if (badge == null) return;
+//        if (badge == null) return;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (cart_count == 0){
-                    badge.setVisibility(View.INVISIBLE);
+//                    badge.setVisibility(View.INVISIBLE);
+
                     fab.setCount(0);
-                    fab.setVisibility(View.INVISIBLE);
                 }
                 else{
-                    badge.setVisibility(View.VISIBLE);
-                    badge.setText(String.valueOf(cart_count));
+//                    badge.setVisibility(View.VISIBLE);
+//                    badge.setText(String.valueOf(cart_count));
                     fab.setCount(cart_count);
                 }
             }

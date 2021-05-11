@@ -20,6 +20,13 @@
         android:name="ao.co.proitconsulting.xpress.fragmentos.produtos_estab.ProdutosEstabFragment"
         tools:layout="@layout/fragment_produtos_estab" />
 
+
+
+    <fragment
+        android:id="@+id/nav_produto_detail"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.produtos_detail.ProdutoDetailFragment"
+        tools:layout="@layout/fragment_produto_detail" />
+
     <fragment
         android:id="@+id/nav_menu_perfil"
         android:name="ao.co.proitconsulting.xpress.fragmentos.perfil.PerfilFragment"

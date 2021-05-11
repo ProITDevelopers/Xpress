@@ -2,15 +2,29 @@ package ao.co.proitconsulting.xpress.fragmentos.home;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,15 +33,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.asksira.loopingviewpager.LoopingViewPager;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
-import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
+import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
@@ -56,8 +68,20 @@ public class HomeFragment extends Fragment {
     private List<Estabelecimento> estabelecimentoList = new ArrayList<>();
     private List<CategoriaEstabelecimento> categoriaEstabelecimentoList = new ArrayList<>();
 
+    private ConstraintLayout coordinatorLayout;
+    private RelativeLayout errorLayout;
+    private TextView btnTentarDeNovo;
+
+    private String errorMessage;
+
 
     public HomeFragment(){}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,25 +90,58 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        loopingViewPager = view.findViewById(R.id.loopingViewPager);
-        recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
+
+        initViews();
 
 
         homeViewModel.getListMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {
             @Override
             public void onChanged(List<TopSlideImages> topSlideImages) {
-                MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(getContext(),topSlideImages,true);
-                loopingViewPager.setAdapter(menuBannerAdapter);
+                TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImages,true);
+                loopingViewPager.setAdapter(topImageSlideAdapter);
             }
         });
-        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
-        waitingDialog.setMessage("Por favor aguarde...");
-        waitingDialog.setCancelable(false);
+
 
 
         verifConecxaoCategoryEstabelecimento();
 
         return view;
+    }
+
+    private void initViews() {
+        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
+        waitingDialog.setMessage("Por favor aguarde...");
+        waitingDialog.setCancelable(false);
+
+        loopingViewPager = view.findViewById(R.id.loopingViewPager);
+        recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
+
+        coordinatorLayout = view.findViewById(R.id.constraintLayout);
+        errorLayout = view.findViewById(R.id.erroLayout);
+        btnTentarDeNovo = view.findViewById(R.id.btn);
+
+    }
+
+    private void mostarMsnErro(){
+
+        if (errorLayout.getVisibility() == View.GONE){
+            errorLayout.setVisibility(View.VISIBLE);
+
+            coordinatorLayout.setVisibility(View.GONE);
+
+
+        }
+
+        btnTentarDeNovo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coordinatorLayout.setVisibility(View.VISIBLE);
+
+                errorLayout.setVisibility(View.GONE);
+                verifConecxaoCategoryEstabelecimento();
+            }
+        });
     }
 
     private void verifConecxaoCategoryEstabelecimento() {
@@ -94,7 +151,7 @@ public class HomeFragment extends Fragment {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
-//                    mostarMsnErro();
+                    mostarMsnErro();
                 } else {
 //                    carregarListaMenuCategory();
                     carregarListaEstabelicimentos();
@@ -179,7 +236,7 @@ public class HomeFragment extends Fragment {
                                 if (estab.estadoEstabelecimento!=null){
                                     estabelecimentoList.add(estab);
 
-                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+", Categoria - "+estab.tipoDeEstabelecimento.descricao);
+                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+" - "+estab.tipoDeEstabelecimento.descricao);
                                 }
                             }
                         }
@@ -195,6 +252,13 @@ public class HomeFragment extends Fragment {
 
 //                    progressBar.setVisibility(View.GONE);
                     waitingDialog.dismiss();
+                    try {
+                        errorMessage = response.errorBody().string();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.d(TAG, "onResponseEstabError: "+errorMessage+", ResponseCode: "+response.code());
                 }
 
 
@@ -203,6 +267,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
                 waitingDialog.dismiss();
+                Log.d(TAG, "onResponseEstabFailed: "+t.getMessage());
                 if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
                 }else  if ("timeout".equals(t.getMessage())) {
@@ -294,5 +359,51 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         loopingViewPager.pauseAutoScroll();
         super.onPause();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_options_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getString(R.string.pesquisar));
+
+        SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
+        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
+        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                if (categoryEstabAdapter!=null)
+//                    categoryEstabAdapter.getFilter().filter(newText);
+
+                Toast.makeText(getContext(), ""+newText, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_filtros:
+                Toast.makeText(getContext(), "Filtros", Toast.LENGTH_SHORT).show();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

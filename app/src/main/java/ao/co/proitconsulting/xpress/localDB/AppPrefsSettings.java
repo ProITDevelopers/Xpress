@@ -11,11 +11,11 @@ import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 public class AppPrefsSettings {
 
     private static final String APP_SHARED_PREF_NAME = "XPRESS_SHAREDPREF";
-    private static final String KEY_USER = "USUARIO_KEY";
-    private static final String KEY_SESSION = "USER_LOGGEDIN";
-    private static final String KEY_AUTH_TOKEN = "USER_AUTH_TOKEN";
-    private static final String KEY_AUTH_TOKEN_TIME = "AUTH_TOKEN_TIME";
-    private static final String KEY_CHANGE_VIEW = "CHANGE_VIEW";
+    private static final String KEY_USER = "XPRESS_USUARIO_KEY";
+    private static final String KEY_SESSION = "XPRESS_USER_LOGGEDIN";
+    private static final String KEY_AUTH_TOKEN = "XPRESS_USER_AUTH_TOKEN";
+    private static final String KEY_AUTH_TOKEN_TIME = "XPRESS_AUTH_TOKEN_TIME";
+    private static final String KEY_CHANGE_VIEW = "XPRESS_CHANGE_VIEW";
 
     private static AppPrefsSettings mInstance;
     private static SharedPreferences sharedPreferences;

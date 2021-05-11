@@ -48,8 +48,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void initViews() {
         topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation_splash);
-        bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_splash);
         leftAnim = AnimationUtils.loadAnimation(this, R.anim.left_animation_splash);
+        bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_splash);
 
         imgAppLogoHands = findViewById(R.id.imgAppLogoHands);
         imgAppLogo = findViewById(R.id.imgAppLogo);
@@ -64,8 +64,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         txt_SignUp.setText(spannableString);
 
         imgAppLogo.setAnimation(topAnim);
-        imgAppLogoHands.setAnimation(leftAnim);
-        delaySplashScreen();
+
+        Completable.timer(3, TimeUnit.SECONDS,
+                AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    imgAppLogoHands.setAnimation(leftAnim);
+                    imgAppLogoHands.setVisibility(View.VISIBLE);
+                    delaySplashScreen();
+                });
+
+//        delaySplashScreen();
 
 
 
@@ -73,7 +81,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void delaySplashScreen() {
 
-        Completable.timer(3, TimeUnit.SECONDS,
+        Completable.timer(2, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
                 .subscribe(() -> {
 
@@ -108,6 +116,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                                 }
                             });
+
+//                            Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
 
 
 

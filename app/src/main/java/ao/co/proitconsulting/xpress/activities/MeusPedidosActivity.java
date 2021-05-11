@@ -19,7 +19,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,7 +61,11 @@ public class MeusPedidosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //showBackground in status bar
+        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_meus_pedidos);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle(getString(R.string.nav_encomendas_title));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

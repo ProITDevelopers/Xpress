@@ -20,7 +20,8 @@
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_wifi_off_24"/>
+            android:src="@drawable/ic_baseline_wifi_off_24"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,7 +45,7 @@
             android:layout_marginTop="15dp"
             android:textStyle="bold"
             android:text="@string/txtTentarNovamente"
-            android:background="@color/login_register_text_color"
+            android:background="@drawable/button_background"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"/>

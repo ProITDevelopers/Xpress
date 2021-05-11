@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
+import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
@@ -197,8 +197,8 @@ public class LoginActivity extends AppCompatActivity {
         List<TopSlideImages> topSlideImages = new ArrayList<>();
         topSlideImages.add(new TopSlideImages(R.drawable.img_lavar_maos2));
         topSlideImages.add(new TopSlideImages(R.drawable.img_lavar_maos));
-        MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(this,topSlideImages,true);
-        loopingViewPager.setAdapter(menuBannerAdapter);
+        TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(this,topSlideImages,true);
+        loopingViewPager.setAdapter(topImageSlideAdapter);
 
 
         ImageView imgBtnFecharTelef = dialogLayoutCOVID.findViewById(R.id.imgBtnFecharTelef);

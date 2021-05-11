@@ -9,6 +9,7 @@ import ao.co.proitconsulting.xpress.BuildConfig;
 import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
+import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.SobreNos;
 
 public class Common {
@@ -18,6 +19,9 @@ public class Common {
 
     public static int selectedCategoryEstabPosition;
     public static CategoriaEstabelecimento selectedCategoryEstab;
+
+    public static int selectedProdutoPosition;
+    public static Produtos selectedProduto;
 
     public static List<GetTaxaModel> getTaxaModelList = new ArrayList<>();
 
@@ -33,6 +37,7 @@ public class Common {
 
     public static final int VIEW_TYPE_LIST = 1;
     public static final int VIEW_TYPE_GRID = 2;
+
 
     public static List<SobreNos> getSobreNosList(){
         List<SobreNos> sobreNosList = new ArrayList<>();

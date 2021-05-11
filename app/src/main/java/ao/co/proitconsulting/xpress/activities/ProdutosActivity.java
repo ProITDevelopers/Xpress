@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,16 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.gson.annotations.SerializedName;
 import com.nex3z.notificationbadge.NotificationBadge;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.ProdutosAdapter;
-import ao.co.proitconsulting.xpress.adapters.ProdutosViewAdapter;
 import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
-import ao.co.proitconsulting.xpress.adapters.menuBanner.MenuBannerAdapter;
+import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
@@ -54,8 +50,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapter.ProductsAdapterListener{
-public class ProdutosActivity extends AppCompatActivity implements ProdutosViewAdapter.ProductsAdapterListener{
+public class ProdutosActivity extends AppCompatActivity implements ProdutosAdapter.ProductsAdapterListener{
+//public class ProdutosActivity extends AppCompatActivity implements ProdutosViewAdapter.ProductsAdapterListener{
 
     private static final String TAG = "TAG_ProdutosActivity";
 
@@ -67,8 +63,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosViewA
 
 
     private RecyclerView recyclerView;
-//    private ProdutosAdapter itemAdapter;
-    private ProdutosViewAdapter itemAdapter;
+    private ProdutosAdapter itemAdapter;
+//    private ProdutosViewAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
     private ProgressBar progressBar;
 
@@ -145,8 +141,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosViewA
         List<TopSlideImages> topSlideImages = new ArrayList<>();
         topSlideImages.add(new TopSlideImages(estabelecimento.logotipo));
         topSlideImages.add(new TopSlideImages(estabelecimento.imagemCapa));
-        MenuBannerAdapter menuBannerAdapter = new MenuBannerAdapter(this,topSlideImages,true);
-        loopingViewPager.setAdapter(menuBannerAdapter);
+        TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(this,topSlideImages,true);
+        loopingViewPager.setAdapter(topImageSlideAdapter);
 
 
         txtEstabNome.setText(estabelecimento.nomeEstabelecimento);
@@ -155,8 +151,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosViewA
 
 
         recyclerView =  findViewById(R.id.recyclewProdutos);
-//        gridLayoutManager = new GridLayoutManager(this, AppPrefsSettings.getInstance().getListGridViewMode());
-        gridLayoutManager = new GridLayoutManager(this, 1);
+        gridLayoutManager = new GridLayoutManager(this, AppPrefsSettings.getInstance().getListGridViewMode());
+//        gridLayoutManager = new GridLayoutManager(this, 1);
         progressBar = findViewById(R.id.progressBar);
 
 
@@ -367,8 +363,8 @@ public class ProdutosActivity extends AppCompatActivity implements ProdutosViewA
 
         if (produtosList.size()>0){
 
-//            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
-            itemAdapter = new ProdutosViewAdapter(this, produtosList,this);
+            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
+//            itemAdapter = new ProdutosViewAdapter(this, produtosList,this);
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(gridLayoutManager);
 

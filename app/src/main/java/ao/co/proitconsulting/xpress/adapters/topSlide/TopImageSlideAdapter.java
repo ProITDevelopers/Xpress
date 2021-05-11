@@ -1,4 +1,4 @@
-package ao.co.proitconsulting.xpress.adapters.menuBanner;
+package ao.co.proitconsulting.xpress.adapters.topSlide;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,10 +16,10 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 
-public class MenuBannerAdapter extends LoopingPagerAdapter<TopSlideImages> {
+public class TopImageSlideAdapter extends LoopingPagerAdapter<TopSlideImages> {
 
 
-    public MenuBannerAdapter(Context context, List<? extends TopSlideImages> itemList, boolean isInfinite) {
+    public TopImageSlideAdapter(Context context, List<? extends TopSlideImages> itemList, boolean isInfinite) {
         super(context, itemList, isInfinite);
     }
 
