@@ -8,6 +8,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -88,10 +89,8 @@ public class CategoryEstabAdapter extends RecyclerView.Adapter<CategoryEstabAdap
 
         if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
             holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.xpress_green));
-            holder.cardViewItem.setEnabled(true);
         }else{
-            holder.cardViewItem.setEnabled(false);
-            holder.cardViewItem.setAlpha(0.5f);
+            holder.cardViewItem.setAlpha(0.6f);
             holder.estadoInfoList.setTextColor(ContextCompat.getColor(context, R.color.xpress_purple));
         }
         holder.estadoInfoList.setText(estabelecimento.estadoEstabelecimento);
@@ -101,7 +100,11 @@ public class CategoryEstabAdapter extends RecyclerView.Adapter<CategoryEstabAdap
             public void onItemClickListener(View view, int position) {
                 Common.selectedEstab = estabelecimentoList.get(position);
                 Common.selectedEstabPosition = position;
-                EventBus.getDefault().postSticky(new EstabelecimentoClick(true, estabelecimentoList.get(position)));
+                if(estabelecimentoList.get(position).estadoEstabelecimento.equals("Aberto")){
+                    EventBus.getDefault().postSticky(new EstabelecimentoClick(true, estabelecimentoList.get(position)));
+                }else{
+                    Toast.makeText(context, ""+estabelecimentoList.get(position).nomeEstabelecimento+" encontra-se fechado.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

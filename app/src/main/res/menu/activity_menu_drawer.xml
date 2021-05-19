@@ -30,7 +30,7 @@
             android:title="@string/nav_mapa_title"/>
 
         <item android:id="@+id/nav_menu_wallet"
-            android:icon="@drawable/ic_baseline_account_balance_wallet_24"
+            android:icon="@drawable/ic_baseline_account_wallet_24"
             app:iconTint="@color/xpress_purple"
             android:title="@string/nav_carteira_title"/>
 

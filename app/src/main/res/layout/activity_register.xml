@@ -34,7 +34,7 @@
                 android:id="@+id/textView"
                 android:text="@string/hint_produtos_tua_disposicao"
                 android:textColor="@color/black"
-                android:textSize="42sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,6 +44,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/poppins_regular"
                 />
 
 
@@ -85,6 +86,7 @@
                             android:paddingBottom="15dp"
                             android:textColorHint="@color/black"
                             android:backgroundTint="@color/xpress_green"
+                            android:fontFamily="@font/poppins_regular"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -106,6 +108,7 @@
                             android:paddingBottom="15dp"
                             android:textColorHint="@color/black"
                             android:backgroundTint="@color/xpress_green"
+                            android:fontFamily="@font/poppins_regular"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -172,6 +175,7 @@
                     android:paddingBottom="15dp"
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -198,6 +202,7 @@
                     android:paddingBottom="15dp"
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -225,6 +230,7 @@
                     android:paddingBottom="15dp"
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -252,6 +258,7 @@
                     android:paddingBottom="15dp"
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -285,6 +292,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/hint_confirmpass"
                 app:layout_constraintStart_toStartOf="@+id/hint_confirmpass"
                 app:layout_constraintEnd_toEndOf="@+id/hint_confirmpass"
+                android:fontFamily="@font/poppins_regular"
                 />
 
 
@@ -300,6 +308,8 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textAllCaps="false"
                 />
 
 

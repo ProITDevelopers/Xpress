@@ -12,6 +12,7 @@ import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.activities.MeusPedidosActivity;
 
 public class NotificationHelper {
@@ -31,7 +32,7 @@ public class NotificationHelper {
     public void createNotification(String title, String message, boolean status)
     {
         /**Creates an explicit intent for an Activity in your app**/
-        Intent resultIntent = new Intent(mContext , MeusPedidosActivity.class);
+        Intent resultIntent = new Intent(mContext , MenuActivity.class);
 //        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

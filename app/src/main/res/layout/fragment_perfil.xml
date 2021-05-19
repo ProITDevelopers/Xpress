@@ -17,7 +17,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="380dp"
             android:fitsSystemWindows="true"
             android:background="@color/white"
             app:contentScrim="@color/xpress_green"
@@ -33,25 +33,42 @@
                 android:layout_gravity="center_horizontal"
                 >
 
-
-
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/imgUserPhoto"
+                <androidx.cardview.widget.CardView
                     android:layout_width="250dp"
                     android:layout_height="320dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    app:riv_corner_radius="12dp"
-                    android:paddingTop="25dp"
-                    android:paddingBottom="15dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="20dp"
                     android:layout_gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    />
+                    >
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/imgUserPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        app:riv_corner_radius="12dp" />
+
+                </androidx.cardview.widget.CardView>
+
+
+
+<!--                <com.makeramen.roundedimageview.RoundedImageView-->
+<!--                    android:id="@+id/imgUserPhoto"-->
+<!--                    android:layout_width="250dp"-->
+<!--                    android:layout_height="320dp"-->
+<!--                    android:adjustViewBounds="true"-->
+<!--                    android:scaleType="fitCenter"-->
+<!--                    app:riv_corner_radius="12dp"-->
+<!--                    android:paddingTop="25dp"-->
+<!--                    android:paddingBottom="15dp"-->
+<!--                    android:layout_marginLeft="25dp"-->
+<!--                    android:layout_marginRight="25dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:clickable="true"-->
+<!--                    android:focusable="true"-->
+<!--                    android:foreground="?android:attr/selectableItemBackground"-->
+<!--                    />-->
 
                 <TextView
                     android:id="@+id/txtUserNameInitial"
@@ -66,6 +83,8 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/xpress_purple"
                     android:textSize="150sp"
+                    android:elevation="22dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
             </FrameLayout>
@@ -76,17 +95,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabEditPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/account_edit_outline_24dp"
-        app:tint="@color/white"
-        app:elevation="6dp"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|right|end"
-        app:pressedTranslationZ="12dp"
-        app:useCompatPadding="true" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -109,10 +117,11 @@
                 android:id="@+id/txtNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/primeiro_nome_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -120,9 +129,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -131,10 +141,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/sobrenome_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -142,9 +153,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -153,10 +165,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/hint_email_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -164,9 +177,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -175,10 +189,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/contactos_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -186,9 +201,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -196,9 +212,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -208,10 +225,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/genero_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -219,9 +237,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -231,10 +250,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/endereco_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
@@ -242,10 +262,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
                 android:layout_marginBottom="25dp"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -258,8 +279,10 @@
                 android:layout_margin="25dp"
                 android:text="@string/editar_perfil"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:background="@drawable/button_background"
+                android:background="@drawable/button_background_green"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/montserrat_regular"
+                android:textAllCaps="false"
                 />
 
 

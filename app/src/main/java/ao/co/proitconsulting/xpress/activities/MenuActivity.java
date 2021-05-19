@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.EventBus.CategoryClick;
+import ao.co.proitconsulting.xpress.EventBus.EncomendaClick;
 import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.EventBus.ProdutoClick;
 import ao.co.proitconsulting.xpress.R;
@@ -49,7 +51,9 @@ import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
+import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
+import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -60,6 +64,7 @@ import retrofit2.Response;
 public class MenuActivity extends AppCompatActivity {
 
 
+    private static final String TAG = "TAG_MenuActivity" ;
     private AppBarConfiguration mAppBarConfiguration;
     private NavigationView navigationView;
     private UsuarioPerfil usuarioPerfil;
@@ -113,6 +118,7 @@ public class MenuActivity extends AppCompatActivity {
                 R.id.nav_menu_perfil,
                 R.id.nav_editar_perfil,
                 R.id.nav_menu_encomendas,
+                R.id.nav_menu_encomenda_detail,
                 R.id.nav_menu_mapa,
                 R.id.nav_menu_wallet)
                 .setDrawerLayout(drawer)
@@ -120,9 +126,6 @@ public class MenuActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
-
 
 
         View view = navigationView.getHeaderView(0);
@@ -165,6 +168,10 @@ public class MenuActivity extends AppCompatActivity {
 
             invalidateOptionsMenu();
         };
+
+
+
+
 
     }
 
@@ -244,6 +251,8 @@ public class MenuActivity extends AppCompatActivity {
 
     private void logOut() {
 
+        Intent serviceIntent = new Intent(this, MySignalRService.class);
+        stopService(serviceIntent);
         AppDatabase.clearData();
         AppPrefsSettings.getInstance().clearAppPrefs();
         Intent intent = new Intent(this, SplashScreenActivity.class);
@@ -382,6 +391,15 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onFacturaItemClick(EncomendaClick event){
+        if (event.isSuccess()){
+//            Toast.makeText(this, "Click to: "+event.getFactura().idFactura, Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_menu_encomenda_detail);
+        }
+    }
+
 
 
     @Override
@@ -460,6 +478,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
+
         updateCartCount();
 
         if (cartItems != null) {
@@ -477,6 +496,7 @@ public class MenuActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy()");
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
         }
@@ -485,14 +505,11 @@ public class MenuActivity extends AppCompatActivity {
         }
         dialogLayoutConfirmarProcesso.cancel();
 
-        if (!AppPrefsSettings.getInstance().getLoggedIn()){
-            AppDatabase.clearData();
-            AppPrefsSettings.getInstance().clearAppPrefs();
-        }
+
 
         super.onDestroy();
 
-
+        Log.d(TAG, "super.onDestroy();");
     }
 
 

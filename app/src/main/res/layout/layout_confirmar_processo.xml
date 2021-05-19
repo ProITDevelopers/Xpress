@@ -38,6 +38,8 @@
             android:lines="2"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:fontFamily="@font/poppins_regular"
+
             />
 
         <TextView
@@ -52,7 +54,9 @@
             android:textColor="@color/xpress_green"
             android:text="@string/msg_confirmar_processo"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins_regular"
+            />
 
 
         <LinearLayout
@@ -111,6 +115,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:fontFamily="@font/poppins_regular"
+                android:textAllCaps="false"
 
                 />
 
@@ -126,7 +132,10 @@
                 android:layout_marginStart="15dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"/>
+                android:foreground="?android:attr/selectableItemBackground"
+                android:fontFamily="@font/poppins_regular"
+                android:textAllCaps="false"
+                />
 
 
 

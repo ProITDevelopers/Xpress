@@ -35,7 +35,9 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins_regular"
+                android:textAllCaps="false"/>
 
         </FrameLayout>
 
@@ -82,6 +84,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textAllCaps="false"
                         />
 
                 </LinearLayout>

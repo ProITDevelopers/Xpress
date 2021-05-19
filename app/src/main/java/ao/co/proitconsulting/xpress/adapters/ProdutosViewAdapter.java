@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
@@ -27,6 +30,7 @@ import ao.co.proitconsulting.xpress.EventBus.ProdutoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
+import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import io.realm.RealmResults;
 
@@ -34,10 +38,12 @@ import static ao.co.proitconsulting.xpress.helper.Common.SPAN_COUNT_ONE;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_GRID;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST;
 
-public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapter.ItemViewHolder> {
+public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapter.ItemViewHolder>
+        implements Filterable {
 
     private Context context;
     private List<Produtos> produtosList;
+    private List<Produtos> produtosListFull;
 //    private RealmResults<CartItemProdutos> cartItems;
 
 //    private ProductsAdapterListener listener;
@@ -54,6 +60,8 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
     public ProdutosViewAdapter(Context context, List<Produtos> produtosList) {
         this.context = context;
         this.produtosList = produtosList;
+
+        produtosListFull = new ArrayList<>(produtosList);
 
     }
 
@@ -154,6 +162,42 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
     public int getItemCount() {
         return produtosList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return produtosFilter;
+    }
+
+    private Filter produtosFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Produtos> filteredList = new ArrayList<>();
+
+            if (charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(produtosListFull);
+            }else{
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for (Produtos produto: produtosListFull) {
+                    if (produto.descricaoProdutoC.toLowerCase().contains(filterPattern) ||
+                            produto.getCategoriaProduto().toLowerCase().contains(filterPattern)){
+                        filteredList.add(produto);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            produtosList.clear();
+            produtosList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //        private ImageView thumbnail;

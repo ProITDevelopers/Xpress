@@ -8,7 +8,8 @@
         android:title="Actualizar"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_sync_24"/>
+        android:icon="@drawable/ic_baseline_sync_24"
+        android:fontFamily="@font/montserrat_regular"/>
 
 <!--    <item-->
 <!--        android:id="@+id/action_favoritos"-->
@@ -20,6 +21,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="102"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never"
+        android:fontFamily="@font/montserrat_regular"/>
 
 </menu>

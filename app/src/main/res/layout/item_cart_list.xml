@@ -65,6 +65,7 @@
                     android:textSize="14sp"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <TextView
@@ -76,6 +77,7 @@
                     android:maxLines="1"
                     android:textColor="#1a1824"
                     android:textStyle="bold"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <TextView
@@ -87,6 +89,7 @@
                     android:ellipsize="end"
                     android:textColor="#1a1824"
                     android:layout_marginTop="2dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
 
@@ -135,13 +138,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="sans-serif"
                 android:padding="8dp"
                 android:lineSpacingExtra="2sp"
                 android:text="@string/one"
                 android:textColor="@color/white"
                 android:textSize="17sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                android:fontFamily="@font/montserrat_regular"/>
 
 
             <ImageView

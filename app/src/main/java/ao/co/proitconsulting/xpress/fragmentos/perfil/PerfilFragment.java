@@ -27,7 +27,7 @@ public class PerfilFragment extends Fragment {
 
     //    private CircleImageView imageView;
     private RoundedImageView imageView;
-    private FloatingActionButton fabEditPerfil;
+
     private TextView txtUserNameInitial,txtNomeCompleto,txtSobrenome,txtTelefone,txtTelefoneAlternativo;
     private TextView txtEmail,txtSexo,txtUserAddress,txtEndereco;
     private Button btnEditPerfil;
@@ -70,16 +70,9 @@ public class PerfilFragment extends Fragment {
 
 
 
-        fabEditPerfil = view.findViewById(R.id.fabEditPerfil);
         btnEditPerfil = view.findViewById(R.id.btnEditPerfil);
 
-        fabEditPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(PerfilFragment.this)
-                        .navigate(R.id.action_nav_perfil_to_nav_editar_perfil);
-            }
-        });
+
 
         btnEditPerfil.setOnClickListener(new View.OnClickListener() {
             @Override

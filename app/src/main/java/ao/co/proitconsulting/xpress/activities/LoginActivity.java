@@ -1,5 +1,6 @@
 package ao.co.proitconsulting.xpress.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import androidx.core.content.ContextCompat;
 import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
 import java.io.IOException;
@@ -47,6 +49,8 @@ import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
+import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
+import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,18 +68,20 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout login_root;
     private FloatingActionButton fabPrevious;
     private AppCompatEditText editEmail;
-    private ShowHidePasswordEditText editPassword;
+//    private ShowHidePasswordEditText editPassword;
+    private TextInputLayout text_input_password;
     private TextView txtRemember;
     private SwitchCompat switchRemember;
     private TextView txtForgotPassword,txtRegister;
     private Button btnLogin;
     private String emailTelefone,password;
     private LoginRequest loginRequest = new LoginRequest();
-    private NotificationHelper notificationHelper;
+
     private UsuarioPerfil usuarioPerfil;
     //DIALOG_LAYOUT_COVID_19
     private Dialog dialogLayoutCOVID;
     private LoopingViewPager loopingViewPager;
+    private AlertDialog waitingDialog;
 
 
     @Override
@@ -86,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 //        printKeyHash();
 
-        notificationHelper = new NotificationHelper(this);
 
         //InitViews
         initViews();
@@ -112,12 +117,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initViews(){
 
+        waitingDialog = new SpotsDialog.Builder().setContext(this).build();
+
         loginRequest.rememberMe = false;
 
         login_root = findViewById(R.id.login_root);
         fabPrevious = findViewById(R.id.fabPrevious);
         editEmail = findViewById(R.id.editEmail);
-        editPassword = findViewById(R.id.editPassword);
+//        editPassword = findViewById(R.id.editPassword);
+        text_input_password = findViewById(R.id.text_input_password);
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
         txtRegister = findViewById(R.id.txtRegister);
         btnLogin = findViewById(R.id.btnLogin);
@@ -217,7 +225,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean verificarCamposEmailTelefone() {
 
         emailTelefone = editEmail.getText().toString().trim();
-        password = editPassword.getText().toString().trim();
+        password = text_input_password.getEditText().getText().toString().trim();
 
         if (emailTelefone.isEmpty()){
             editEmail.setError(getString(R.string.msg_erro_campo_vazio));
@@ -240,15 +248,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (password.isEmpty()) {
-            editPassword.requestFocus();
-            editPassword.setError(getString(R.string.msg_erro_campo_vazio));
+            text_input_password.requestFocus();
+            text_input_password.setError(getString(R.string.msg_erro_campo_vazio));
             return false;
+        }else{
+            text_input_password.setError(null);
+
         }
 
 
 
         editEmail.onEditorAction(EditorInfo.IME_ACTION_DONE);
-        editPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        text_input_password.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
 
 
 
@@ -263,17 +274,21 @@ public class LoginActivity extends AppCompatActivity {
             if (netInfo == null) {
                 MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet);
             } else {
-                loginRequest.password = password;
 
-                autenticacaoLogin(loginRequest);
+                autenticacaoLogin();
             }
         }
     }
 
 
-    private void autenticacaoLogin(LoginRequest loginRequest) {
+    private void autenticacaoLogin() {
 
-        MetodosUsados.showLoadingDialog(getString(R.string.msg_login_auth_verification));
+        loginRequest.password = password;
+
+        waitingDialog.setMessage(getString(R.string.msg_login_auth_verification));
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+
 
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -283,42 +298,42 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
 
 
-                MetodosUsados.changeMessageDialog(getString(R.string.msg_login_auth_validando));
-                if (response.isSuccessful() && response.body() != null) {
-                    UsuarioAuth userToken = response.body();
+                waitingDialog.setMessage(getString(R.string.msg_login_auth_validando));
+                if (response.isSuccessful()) {
+                    if (response.body() != null){
+                        UsuarioAuth userToken = response.body();
 
-                    AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
-                    AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
+                        AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
+                        AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
 
-                    if (loginRequest.rememberMe){
-                        AppPrefsSettings.getInstance().setLoggedIn(true);
+                        if (loginRequest.rememberMe){
+                            AppPrefsSettings.getInstance().setLoggedIn(true);
+                        }
+
+
+                        carregarMeuPerfil(userToken.tokenuser);
+
+
                     }
-
-
-
-
-                    carregarMeuPerfil(userToken.tokenuser);
-
-
                 } else {
 
-                    MetodosUsados.hideLoadingDialog();
+                    waitingDialog.dismiss();
 
                     String message ="";
 
                     try {
                         message = response.errorBody().string();
-                        Log.v("Error code 400",message);
+                        Log.d(TAG, "onLoginResponseError: "+message+", Error code: "+response.code());
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    if (message.equals("\"Password ou Email Errados\"")){
+                    if (message.contains("Errados")){
                         MetodosUsados.mostrarMensagem(LoginActivity.this,getString(R.string.msg_email_palavra_passe_errada));
                     }
 
-                    if (message.equals("\"Usuario Não Existe\"")){
+                    if (message.contains("Não Existe")){
                         Snackbar.make(login_root, getString(R.string.msg_erro_user_not_found), Snackbar.LENGTH_LONG)
                                 .setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.login_register_text_color))
                                 .setAction(getString(R.string.criar_conta), new View.OnClickListener() {
@@ -343,31 +358,24 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
-                MetodosUsados.hideLoadingDialog();
+                waitingDialog.dismiss();
                 if (!MetodosUsados.conexaoInternetTrafego(LoginActivity.this,TAG)){
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
+                }else  if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet_timeout);
                 }else {
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro);
                 }
-                Log.i(TAG,"onFailure" + t.getMessage());
+                Log.d(TAG,"onFailure" + t.getMessage()+", Error code: "+t.getCause().getMessage());
 
-                try {
-                    Snackbar
-                            .make(login_root, t.getMessage(), 4000)
-                            .setActionTextColor(Color.MAGENTA)
-                            .show();
-                } catch (Exception e) {
-                    Log.d(TAG, String.valueOf(e.getMessage()));
-                }
+
             }
         });
 
     }
 
     private void carregarMeuPerfil(String token) {
-        MetodosUsados.changeMessageDialog(getString(R.string.msg_login_auth_carregando_dados));
+        waitingDialog.setMessage(getString(R.string.msg_login_auth_carregando_dados));
         String bearerToken = Common.bearerApi.concat(token);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<List<UsuarioPerfil>>  usuarioCall = apiInterface.getPerfilLogin(bearerToken);
@@ -378,8 +386,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
 
-
-                    MetodosUsados.hideLoadingDialog();
+                    waitingDialog.dismiss();
                     if (response.body()!=null){
                         usuarioPerfil = response.body().get(0);
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
@@ -389,7 +396,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    MetodosUsados.hideLoadingDialog();
+                    waitingDialog.dismiss();
                     AppPrefsSettings.getInstance().clearAppPrefs();
                 }
 
@@ -401,14 +408,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
                 AppPrefsSettings.getInstance().clearAppPrefs();
-                MetodosUsados.hideLoadingDialog();
+                waitingDialog.dismiss();
                 if (!MetodosUsados.conexaoInternetTrafego(LoginActivity.this,TAG)){
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
+                }else  if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet_timeout);
                 }else {
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro);
                 }
+                Log.d(TAG, "onLoginPerfilFailed: "+t.getMessage());
 
             }
         });
@@ -421,7 +429,12 @@ public class LoginActivity extends AppCompatActivity {
 
         String title = "Olá, ".concat(usuarioPerfil.primeiroNome+" "+usuarioPerfil.ultimoNome);
         String message = "Seja bem-vindo(a) ao Xpress Lengueno!";
-        notificationHelper.createNotification(title,message,false);
+//        notificationHelper.createNotification(title,message,false);
+
+        Intent serviceIntent = new Intent(this, MySignalRService.class);
+        startService(serviceIntent);
+
+
 
         finish();
     }
@@ -429,13 +442,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         loopingViewPager.resumeAutoScroll();
-        MetodosUsados.spotsDialog(this);
+
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        MetodosUsados.hideLoadingDialog();
+
         super.onDestroy();
     }
 

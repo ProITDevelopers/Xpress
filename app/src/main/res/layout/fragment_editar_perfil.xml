@@ -35,25 +35,43 @@
                 android:layout_gravity="center_horizontal"
                 >
 
-
-
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/imgUserPhoto"
+                <androidx.cardview.widget.CardView
                     android:layout_width="250dp"
                     android:layout_height="320dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    app:riv_corner_radius="12dp"
-                    android:paddingTop="25dp"
-                    android:paddingBottom="15dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="20dp"
                     android:layout_gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    />
+                    >
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/imgUserPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        app:riv_corner_radius="12dp" />
+
+                </androidx.cardview.widget.CardView>
+
+
+
+
+<!--                <com.makeramen.roundedimageview.RoundedImageView-->
+<!--                    android:id="@+id/imgUserPhoto"-->
+<!--                    android:layout_width="250dp"-->
+<!--                    android:layout_height="320dp"-->
+<!--                    android:adjustViewBounds="true"-->
+<!--                    android:scaleType="fitCenter"-->
+<!--                    app:riv_corner_radius="12dp"-->
+<!--                    android:paddingTop="25dp"-->
+<!--                    android:paddingBottom="15dp"-->
+<!--                    android:layout_marginLeft="25dp"-->
+<!--                    android:layout_marginRight="25dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:clickable="true"-->
+<!--                    android:focusable="true"-->
+<!--                    android:foreground="?android:attr/selectableItemBackground"-->
+<!--                    />-->
 
                 <TextView
                     android:id="@+id/txtUserNameInitial"
@@ -68,13 +86,16 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/xpress_purple"
                     android:textSize="150sp"
+                    android:elevation="22dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <ImageView
                     android:src="@drawable/btn_camera"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:elevation="25dp"/>
 
             </FrameLayout>
 
@@ -106,10 +127,11 @@
                 android:id="@+id/txtNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/primeiro_nome_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -123,6 +145,7 @@
                 android:inputType="textCapWords"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -131,10 +154,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/sobrenome_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -148,6 +172,7 @@
                 android:inputType="textCapWords"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
 
@@ -156,10 +181,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/hint_email_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
 
                 />
 
@@ -173,6 +199,7 @@
                 android:inputType="textEmailAddress"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:fontFamily="@font/montserrat_regular"
 
                 />
 
@@ -182,10 +209,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/contactos_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <LinearLayout
@@ -208,6 +236,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
 
@@ -225,6 +254,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
 
@@ -244,11 +274,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/genero_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
                 android:layout_weight="1.80"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <RadioGroup
@@ -272,7 +303,8 @@
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:layout_marginRight="15dp"
-                    android:layout_marginEnd="15dp"/>
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/montserrat_regular"/>
 
                 <RadioButton
                     android:id="@+id/radioBtnFem"
@@ -283,7 +315,8 @@
                     android:text="@string/gender_female"
                     android:textColor="@color/transparentBlack"
                     android:textSize="16sp"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:fontFamily="@font/montserrat_regular"/>
 
 
             </RadioGroup>
@@ -300,10 +333,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="@string/endereco_caps"
                 android:textColor="@color/perfil_text_color"
                 android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
                 />
 
             <RelativeLayout
@@ -316,10 +350,13 @@
 
                 <Spinner android:id="@+id/editCidadeSpiner"
                     android:layout_width="match_parent"
-                    app:backgroundTint="@color/xpress_purple"
-                    android:popupBackground="@color/xpress_green"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    android:layout_height="46dp"/>
+                    app:backgroundTint="@color/xpress_green"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                    android:paddingLeft="4dp"
+                    android:paddingStart="4dp"
+                    android:paddingBottom="4dp"
+                    android:layout_height="46dp"
+                    android:fontFamily="@font/montserrat_regular"/>
 
             </RelativeLayout>
 
@@ -340,6 +377,7 @@
                     android:background="@android:color/transparent"
                     android:inputType="textCapWords"
                     android:padding="12dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
             </RelativeLayout>
@@ -360,71 +398,58 @@
                     android:background="@android:color/transparent"
                     android:inputType="textCapWords"
                     android:padding="12dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border"
+                android:layout_marginTop="10dp">
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editRua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rua"
+                    android:maxLines="1"
+                    android:textColor="@color/perfil_text_color"
+                    android:inputType="textCapWords"
+                    android:background="@android:color/transparent"
+                    android:padding="12dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border"
+                android:layout_marginTop="10dp">
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editNCasa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/numero_da_casa"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:textColor="@color/perfil_text_color"
+                    android:inputType="textCapWords"
+                    android:background="@android:color/transparent"
+                    android:padding="12dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
             </RelativeLayout>
 
 
-            <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:baselineAligned="false">
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/box_border"
-                    android:layout_weight="1"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/editRua"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/rua"
-                        android:maxLines="1"
-                        android:textColor="@color/perfil_text_color"
-                        android:inputType="textCapWords"
-                        android:background="@android:color/transparent"
-                        android:padding="12dp"
-                        />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/box_border"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/editNCasa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/numero_da_casa"
-                        android:maxLength="20"
-                        android:maxLines="1"
-                        android:textColor="@color/perfil_text_color"
-                        android:inputType="textCapWords"
-                        android:background="@android:color/transparent"
-                        android:padding="12dp"
-                        />
-
-                </RelativeLayout>
-
-
-
-
-
-
-
-            </LinearLayout>
 
 
 
@@ -436,8 +461,10 @@
                 android:layout_margin="25dp"
                 android:text="@string/salvar"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:background="@drawable/button_background"
+                android:background="@drawable/button_background_green"
                 android:textColor="@android:color/white"
+                android:fontFamily="@font/montserrat_regular"
+                android:textAllCaps="false"
                 />
 
 

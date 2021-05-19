@@ -22,7 +22,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.concurrent.TimeUnit;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
+import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -85,53 +87,41 @@ public class SplashScreenActivity extends AppCompatActivity {
                 AndroidSchedulers.mainThread())
                 .subscribe(() -> {
 
-                    if (AppPrefsSettings.getInstance().getAuthToken()==null) {
+                    if (!AppPrefsSettings.getInstance().getLoggedIn()){
+                        Intent serviceIntent = new Intent(this, MySignalRService.class);
+                        stopService(serviceIntent);
+                        AppDatabase.clearData();
+                        AppPrefsSettings.getInstance().clearAppPrefs();
 
-                        if (AppPrefsSettings.getInstance().getUser()!=null){
-                            Intent intent = new Intent(SplashScreenActivity.this, LoginTemporarioActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                            return;
-                        }else {
-                            relative_Start.setVisibility(View.VISIBLE);
-                            relative_Start.setAnimation(bottomAnim);
-                            fabStart.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                        relative_Start.setVisibility(View.VISIBLE);
+                        relative_Start.setAnimation(bottomAnim);
+                        fabStart.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
 //                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
+                                startActivity(intent);
 
-                                }
-                            });
+                            }
+                        });
 
 
-                            txt_SignUp.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    Intent intent = new Intent(SplashScreenActivity.this, RegisterActivity.class);
+                        txt_SignUp.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(SplashScreenActivity.this, RegisterActivity.class);
 //                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
+                                startActivity(intent);
 
-                                }
-                            });
-
-//                            Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(intent);
-
-
-
-                        }
-
-
-
-                    }
-                    if (!TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
-
+                            }
+                        });
+                    } else {
                         launchHomeScreen();
                     }
+
+
+
+
                 });
     }
 
@@ -140,6 +130,56 @@ public class SplashScreenActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    private void checkAuthToken(){
+        if (AppPrefsSettings.getInstance().getAuthToken()==null) {
+
+            if (AppPrefsSettings.getInstance().getUser()!=null){
+                Intent intent = new Intent(SplashScreenActivity.this, LoginTemporarioActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+                return;
+            }else {
+                relative_Start.setVisibility(View.VISIBLE);
+                relative_Start.setAnimation(bottomAnim);
+                fabStart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+
+                    }
+                });
+
+
+                txt_SignUp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(SplashScreenActivity.this, RegisterActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+
+                    }
+                });
+
+//                            Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
+
+
+
+            }
+
+
+
+        }
+        if (!TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
+
+            launchHomeScreen();
+        }
     }
 
 

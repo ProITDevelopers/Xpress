@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
@@ -23,14 +26,18 @@ import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 
-public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>{
+public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>
+        implements Filterable {
 
     private Context context;
     private List<CategoriaEstabelecimento> sectionList;
+    private List<CategoriaEstabelecimento> sectionListFull;
 
     public MainRecyclerAdapter(Context context, List<CategoriaEstabelecimento> sectionList) {
         this.context = context;
         this.sectionList = sectionList;
+
+        sectionListFull = new ArrayList<>(sectionList);
     }
 
     @NonNull
@@ -73,9 +80,44 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         return sectionList.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return sectionFilter;
+    }
+
+    private Filter sectionFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<CategoriaEstabelecimento> filteredList = new ArrayList<>();
+
+            if (charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(sectionListFull);
+            }else{
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for (CategoriaEstabelecimento catEstab: sectionListFull) {
+                    if (catEstab.getMenuCategory().getDescricao().toLowerCase().contains(filterPattern)){
+                        filteredList.add(catEstab);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            sectionList.clear();
+            sectionList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView sectionNameTextView;
+        private TextView sectionNameTextView,sectionVerMaisTextView;
         private RecyclerView childRecyclerView;
         private IRecyclerClickListener listener;
 
@@ -83,9 +125,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             super(itemView);
 
             sectionNameTextView = itemView.findViewById(R.id.sectionNameTextView);
+            sectionVerMaisTextView = itemView.findViewById(R.id.sectionVerMaisTextView);
             childRecyclerView = itemView.findViewById(R.id.childRecyclerView);
 
-            sectionNameTextView.setOnClickListener(this);
+            sectionVerMaisTextView.setOnClickListener(this);
         }
 
         public void setListener(IRecyclerClickListener listener) {

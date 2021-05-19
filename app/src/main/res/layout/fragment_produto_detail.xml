@@ -55,7 +55,8 @@
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"/>
 
 
 
@@ -93,14 +94,15 @@
                     android:id="@+id/txtProdutoNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:textColor="@color/xpress_purple"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#262628"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <TextView
@@ -116,6 +118,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <TextView
@@ -124,13 +127,14 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="6dp"
                     android:text="@string/txt_descricao"
-                    android:textColor="@color/xpress_purple"
+                    android:textColor="#262628"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <TextView
@@ -145,6 +149,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
                 <TextView
@@ -152,13 +157,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:text="Quantidade"
-                    android:textColor="@color/xpress_purple"
+                    android:textColor="#262628"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/montserrat_regular"
                     />
 
 
@@ -180,7 +186,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/montserrat_regular"
                         android:lineSpacingExtra="2sp"
                         android:text="@string/one"
                         android:paddingLeft="8dp"
@@ -299,7 +305,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="44dp"
-                        android:background="@drawable/button_background"
+                        android:background="@drawable/button_background_green"
                         android:text="Finalizar Compra"
                         android:textColor="@color/white"
                         android:layout_marginLeft="15dp"
@@ -307,6 +313,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textAllCaps="false"
                         />
 
 

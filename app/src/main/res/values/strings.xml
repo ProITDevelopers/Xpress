@@ -73,9 +73,9 @@
     <string name="msg_login_auth_validando">Validando os dados…</string>
     <string name="terminar_sessao">Terminar a sessão</string>
     <string name="sem_imagem">Sem Imagem</string>
-    <string name="msg_email_palavra_passe_errada">As suas credenciais estão erradas</string>
+    <string name="msg_email_palavra_passe_errada">As suas credenciais estão erradas.</string>
     <string name="criar_conta">Criar conta</string>
-    <string name="msg_erro_user_not_found">Este usuário não exite!</string>
+    <string name="msg_erro_user_not_found">Este utilizador não exite!</string>
     <string name="enviando_num_telefone">A enviar o nº de telefone…</string>
     <string name="reenviando_num_telefone">A reenviar o nº de telefone…</string>
     <string name="enviando_confirm_code">Enviando o código de confirmação…</string>
@@ -119,7 +119,7 @@
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
 
     <string name="price_with_currency">%.2f</string>
-    <string name="order_id">Factura #%s</string>
+    <string name="order_id">Encomenda #%s</string>
     <string name="lbl_item_price_quantity">%s x %d</string>
     <string name="cart_info_bar_items">%d Items</string>
     <string name="cart_info_bar_total">Total: %.2f</string>

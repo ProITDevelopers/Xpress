@@ -66,8 +66,9 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:text="@string/hint_prioridade_da_xpress_tua_saude"
-                    android:textSize="26sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
                 <TextView
@@ -81,6 +82,7 @@
                     android:textColor="@color/white"
                     android:text="@string/hint_principais_medidas_de_prevencao"
                     android:textSize="18sp"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
                 <com.asksira.loopingviewpager.LoopingViewPager
@@ -108,6 +110,7 @@
                     android:text="@string/hint_lava_maos"
                     android:textSize="18sp"
                     android:padding="6dp"
+                    android:fontFamily="@font/poppins_regular"
                     />
 
 

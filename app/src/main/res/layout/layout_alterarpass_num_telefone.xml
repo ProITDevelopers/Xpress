@@ -40,7 +40,9 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_regular"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -54,7 +56,10 @@
                     android:text="@string/alterar_palavra_passe_telef"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/poppins_regular"
+
+                    />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -73,7 +78,7 @@
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:textColor="@color/white"
-
+                        android:fontFamily="@font/poppins_regular"
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -108,6 +113,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textAllCaps="false"
                         />
 
                     <Button
@@ -123,6 +130,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textAllCaps="false"
                         />
 
                 </LinearLayout>

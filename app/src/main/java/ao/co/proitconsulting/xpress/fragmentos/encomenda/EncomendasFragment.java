@@ -17,12 +17,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.activities.MeusPedidosActivity;
+import ao.co.proitconsulting.xpress.adapters.EncomendaFacturaAdapter;
 import ao.co.proitconsulting.xpress.adapters.FacturaAdapter;
 import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
 import ao.co.proitconsulting.xpress.api.ApiClient;
@@ -168,20 +171,19 @@ public class EncomendasFragment extends Fragment {
 
             Collections.reverse(facturaList);
 
-            FacturaAdapter facturaAdapter = new FacturaAdapter(getContext(),facturaList);
+            EncomendaFacturaAdapter encomendaFacturaAdapter = new EncomendaFacturaAdapter(getContext(),facturaList);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
             recyclerView.setHasFixedSize(true);
-            facturaAdapter.notifyDataSetChanged();
-            recyclerView.setAdapter(facturaAdapter);
-            facturaAdapter.setItemClickListener(new RecyclerViewOnItemClickListener() {
-                @Override
-                public void onItemClickListener(int position) {
-
-                }
-            });
+            recyclerView.setAdapter(encomendaFacturaAdapter);
 
         }else {
             MetodosUsados.mostrarMensagem(getContext(),"Não fez nenhum pedido!");
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().removeAllStickyEvents();
+        super.onDestroyView();
     }
 }

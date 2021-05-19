@@ -15,13 +15,15 @@
         android:id="@+id/action_settings"
         android:orderInCategory="103"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:fontFamily="@font/montserrat_regular"/>
 
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="104"
         android:title="@string/terminar_sessao"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:fontFamily="@font/montserrat_regular"/>
 
 
 </menu>

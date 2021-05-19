@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -61,7 +62,13 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
             public void onItemClickListener(View view, int position) {
                 Common.selectedEstab = items.get(position);
                 Common.selectedEstabPosition = position;
-                EventBus.getDefault().postSticky(new EstabelecimentoClick(true, items.get(position)));
+
+                if(items.get(position).estadoEstabelecimento.equals("Aberto")){
+                    EventBus.getDefault().postSticky(new EstabelecimentoClick(true, items.get(position)));
+                }else{
+                    Toast.makeText(context, ""+items.get(position).nomeEstabelecimento+" encontra-se fechado.", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });

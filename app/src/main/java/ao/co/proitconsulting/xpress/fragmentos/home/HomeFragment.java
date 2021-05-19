@@ -74,6 +74,8 @@ public class HomeFragment extends Fragment {
 
     private String errorMessage;
 
+    private MainRecyclerAdapter mainRecyclerAdapter;
+
 
     public HomeFragment(){}
 
@@ -236,7 +238,7 @@ public class HomeFragment extends Fragment {
                                 if (estab.estadoEstabelecimento!=null){
                                     estabelecimentoList.add(estab);
 
-                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+" - "+estab.tipoDeEstabelecimento.descricao);
+//                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+" - "+estab.tipoDeEstabelecimento.descricao);
                                 }
                             }
                         }
@@ -342,7 +344,7 @@ public class HomeFragment extends Fragment {
         waitingDialog.dismiss();
         recyclerViewMenu.setHasFixedSize(true);
         recyclerViewMenu.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
-        MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(getContext(),categoriaEstabelecimentoList);
+        mainRecyclerAdapter = new MainRecyclerAdapter(getContext(),categoriaEstabelecimentoList);
         recyclerViewMenu.setAdapter(mainRecyclerAdapter);
     }
 
@@ -362,36 +364,49 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy()");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_options_search, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint(getString(R.string.pesquisar));
-
-        SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-
-
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-//                if (categoryEstabAdapter!=null)
-//                    categoryEstabAdapter.getFilter().filter(newText);
-
-                Toast.makeText(getContext(), ""+newText, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+//        MenuItem searchItem = menu.findItem(R.id.action_search);
+//
+//        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        searchView.setQueryHint(getString(R.string.pesquisar));
+//
+//        SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
+//        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
+//        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
+//        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+//
+//
+//
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                if (mainRecyclerAdapter!=null)
+//                    mainRecyclerAdapter.getFilter().filter(newText);
+//
+//
+//                return false;
+//            }
+//        });
         super.onCreateOptionsMenu(menu, inflater);
     }
 

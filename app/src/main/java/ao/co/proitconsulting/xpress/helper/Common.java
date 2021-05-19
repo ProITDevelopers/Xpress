@@ -9,6 +9,7 @@ import ao.co.proitconsulting.xpress.BuildConfig;
 import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
+import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.SobreNos;
 
@@ -37,6 +38,7 @@ public class Common {
 
     public static final int VIEW_TYPE_LIST = 1;
     public static final int VIEW_TYPE_GRID = 2;
+    public static Factura selectedFactura;
 
 
     public static List<SobreNos> getSobreNosList(){

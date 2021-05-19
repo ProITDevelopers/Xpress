@@ -33,7 +33,7 @@
                 android:id="@+id/textView"
                 android:text="@string/hint_o_melhor_na_tua_cidade"
                 android:textColor="@color/black"
-                android:textSize="42sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,6 +43,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/poppins_regular"
                 />
 
             <LinearLayout
@@ -63,14 +64,16 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Username"
-                        android:textSize="17sp"
+                        android:text="Email/Telefone"
+                        android:textSize="14sp"
                         android:padding="5dp"
                         android:textStyle="bold"
                         android:textColor="@color/perfil_text_color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"/>
+                        android:layout_gravity="bottom"
+                        android:fontFamily="@font/poppins_regular"
+                        />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/editEmail"
@@ -78,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:paddingTop="20dp"
-
+                        android:fontFamily="@font/poppins_regular"
                         android:textColorHint="@color/black"
                         android:maxLines="1"
                         android:backgroundTint="@color/xpress_green"
@@ -94,27 +97,52 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Password"
-                        android:textSize="17sp"
+                        android:text="@string/hint_password"
+                        android:textSize="14sp"
                         android:padding="5dp"
                         android:layout_gravity="bottom"
                         android:textStyle="bold"
                         android:textColor="@color/perfil_text_color"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
 
-                    <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
-                        android:id="@+id/editPassword"
+                        />
+
+<!--                    <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText-->
+<!--                        android:id="@+id/editPassword"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:inputType="textPassword"-->
+<!--                        android:paddingTop="20dp"-->
+<!--                        android:textColorHint="@color/black"-->
+<!--                        android:fontFamily="@font/poppins_regular"-->
+<!--                        app:tint_color="@color/xpress_green"-->
+<!--                        android:backgroundTint="@color/xpress_green"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:visibility="gone"-->
+<!--                        />-->
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/text_input_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:paddingTop="20dp"
-                        android:textColorHint="@color/black"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/xpress_green"
+                        >
 
-                        app:tint_color="@color/xpress_green"
-                        android:backgroundTint="@color/xpress_green"
-                        android:maxLines="1"
-                        />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textColorHint="@color/black"
+                            android:fontFamily="@font/poppins_regular"
+                            android:backgroundTint="@color/xpress_green"
+                            android:maxLines="1">
+
+                        </com.google.android.material.textfield.TextInputEditText>
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -200,7 +228,9 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                />
 
 
 
@@ -223,6 +253,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/switchRemember"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/poppins_regular"
+                android:textAllCaps="false"
                 />
 
             <Button
@@ -250,6 +282,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:fontFamily="@font/poppins_regular"
+                android:textAllCaps="false"
                 />
 
 

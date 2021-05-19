@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
@@ -16,8 +17,10 @@ import io.reactivex.Single;
 
 public class MySignalRService extends Service {
 
-    //    private static final String BASE_URL_XPRESS_EVENTHUB = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/eventhub";
+
     private static final String BASE_URL_XPRESS_EVENTHUB = "https://apixpress.lengueno.com/eventhub";
+
+    private static final String TAG = "TAG_MySignalRService";
 
     private HubConnection mHubConnection;
     private final IBinder mBinder = new LocalBinder(); // Binder given to clients
@@ -32,12 +35,14 @@ public class MySignalRService extends Service {
         super.onCreate();
 
         notificationHelper = new NotificationHelper(this);
+        Log.d(TAG, "onMySignalRService: "+"onCreate()");
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int result = super.onStartCommand(intent, flags, startId);
+        Log.d(TAG, "onMySignalRService: "+"onStartCommand()");
         startSignalR();
         return result;
     }
@@ -49,6 +54,7 @@ public class MySignalRService extends Service {
             mHubConnection.stop();
 
 //        mHubConnection.stop();
+        Log.d(TAG, "onMySignalRService: "+"onDestroy()");
         super.onDestroy();
     }
 
@@ -56,6 +62,7 @@ public class MySignalRService extends Service {
     public IBinder onBind(Intent intent) {
         // Return the communication channel to the service.
         startSignalR();
+        Log.d(TAG, "onMySignalRService: "+"IBinder_onBind()");
         return mBinder;
     }
 
@@ -83,6 +90,7 @@ public class MySignalRService extends Service {
         String token = AppPrefsSettings.getInstance().getAuthToken();
 
         if (TextUtils.isEmpty(token)) {
+            Log.d(TAG, "onMySignalRService: "+"startSignalR() token isEmpty()");
             return;
         }
 
@@ -92,7 +100,6 @@ public class MySignalRService extends Service {
 
         mHubConnection = HubConnectionBuilder.create(BASE_URL_XPRESS_EVENTHUB)
                 .withAccessTokenProvider(Single.defer(() -> {
-
                     // Your logic here.
                     return Single.just(token);
                 })).build();
@@ -102,7 +109,7 @@ public class MySignalRService extends Service {
 
         mHubConnection.on("UpdatedUserList",(ConnectionId, users)->{
 
-
+            Log.d(TAG, "onMySignalRService: "+"UpdatedUserList: "+users);
 
         },String.class,String.class);
 
@@ -115,6 +122,7 @@ public class MySignalRService extends Service {
 
             notificationHelper.createNotification(title,body,true);
 
+            Log.d(TAG, "onMySignalRService: "+"ReceiveMessage: "+title+", "+message);
 
         },String.class);
 

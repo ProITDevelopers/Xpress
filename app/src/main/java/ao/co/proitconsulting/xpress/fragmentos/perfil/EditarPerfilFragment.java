@@ -760,7 +760,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.xpress_purple));
+        ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
         if (parent.getId() == R.id.editCidadeSpiner) {
             valorCidadeItem = parent.getItemAtPosition(position).toString();
         }

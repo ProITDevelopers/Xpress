@@ -55,6 +55,11 @@
         tools:layout="@layout/fragment_encomendas" />
 
     <fragment
+        android:id="@+id/nav_menu_encomenda_detail"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.encomenda_detail.EncomendaDetailFragment"
+        tools:layout="@layout/fragment_encomenda_detail" />
+
+    <fragment
         android:id="@+id/nav_menu_mapa"
         android:name="ao.co.proitconsulting.xpress.fragmentos.mapa.MapaFragment"
         android:label="@string/nav_mapa_title"

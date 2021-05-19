@@ -66,7 +66,7 @@ public class ProdutosEstabFragment extends Fragment  {
     private View view;
 
     private AlertDialog waitingDialog;
-    private LoopingViewPager loopingViewPager;
+//    private LoopingViewPager loopingViewPager;
     private List<Produtos> produtosList = new ArrayList<>();
     private ProdutosViewAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
@@ -80,6 +80,8 @@ public class ProdutosEstabFragment extends Fragment  {
     private TextView btnTentarDeNovo;
 
     private String errorMessage;
+
+
 
 
 
@@ -106,13 +108,13 @@ public class ProdutosEstabFragment extends Fragment  {
         view = inflater.inflate(R.layout.fragment_produtos_estab, container, false);
         initViews();
 
-        produtosEstabViewModel.getTopImagesMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {
-            @Override
-            public void onChanged(List<TopSlideImages> topSlideImages) {
-                TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImages,true);
-                loopingViewPager.setAdapter(topImageSlideAdapter);
-            }
-        });
+//        produtosEstabViewModel.getTopImagesMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {
+//            @Override
+//            public void onChanged(List<TopSlideImages> topSlideImages) {
+//                TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImages,true);
+//                loopingViewPager.setAdapter(topImageSlideAdapter);
+//            }
+//        });
 
         produtosEstabViewModel.getEstabelecimentoMutableLiveData().observe(this, new Observer<Estabelecimento>() {
             @Override
@@ -121,6 +123,8 @@ public class ProdutosEstabFragment extends Fragment  {
                         .getSupportActionBar()
                         .setTitle(estabelecimento.nomeEstabelecimento);
                 estabelecimentoID = estabelecimento.estabelecimentoID;
+
+
             }
         });
 
@@ -148,7 +152,7 @@ public class ProdutosEstabFragment extends Fragment  {
 //        realm = Realm.getDefaultInstance();
 //        cartItems = realm.where(CartItemProdutos.class).findAllAsync();
 
-        loopingViewPager = view.findViewById(R.id.loopingViewPager);
+//        loopingViewPager = view.findViewById(R.id.loopingViewPager);
         recyclewProdutos = view.findViewById(R.id.recyclewProdutos);
         gridLayoutManager = new GridLayoutManager(getContext(), 1);
 
@@ -318,7 +322,7 @@ public class ProdutosEstabFragment extends Fragment  {
         }
         verifConecxaoProdutos();
         super.onResume();
-        loopingViewPager.resumeAutoScroll();
+//        loopingViewPager.resumeAutoScroll();
 //        if (cartItems != null) {
 //            cartItems.addChangeListener(cartRealmChangeListener);
 //        }
@@ -327,7 +331,7 @@ public class ProdutosEstabFragment extends Fragment  {
 
     @Override
     public void onPause() {
-        loopingViewPager.pauseAutoScroll();
+//        loopingViewPager.pauseAutoScroll();
         super.onPause();
     }
 
@@ -344,20 +348,17 @@ public class ProdutosEstabFragment extends Fragment  {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_options_search, menu);
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint(getString(R.string.pesquisar));
+        searchView.setQueryHint("Produto, Categoria");
+//        searchView.setQueryHint(getString(R.string.pesquisar));
 
         SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
+//        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
+        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -367,15 +368,22 @@ public class ProdutosEstabFragment extends Fragment  {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                if (categoryEstabAdapter!=null)
-//                    categoryEstabAdapter.getFilter().filter(newText);
+                if (itemAdapter!=null)
+                    itemAdapter.getFilter().filter(newText);
 
-                Toast.makeText(getContext(), ""+newText, Toast.LENGTH_SHORT).show();
 
 
                 return false;
             }
         });
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_options_search, menu);
+
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
