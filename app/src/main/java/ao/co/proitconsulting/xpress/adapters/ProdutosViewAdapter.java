@@ -179,10 +179,20 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 for (Produtos produto: produtosListFull) {
-                    if (produto.descricaoProdutoC.toLowerCase().contains(filterPattern) ||
-                            produto.getCategoriaProduto().toLowerCase().contains(filterPattern)){
-                        filteredList.add(produto);
+
+                    if (produto.descricaoProdutoC!=null){
+                        if (produto.descricaoProdutoC.toLowerCase().contains(filterPattern)){
+                            filteredList.add(produto);
+                        }
                     }
+
+                    if (produto.getCategoriaProduto()!=null){
+                        if (produto.getCategoriaProduto().toLowerCase().contains(filterPattern)){
+                            filteredList.add(produto);
+                        }
+                    }
+
+
                 }
             }
             FilterResults filterResults = new FilterResults();

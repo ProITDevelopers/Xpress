@@ -209,7 +209,7 @@ public class ProdutosEstabFragment extends Fragment  {
 
                 if (response.isSuccessful()) {
 
-                    if (response.body()!=null){
+                    if (response.body()!=null && response.body().size()>0){
 
                         produtosList = response.body();
 
@@ -221,8 +221,13 @@ public class ProdutosEstabFragment extends Fragment  {
                         }
 
 
+                        Log.d(TAG, "onResponseProduct2: "+response.body());
+                    }else {
+                        waitingDialog.dismiss();
+                        MetodosUsados.mostrarMensagem(getContext(),"Sem produtos.");
+                        Log.d(TAG, "onResponseProduct3: "+response.body());
                     }
-                    waitingDialog.dismiss();
+
                 } else {
 
                     waitingDialog.dismiss();
@@ -231,6 +236,7 @@ public class ProdutosEstabFragment extends Fragment  {
 //                    }
                     try {
                         errorMessage = response.errorBody().string();
+                        Log.d(TAG, "onResponseProductError: "+errorMessage);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -257,6 +263,7 @@ public class ProdutosEstabFragment extends Fragment  {
 
     private void setProdutosAdapters(List<Produtos> produtosList) {
 
+        waitingDialog.dismiss();
         if (produtosList.size()>0){
 
 //            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,10 +33,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.asksira.loopingviewpager.LoopingViewPager;
+import com.asksira.loopingviewpager.indicator.CustomShapePagerIndicator;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
@@ -59,6 +63,7 @@ public class HomeFragment extends Fragment {
     private View view;
 
     private LoopingViewPager loopingViewPager;
+    private TabLayout tabLayout;
     private RecyclerView recyclerViewMenu;
 
     private AlertDialog waitingDialog;
@@ -101,6 +106,8 @@ public class HomeFragment extends Fragment {
             public void onChanged(List<TopSlideImages> topSlideImages) {
                 TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImages,true);
                 loopingViewPager.setAdapter(topImageSlideAdapter);
+
+
             }
         });
 
@@ -119,9 +126,13 @@ public class HomeFragment extends Fragment {
         loopingViewPager = view.findViewById(R.id.loopingViewPager);
         recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
 
+        tabLayout = view.findViewById(R.id.tab_layout);
+
         coordinatorLayout = view.findViewById(R.id.constraintLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
         btnTentarDeNovo = view.findViewById(R.id.btn);
+
+
 
     }
 
@@ -248,6 +259,9 @@ public class HomeFragment extends Fragment {
 
 
 
+                    }else{
+                        waitingDialog.dismiss();
+                        MetodosUsados.mostrarMensagem(getContext(),"Sem estabelecimentos");
                     }
 
                 } else {
@@ -353,6 +367,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
+        tabLayout.setupWithViewPager(loopingViewPager);
         super.onResume();
         loopingViewPager.resumeAutoScroll();
     }

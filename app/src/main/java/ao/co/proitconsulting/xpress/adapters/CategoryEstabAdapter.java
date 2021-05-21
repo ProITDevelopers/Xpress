@@ -135,9 +135,12 @@ public class CategoryEstabAdapter extends RecyclerView.Adapter<CategoryEstabAdap
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 for (Estabelecimento estab: estabelecimentoListFull) {
-                    if (estab.nomeEstabelecimento.toLowerCase().contains(filterPattern)){
-                        filteredList.add(estab);
+                    if (estab.nomeEstabelecimento!=null){
+                        if (estab.nomeEstabelecimento.toLowerCase().contains(filterPattern)){
+                            filteredList.add(estab);
+                        }
                     }
+
                 }
             }
             FilterResults filterResults = new FilterResults();
