@@ -20,12 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.EncomendaDetailListAdapter;
-import ao.co.proitconsulting.xpress.fragmentos.produtos_detail.ProdutoDetailViewModel;
-import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.modelos.Factura;
-import ao.co.proitconsulting.xpress.modelos.Produtos;
-import ao.co.proitconsulting.xpress.utilityClasses.OrderItemsListView;
 
 public class EncomendaDetailFragment extends Fragment {
 

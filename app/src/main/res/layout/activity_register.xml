@@ -5,7 +5,7 @@
     android:id="@+id/register_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+
     android:orientation="vertical"
     tools:context=".activities.RegisterActivity">
 
@@ -13,8 +13,9 @@
         android:id="@+id/fabPrevious"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/previous_arrow"
-        app:backgroundTint="@color/white"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:backgroundTint="@color/login_register_topbutton_color"
+        android:tint="@color/login_register_topbutton_icon_color"
         android:layout_marginTop="28dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
@@ -33,7 +34,7 @@
             <TextView
                 android:id="@+id/textView"
                 android:text="@string/hint_produtos_tua_disposicao"
-                android:textColor="@color/black"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -133,10 +134,11 @@
                         android:id="@+id/imgUserPhoto"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:src="@color/white"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
                         android:contentDescription="@string/foto_de_usuario"
+                        app:civ_border_color="@color/userphoto_nav_bar_border"
+                        app:civ_border_width="2dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"

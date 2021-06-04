@@ -10,6 +10,7 @@
     app:cardCornerRadius="8dp"
     android:layout_margin="8dp"
     android:id="@+id/cardViewFactura"
+
     >
 
     <LinearLayout
@@ -38,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:text="Encomenda #423"
                     android:textStyle="bold"
-                    android:textColor="#242134"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:padding="5dp"
                     android:textSize="16sp"
                     android:layout_weight="1.20"
@@ -49,9 +50,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="252367kz"
-                    android:textColor="@color/login_register_text_color"
+                    android:textColor="@color/xpress_green"
                     android:textStyle="bold"
-                    android:padding="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:textSize="16sp"
                     android:layout_weight="0.80"
                     android:gravity="end|right"
@@ -73,6 +75,7 @@
                     android:padding="5dp"
                     android:textSize="14sp"
                     android:layout_weight="1.20"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     />
 
                 <TextView
@@ -80,11 +83,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="16/12/2019"
-                    android:padding="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:textSize="14sp"
                     android:layout_weight="0.80"
                     android:gravity="end|right"
-                    android:textColor="#1a1824"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     />
 
 

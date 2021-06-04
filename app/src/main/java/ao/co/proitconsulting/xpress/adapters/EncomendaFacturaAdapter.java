@@ -6,11 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,12 +18,10 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
 import ao.co.proitconsulting.xpress.EventBus.EncomendaClick;
-import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.modelos.Factura;
-import ao.co.proitconsulting.xpress.utilityClasses.OrderItemsListView;
 
 public class EncomendaFacturaAdapter extends RecyclerView.Adapter<EncomendaFacturaAdapter.FacturaViewHolder> {
 
@@ -55,10 +51,35 @@ public class EncomendaFacturaAdapter extends RecyclerView.Adapter<EncomendaFactu
 
             holder.txtFacturaId.setText(context.getString(R.string.order_id, String.valueOf(factura.idFactura)));
             holder.txtDataPedido.setText(Utils.getOrderTimestamp(factura.dataPedido));
+
+            if (factura.estado.equals("Pedido Fechado")){
+                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.encomenda_estado_color));
+            }
+
+            if (factura.estado.equals("À Ser Confencionado")){
+                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+            }
+
+            if (factura.estado.equals("Pronto Para Entrega")){
+                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+            }
+
+            if (factura.estado.equals("A Caminho")){
+                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.yellow));
+            }
+
+
+            if (factura.estado.equals("Entregue")){
+                holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.xpress_green));
+            }
+
             holder.txtEstado.setText(factura.estado);
+
 
             String total = String.valueOf(factura.total);
             holder.txtTotal.setText(context.getString(R.string.price_with_currency, Float.parseFloat(total)).concat(" AKZ"));
+
+
 
             holder.setListener(new IRecyclerClickListener() {
                 @Override

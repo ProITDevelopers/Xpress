@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.activities.MenuActivity;
-import ao.co.proitconsulting.xpress.activities.MeusPedidosActivity;
 
 public class NotificationHelper {
     private Context mContext;

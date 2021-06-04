@@ -67,8 +67,8 @@
 
     <fragment
         android:id="@+id/nav_menu_wallet"
-        android:name="ao.co.proitconsulting.xpress.fragmentos.wallet.CarteiraXpressFragment"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.wallet_xpress_saldo.CarteiraXpressSaldoFragment"
         android:label="@string/nav_carteira_title"
-        tools:layout="@layout/fragment_carteira_xpress" />
+        tools:layout="@layout/fragment_carteira_xpress_conta" />
 
 </navigation>

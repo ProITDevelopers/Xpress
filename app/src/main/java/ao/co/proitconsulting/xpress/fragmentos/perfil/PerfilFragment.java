@@ -11,15 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.andremion.counterfab.CounterFab;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
-
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PerfilFragment extends Fragment {
 
@@ -81,6 +80,11 @@ public class PerfilFragment extends Fragment {
                         .navigate(R.id.action_nav_perfil_to_nav_editar_perfil);
             }
         });
+
+        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            floatingActionButton.hide();
+        }
     }
 
     @Override

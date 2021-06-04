@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.AlterarPalavraPasseActivity">
 
@@ -12,8 +11,9 @@
         android:id="@+id/fabPrevious"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/previous_arrow"
-        app:backgroundTint="@color/white"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:backgroundTint="@color/login_register_topbutton_color"
+        android:tint="@color/login_register_topbutton_icon_color"
         android:layout_marginTop="28dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
@@ -22,15 +22,15 @@
     <TextView
         android:id="@+id/textView"
         android:text="@string/hint_produtos_tua_disposicao"
-        android:textColor="@color/black"
-        android:textSize="42sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="28dp"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
-
+        android:fontFamily="@font/poppins_regular"
         />
 
 </LinearLayout>

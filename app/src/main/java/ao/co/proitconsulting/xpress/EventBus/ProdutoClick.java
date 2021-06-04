@@ -1,6 +1,5 @@
 package ao.co.proitconsulting.xpress.EventBus;
 
-import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 
 public class ProdutoClick {

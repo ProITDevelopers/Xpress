@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="17sp"
-        android:textColor="@color/xpress_purple"
+        android:textColor="@color/home_item_row_color"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:padding="5dp"

@@ -6,6 +6,7 @@
     android:layout_gravity="center"
     app:cardElevation="8dp"
     app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="@color/xpress_green"
     >
 
     <LinearLayout
@@ -33,6 +34,7 @@
                     android:scaleType="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="8dp"
+                    app:tint="@color/white"
                     />
 
             </LinearLayout>
@@ -53,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:textColor="@color/xpress_purple"
+                    android:textColor="@color/white"
                     android:text="@string/escolher_fotografia"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -100,30 +102,32 @@
                     android:layout_marginBottom="20dp">
 
                     <ImageView
-                        android:id="@+id/dialog_ImgBtnCamera"
-                        android:src="@drawable/btn_camera"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/dialog_ImgBtnGaleria"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        />
-
-
-                    <ImageView
                         android:id="@+id/dialog_ImgBtnGaleria"
                         android:src="@drawable/btn_galeria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/dialog_ImgBtnCamera"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/dialog_ImgBtnCamera"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:tint="@color/white"
+                        />
+
+
+                    <ImageView
+                        android:id="@+id/dialog_ImgBtnCamera"
+                        android:src="@drawable/btn_camera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/dialog_ImgBtnGaleria"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+                        app:tint="@color/white"
                         />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

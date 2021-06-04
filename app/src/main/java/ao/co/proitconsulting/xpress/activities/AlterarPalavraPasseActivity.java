@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
@@ -65,7 +64,7 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //showBackground in status bar
-        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+//        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_alterar_palavra_passe);
 
         initViews();

@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:textColor="@color/xpress_purple"
+                    android:textColor="@color/catestab_name_color"
                     android:textStyle="bold"
                     android:textSize="17sp"
                     android:padding="5dp"
@@ -75,7 +75,7 @@
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:gravity="center"
-                    android:textColor="@color/login_icon_text_color"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:fontFamily="@font/montserrat_regular"
                     />
 
@@ -87,6 +87,7 @@
                     android:lines="1"
                     android:gravity="end"
                     android:fontFamily="@font/montserrat_regular"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     />
 
             </LinearLayout>

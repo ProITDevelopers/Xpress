@@ -1,31 +1,22 @@
 package ao.co.proitconsulting.xpress.fragmentos.perfil;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,12 +32,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
+import com.andremion.counterfab.CounterFab;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -55,16 +45,12 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-
-import ao.co.proitconsulting.xpress.activities.EditarPerfilActivity;
+import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.activities.imagePicker.ImagePickerActivity;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
@@ -72,7 +58,6 @@ import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfilRequest;
-import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -136,6 +121,11 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void initViews() {
+        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            floatingActionButton.hide();
+        }
+
         editPerfil_root = view.findViewById(R.id.editPerfil_root);
 
         imageView = view.findViewById(R.id.imgUserPhoto);
@@ -162,11 +152,11 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    radioBtnFem.setTextColor(ContextCompat.getColor(getContext(),R.color.xpress_purple));
+                    radioBtnFem.setTextColor(ContextCompat.getColor(getContext(),R.color.perfil_radiobtn_color));
                     radioBtnFem.setError(null);
                     radioBtnMasc.setError(null);
                 }else{
-                    radioBtnFem.setTextColor(ContextCompat.getColor(getContext(),R.color.transparentBlack));
+                    radioBtnFem.setTextColor(ContextCompat.getColor(getContext(),R.color.perfil_radiotxt_color));
                 }
             }
         });
@@ -175,11 +165,11 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    radioBtnMasc.setTextColor(ContextCompat.getColor(getContext(),R.color.xpress_purple));
+                    radioBtnMasc.setTextColor(ContextCompat.getColor(getContext(),R.color.perfil_radiobtn_color));
                     radioBtnMasc.setError(null);
                     radioBtnFem.setError(null);
                 }else{
-                    radioBtnMasc.setTextColor(ContextCompat.getColor(getContext(),R.color.transparentBlack));
+                    radioBtnMasc.setTextColor(ContextCompat.getColor(getContext(),R.color.perfil_radiotxt_color));
                 }
             }
         });
@@ -190,6 +180,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         ArrayAdapter<CharSequence> adapterCidade = ArrayAdapter.createFromResource(getContext(),
                 R.array.cidade, android.R.layout.simple_spinner_item);
         adapterCidade.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         editCidadeSpiner.setAdapter(adapterCidade);
         editCidadeSpiner.setOnItemSelectedListener(this);
 
@@ -669,7 +660,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
 
     private void salvarFoto(String postPath) {
 
-        AlertDialog waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
+        AlertDialog waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
         waitingDialog.setMessage(getString(R.string.salvando_foto));
         waitingDialog.setCancelable(false);
         waitingDialog.show();
@@ -760,7 +751,11 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
+        if (parent.getChildAt(0)!=null){
+            ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
+        }
+
+
         if (parent.getId() == R.id.editCidadeSpiner) {
             valorCidadeItem = parent.getItemAtPosition(position).toString();
         }

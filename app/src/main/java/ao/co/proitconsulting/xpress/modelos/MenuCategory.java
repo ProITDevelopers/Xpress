@@ -1,7 +1,5 @@
 package ao.co.proitconsulting.xpress.modelos;
 
-import java.util.Comparator;
-
 //public class MenuCategory implements Comparator<MenuCategory> {
 public class MenuCategory  {
     private int idTipo;

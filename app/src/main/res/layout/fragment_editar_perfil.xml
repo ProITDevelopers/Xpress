@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/editPerfil_root"
@@ -21,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:fitsSystemWindows="true"
-            android:background="@color/white"
             app:contentScrim="@color/xpress_green"
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -33,6 +31,7 @@
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax"
                 android:layout_gravity="center_horizontal"
+                android:background="@drawable/side_nav_bar"
                 >
 
                 <androidx.cardview.widget.CardView
@@ -41,6 +40,7 @@
                     app:cardCornerRadius="12dp"
                     app:cardElevation="20dp"
                     android:layout_gravity="center"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <com.makeramen.roundedimageview.RoundedImageView
@@ -49,7 +49,11 @@
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
-                        app:riv_corner_radius="12dp" />
+                        app:riv_corner_radius="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        />
 
                 </androidx.cardview.widget.CardView>
 
@@ -84,7 +88,7 @@
                     android:maxLength="2"
                     android:visibility="gone"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/xpress_purple"
+                    android:textColor="@color/nav_menu_username_initial_color"
                     android:textSize="150sp"
                     android:elevation="22dp"
                     android:fontFamily="@font/montserrat_regular"
@@ -129,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:text="@string/primeiro_nome_caps"
-                android:textColor="@color/perfil_text_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
                 />
@@ -156,7 +160,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/sobrenome_caps"
-                android:textColor="@color/perfil_text_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
                 />
@@ -183,7 +187,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/hint_email_caps"
-                android:textColor="@color/perfil_text_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
 
@@ -211,7 +215,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/contactos_caps"
-                android:textColor="@color/perfil_text_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
                 />
@@ -276,7 +280,7 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="14sp"
                 android:text="@string/genero_caps"
-                android:textColor="@color/perfil_text_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:layout_weight="1.80"
                 android:fontFamily="@font/montserrat_regular"
@@ -298,8 +302,8 @@
                     android:layout_height="match_parent"
                     android:checked="false"
                     android:text="@string/gender_male"
-                    android:textColor="@color/transparentBlack"
-                    app:buttonTint="@color/xpress_purple"
+                    android:textColor="@color/perfil_radiotxt_color"
+                    app:buttonTint="@color/perfil_radiobtn_color"
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:layout_marginRight="15dp"
@@ -310,10 +314,10 @@
                     android:id="@+id/radioBtnFem"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    app:buttonTint="@color/xpress_purple"
+                    android:textColor="@color/perfil_radiotxt_color"
+                    app:buttonTint="@color/perfil_radiobtn_color"
                     android:checked="false"
                     android:text="@string/gender_female"
-                    android:textColor="@color/transparentBlack"
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:fontFamily="@font/montserrat_regular"/>
@@ -335,7 +339,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/endereco_caps"
-                android:textColor="@color/perfil_text_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
                 />
@@ -351,7 +355,7 @@
                 <Spinner android:id="@+id/editCidadeSpiner"
                     android:layout_width="match_parent"
                     app:backgroundTint="@color/xpress_green"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+
                     android:paddingLeft="4dp"
                     android:paddingStart="4dp"
                     android:paddingBottom="4dp"

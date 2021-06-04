@@ -1,7 +1,6 @@
 package ao.co.proitconsulting.xpress.EventBus;
 
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
-import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 
 public class CategoryClick {
     private boolean success;

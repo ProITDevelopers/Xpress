@@ -1,12 +1,25 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">@color/xpress_green</item>
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
+
+
+        <!--  Status bar color.  -->
+<!--        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>-->
+
+        <!-- Status bar stuff. -->
+<!--        <item name="android:statusBarColor" tools:targetApi="l">@color/statusBarColor</item>-->
+        <item name="android:windowLightStatusBar" tools:targetApi="M">true</item>
+
+<!--        &lt;!&ndash; Navigation Drawer &ndash;&gt;-->
+<!--        <item name="colorNavigationItem">@color/menu_item_color_state</item>-->
+<!--        <item name="colorNavigationItemSelected">@color/white</item>-->
+<!--        <item name="drawableNavigationItemBackground">@drawable/menu_background_color_state</item>-->
 
 
     </style>
@@ -19,38 +32,21 @@
     </style>
 
 
-    <style name="AlterarPassTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/white</item>
+    <style name="AlterarPassTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/white</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
+<!--        <item name="android:statusBarColor" tools:targetApi="l">@color/statusBarColor</item>-->
     </style>
 
-    <style name="MyCustomAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/xpress_green</item>
-        <item name="colorPrimaryDark">@color/xpress_green</item>
-        <item name="colorAccent">@color/xpress_green</item>
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:fontFamily">@font/montserrat_regular</item>
-    </style>
 
-    <style name="XpressGreenAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/xpress_green</item>
-        <item name="colorPrimaryDark">@color/xpress_green</item>
-        <item name="colorAccent">@color/xpress_green</item>
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:fontFamily">@font/montserrat_regular</item>
-    </style>
-
-    <style name="XpressWhiteAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/white</item>
-        <item name="colorAccent">@color/xpress_green</item>
-        <item name="android:windowDisablePreview">true</item>
+    <style name="CustomSpotsDialog" parent="android:Theme.DeviceDefault.Light.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogSpotColor">@color/xpress_green</item>
+        <item name="DialogSpotCount">4</item>
+        <item name="android:background">@color/white</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
     </style>
 
@@ -60,17 +56,28 @@
     </style>
 
 
+    <style name="CustomNavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemIconTint">?attr/colorNavigationItem</item>
+        <item name="itemTextColor">?attr/colorNavigationItem</item>
+        <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
+    </style>
+
+
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
+
+
+
     </style>
 
 <!--    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
-    <style name="AppThemeGreen.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppThemeWhite.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+<!--    <style name="AppThemeGreen.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

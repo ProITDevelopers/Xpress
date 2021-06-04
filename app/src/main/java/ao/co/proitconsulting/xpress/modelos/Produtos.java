@@ -2,6 +2,7 @@ package ao.co.proitconsulting.xpress.modelos;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -37,8 +38,18 @@ public class Produtos extends RealmObject {
     @SerializedName("longitude")
     public String longitude;
 
+    public RealmList<ProdutoListExtras> produtoListExtras;
 
+    //For Cart
+    private RealmList<ProdutoListExtras> userSelectedAddon;
 
+    public RealmList<ProdutoListExtras> getUserSelectedAddon() {
+        return userSelectedAddon;
+    }
+
+    public void setUserSelectedAddon(RealmList<ProdutoListExtras> userSelectedAddon) {
+        this.userSelectedAddon = userSelectedAddon;
+    }
 
     public Produtos() {}
 

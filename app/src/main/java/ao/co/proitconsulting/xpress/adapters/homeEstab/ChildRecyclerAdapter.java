@@ -1,7 +1,6 @@
 package ao.co.proitconsulting.xpress.adapters.homeEstab;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -23,9 +21,7 @@ import java.util.List;
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
 import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.ProdutosActivity;
 import ao.co.proitconsulting.xpress.helper.Common;
-import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 
 public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdapter.ViewHolder> {

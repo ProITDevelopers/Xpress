@@ -6,6 +6,7 @@
     android:layout_gravity="center"
     app:cardElevation="8dp"
     app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="@color/xpress_green"
     >
 
     <LinearLayout
@@ -31,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:src="@drawable/ic_baseline_clear_24"
+                    android:src="@drawable/btn_close"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -54,6 +55,7 @@
                     android:scaleType="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="8dp"
+                    app:tint="@color/white"
                     />
 
             </LinearLayout>
@@ -92,7 +94,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:lines="2"
-                    android:textColor="@color/xpress_purple"
+                    android:textColor="@color/white"
                     android:text="@string/escolha_o_tipo_de_pagamento"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -148,7 +150,7 @@
                         android:layout_marginEnd="5dp"
                         android:text="@string/multicaixa"
                         android:textColor="@color/white"
-                        android:background="@drawable/button_background_green"
+                        android:background="@drawable/button_background_blue"
                         android:layout_height="44dp"
                         android:clickable="true"
                         android:focusable="true"
@@ -169,6 +171,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
+
                         />
 
 

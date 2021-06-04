@@ -1,17 +1,20 @@
 package ao.co.proitconsulting.xpress.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -23,15 +26,15 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -78,7 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
     private AppCompatEditText editTelefone,editEmail;
     private ShowHidePasswordEditText editPass,editConfirmPass;
 
-
+    private AppCompatCheckBox checkboxAcceptTerms;
+    private TextView txtTermsCondicoes;
     private Button btnRegistro;
 
 
@@ -108,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //showBackground in status bar
-        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+//        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_register);
 
 
@@ -137,6 +141,9 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         btnRegistro = findViewById(R.id.btnRegistro);
+
+        checkboxAcceptTerms = findViewById(R.id.checkboxAcceptTerms);
+        txtTermsCondicoes = findViewById(R.id.txtTermsCondicoes);
 
 
         fabPrevious.setOnClickListener(new View.OnClickListener() {
@@ -197,12 +204,32 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-        Picasso.with(this).load(R.drawable.photo_placeholder).into(imgUserPhoto);
+        imgUserPhoto.setImageResource(R.drawable.ic_baseline_outline_person_add_24);
         imgUserPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 verificarPermissaoFotoCameraGaleria();
 
+            }
+        });
+
+        checkboxAcceptTerms.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    checkboxAcceptTerms.setError(null);
+                }
+
+
+            }
+        });
+
+        txtTermsCondicoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MetodosUsados.mostrarMensagem(RegisterActivity.this,
+                        "TERMOS E CONDIÇÕES - Brevemente.");
             }
         });
 
@@ -387,8 +414,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         primeiroNome = editPrimeiroNome.getText().toString().trim();
         sobreNome = editUltimoNome.getText().toString().trim();
-        email = editEmail.getText().toString().trim();
         telefone = editTelefone.getText().toString().trim();
+        email = editEmail.getText().toString().trim();
         senha = editPass.getText().toString().trim();
         confirmSenha = editConfirmPass.getText().toString().trim();
         valorGeneroItem = "M";
@@ -432,6 +459,18 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
+        if (telefone.isEmpty()){
+            editTelefone.setError(getString(R.string.msg_erro_campo_vazio));
+            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Nº de telefone'");
+            return false;
+        }
+
+        if (!telefone.matches("9[1-9][0-9]\\d{6}")){
+            editTelefone.setError(getString(R.string.msg_erro_num_telefone_invalido));
+            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Nº de telefone' inválido");
+            return false;
+        }
+
 
 
 
@@ -448,17 +487,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
-        if (telefone.isEmpty()){
-            editTelefone.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"Preencha o campo: 'Nº de telefone'");
-            return false;
-        }
 
-        if (!telefone.matches("9[1-9][0-9]\\d{6}")){
-            editTelefone.setError(getString(R.string.msg_erro_num_telefone_invalido));
-            MetodosUsados.mostrarMensagemSnackBar(register_root,"'Nº de telefone' inválido");
-            return false;
-        }
 
 
 
@@ -507,16 +536,24 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void vericarImgUsuario() {
-        if (selectedImage == null) {
-            mensagemRegistoSemFoto();
+        if (checkboxAcceptTerms.isChecked()){
+            if (selectedImage == null) {
+                mensagemRegistoSemFoto();
+            }else{
+                registrandoUsuario(true);
+            }
         }else{
-            registrandoUsuario(true);
+            checkboxAcceptTerms.setError("Termos e Condições.");
+            MetodosUsados.mostrarMensagem(this,"Por favor aceite os termos e condições para continuar.");
         }
+
     }
 
     private void mensagemRegistoSemFoto() {
 
-        imgConfirm.setImageResource(R.drawable.photo_placeholder);
+
+
+        imgConfirm.setImageResource(R.drawable.ic_baseline_outline_person_add_24);
         txtConfirmTitle.setText(getString(R.string.registo_sem_foto));
         txtConfirmMsg.setText(getString(R.string.msg_deseja_continuar));
 
@@ -594,7 +631,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void run() throws Exception {
 
                                     MetodosUsados.hideLoadingDialog();
-                                    imgUserPhoto.setImageResource(R.drawable.photo_placeholder);
+                                    imgUserPhoto.setImageResource(R.drawable.ic_baseline_outline_person_add_24);
                                     editPrimeiroNome.setText("");
                                     editUltimoNome.setText("");
                                     editEmail.setText("");
@@ -649,8 +686,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void loadProfile(String url) {
         Log.d(TAG, "Image cache path: " + url);
 
-        imgUserPhoto.setBorderWidth(2);
-        imgUserPhoto.setBorderColor(ContextCompat.getColor(this, R.color.userphoto_nav_bar_border));
+
         Picasso.with(this).load(url).fit().centerCrop().into(imgUserPhoto);
 
     }

@@ -2,46 +2,39 @@ package ao.co.proitconsulting.xpress.fragmentos.home;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.andremion.counterfab.CounterFab;
 import com.asksira.loopingviewpager.LoopingViewPager;
-import com.asksira.loopingviewpager.indicator.CustomShapePagerIndicator;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
 import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
@@ -49,8 +42,8 @@ import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
-import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import ao.co.proitconsulting.xpress.modelos.MenuCategory;
+import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,7 +112,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initViews() {
-        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
         waitingDialog.setMessage("Por favor aguarde...");
         waitingDialog.setCancelable(false);
 
@@ -128,10 +121,18 @@ public class HomeFragment extends Fragment {
 
         tabLayout = view.findViewById(R.id.tab_layout);
 
+        loopingViewPager.setVisibility(View.INVISIBLE);
+        tabLayout.setVisibility(View.INVISIBLE);
+
         coordinatorLayout = view.findViewById(R.id.constraintLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
         btnTentarDeNovo = view.findViewById(R.id.btn);
 
+
+        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            floatingActionButton.show();
+        }
 
 
     }
@@ -254,7 +255,8 @@ public class HomeFragment extends Fragment {
                             }
                         }
 
-
+                        loopingViewPager.setVisibility(View.VISIBLE);
+                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
 
@@ -285,8 +287,9 @@ public class HomeFragment extends Fragment {
                 waitingDialog.dismiss();
                 Log.d(TAG, "onResponseEstabFailed: "+t.getMessage());
                 if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
+                    mostarMsnErro();
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
+                }else  if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet_timeout);
                 }else {
                     MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro);
@@ -355,6 +358,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setUpAdapters() {
+
         waitingDialog.dismiss();
         recyclerViewMenu.setHasFixedSize(true);
         recyclerViewMenu.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));

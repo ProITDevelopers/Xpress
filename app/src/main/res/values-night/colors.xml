@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="statusBarColor">@color/xpress_green</color>
+
+    <color name="colorPrimary">@color/xpress_green</color>
+    <color name="colorPrimaryDark">@color/xpress_green</color>
+    <color name="colorAccent">@color/xpress_green</color>
+
+    <color name="xpress_green">#19d3c5</color>
+    <color name="xpress_purple">#270089</color>
+    <color name="xpress_logo_tint_color">@color/xpress_green</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="transparentBlack">#80000000</color>
+    <color name="yellow">#eba41d</color>
+
+
+    <color name="login_register_topbutton_color">@color/xpress_green</color>
+    <color name="login_register_topbutton_icon_color">@color/white</color>
+
+    <color name="nav_menu_icon_color">@color/xpress_green</color>
+    <color name="nav_menu_selected_text_color">@color/xpress_green</color>
+    <color name="nav_header_menu_text_color">@color/xpress_green</color>
+    <color name="nav_menu_username_initial_color">@color/xpress_green</color>
+
+    <color name="side_nav_bar_start_color">@color/xpress_green</color>
+    <color name="side_nav_bar_center_color">@color/xpress_green</color>
+    <color name="side_nav_bar_end_color">@color/xpress_green</color>
+
+    <color name="search_icon_color">@color/white</color>
+    <color name="home_sectionName_color">@color/xpress_green</color>
+    <color name="home_item_row_color">@color/xpress_green</color>
+
+    <color name="catestab_name_color">@color/xpress_green</color>
+
+    <color name="produto_name_color">@color/xpress_green</color>
+    <color name="produto_price_bkg_color">@color/xpress_green</color>
+    <color name="produto_go_btn_border_color">@color/xpress_green</color>
+    <color name="produto_go_btn_solid_transp_color">@color/xpress_green</color>
+    <color name="produto_go_btn_arrow_color">@color/white</color>
+
+    <color name="encomenda_estado_color">@color/white</color>
+
+    <color name="produto_detail_title_color">@color/xpress_green</color>
+    <color name="colorDarkSemiTransparent">#C6000000</color>
+    <color name="produto_detail_desc_title_color">@color/xpress_green</color>
+    <color name="produto_detail_extra_title_color">@color/xpress_green</color>
+    <color name="produto_detail_qtd_title_color">@color/xpress_green</color>
+    <color name="produto_detail_qtd_color">@color/xpress_green</color>
+
+    <color name="login_icon_text_color">#1a1824</color>
+    <color name="perfil_text_color">@color/xpress_green</color>
+    <color name="perfil_radiobtn_color">@color/xpress_green</color>
+    <color name="perfil_radiotxt_color">@color/xpress_green</color>
+
+    <color name="custom_info_window_color">@color/colorDarkSemiTransparent</color>
+
+
+    <color name="login_register_text_color">@color/xpress_green</color>
+    <color name="btn_login_start_color">@color/xpress_green</color>
+    <color name="btn_login_end_color">@color/xpress_green</color>
+
+    <color name="box_border_color">#dddddd</color>
+    <color name="register_statusbar_color">#0e4e37</color>
+
+
+
+    <color name="userphoto_nav_bar_border">@color/xpress_green</color>
+
+    <color name="register_bkg_start_color">@color/xpress_green</color>
+    <color name="register_bkg_center_color">@color/xpress_green</color>
+    <color name="register_bkg_end_color">@color/xpress_green</color>
+
+
+
+    <color name="swipe_refresh_green_light_color">@color/xpress_green</color>
+    <color name="swipe_refresh_grey_color">#80000000</color>
+    <color name="swipe_refresh_green_color">@color/xpress_purple</color>
+
+    <color name="btn_gray_border">#d1d1d1</color>
+    <color name="splash_view_separator">#575757</color>
+    <color name="navigateview_text_color">#77838f</color>
+    <color name="navigateview_text_color_checked">@color/xpress_green</color>
+    <color name="navigateview_text_color_not_checked">@color/white</color>
+
+</resources>

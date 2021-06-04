@@ -1,7 +1,6 @@
 package ao.co.proitconsulting.xpress.fragmentos.estab;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,8 +23,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.asksira.loopingviewpager.LoopingViewPager;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -34,12 +30,10 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.CategoryEstabAdapter;
-import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.MenuCategory;
-import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import dmax.dialog.SpotsDialog;
 
 public class CategoryEstabFragment extends Fragment {
@@ -120,7 +114,7 @@ public class CategoryEstabFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewEstab);
 
 
-        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
         waitingDialog.setMessage("Carregando...");
         waitingDialog.setCancelable(false);
         waitingDialog.show();

@@ -232,9 +232,9 @@ public class ImagePickerActivity extends AppCompatActivity {
         UCrop.Options options = new UCrop.Options();
         options.setCompressionQuality(IMAGE_COMPRESSION);
         options.setToolbarTitle("Editar foto");
-        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorAccent));
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent));
+        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorAccent));
 
         if (lockAspectRatio)
             options.withAspectRatio(ASPECT_RATIO_X, ASPECT_RATIO_Y);

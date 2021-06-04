@@ -60,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         txt_SignUp = findViewById(R.id.txt_SignUp);
 
         SpannableString spannableString = new SpannableString(getString(R.string.splash_sign_up_hint));
-        ForegroundColorSpan fcsGreen = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.login_register_text_color));
+        ForegroundColorSpan fcsGreen = new ForegroundColorSpan(ContextCompat.getColor(this, R.color.xpress_green));
         spannableString.setSpan(new UnderlineSpan(),22,29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        spannableString.setSpan(fcsGreen,22,29, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         txt_SignUp.setText(spannableString);
@@ -86,6 +86,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         Completable.timer(2, TimeUnit.SECONDS,
                 AndroidSchedulers.mainThread())
                 .subscribe(() -> {
+
 
                     if (!AppPrefsSettings.getInstance().getLoggedIn()){
                         Intent serviceIntent = new Intent(this, MySignalRService.class);
@@ -118,8 +119,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     } else {
                         launchHomeScreen();
                     }
-
-
 
 
                 });

@@ -36,15 +36,13 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
             circleImageView.setImageResource(R.color.white);
 
             if (usuarioPerfil!=null){
-                if (usuarioPerfil.imagem.equals(myView.getContext().getString(R.string.sem_imagem))){
-                    if (!usuarioPerfil.primeiroNome.isEmpty()){
+                if (usuarioPerfil.imagem.equals(myView.getContext().getString(R.string.sem_imagem)) || usuarioPerfil.imagem == null){
+                    if (usuarioPerfil.primeiroNome != null && usuarioPerfil.ultimoNome != null){
                         String userNameInitial = String.valueOf(usuarioPerfil.primeiroNome.charAt(0));
-                        txtUserNameInitial.setText(userNameInitial.toUpperCase());
+                        String userLastNameInitial = String.valueOf(usuarioPerfil.ultimoNome.charAt(0));
+                        txtUserNameInitial.setText(userNameInitial.toUpperCase().concat(userLastNameInitial.toUpperCase()));
                         txtUserNameInitial.setVisibility(View.VISIBLE);
 
-                    }else {
-                        String userNameInitial = String.valueOf(usuarioPerfil.email.charAt(0));
-                        txtUserNameInitial.setText(userNameInitial.toUpperCase());
                     }
 
                 }else {

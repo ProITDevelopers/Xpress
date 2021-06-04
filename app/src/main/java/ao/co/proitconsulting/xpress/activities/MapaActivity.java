@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -24,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -96,7 +98,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //showBackground in status bar
-        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+//        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_mapa);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -272,18 +274,30 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-//        try {
-//
-//            boolean isSucess = googleMap.setMapStyle(
-//                    MapStyleOptions.loadRawResourceStyle(this, R.raw.uber_style_map)
-//            );
-//
-//            if (!isSucess)
-//                Log.e("ERROR", "Map style load failed !!!");
-//
-//        } catch (Resources.NotFoundException ex) {
-//            ex.printStackTrace();
-//        }
+        int nightModeFlags =getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+
+            Log.d(TAG, "onMapReady: darkmodeOn");
+            try {
+
+                boolean isSucess = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(this, R.raw.uber_style_map)
+                );
+
+                if (!isSucess)
+                    Log.d(TAG, "onMapReady_ERROR: Map style load failed !!!");
+
+        } catch (Resources.NotFoundException ex) {
+            ex.printStackTrace();
+        }
+        }else{
+            Log.d(TAG, "onMapReady: darkmodeOff");
+
+        }
+
+
 
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);

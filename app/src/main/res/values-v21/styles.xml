@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -6,8 +6,15 @@
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:statusBarColor">#00000000</item>
+<!--        <item name="android:statusBarColor">#00000000</item>-->
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+<!--        <item name="android:statusBarColor">@color/colorPrimaryDark</item>-->
+
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
+
+<!--        &lt;!&ndash;  Status bar color.  &ndash;&gt;-->
+<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
     </style>
 </resources>

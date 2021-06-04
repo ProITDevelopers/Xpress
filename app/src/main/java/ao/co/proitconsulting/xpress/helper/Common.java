@@ -36,6 +36,8 @@ public class Common {
     public static final int SPAN_COUNT_ONE = 1;
     public static final int SPAN_COUNT_TWO = 2;
 
+    public static final int VIEW_TYPE_LIST_LEFT = 1;
+    public static final int VIEW_TYPE_LIST_RIGHT = 2;
     public static final int VIEW_TYPE_LIST = 1;
     public static final int VIEW_TYPE_GRID = 2;
     public static Factura selectedFactura;

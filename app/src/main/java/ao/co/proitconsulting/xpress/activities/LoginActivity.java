@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -13,6 +16,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -28,12 +32,16 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 
 import com.asksira.loopingviewpager.LoopingViewPager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +51,6 @@ import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
-import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
@@ -54,13 +61,6 @@ import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import android.util.Base64;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -73,22 +73,28 @@ public class LoginActivity extends AppCompatActivity {
     private TextView txtRemember;
     private SwitchCompat switchRemember;
     private TextView txtForgotPassword,txtRegister;
-    private Button btnLogin;
+    private Button btnLogin,btnLoginFacebook;
     private String emailTelefone,password;
     private LoginRequest loginRequest = new LoginRequest();
+    private AlertDialog waitingDialog;
 
     private UsuarioPerfil usuarioPerfil;
     //DIALOG_LAYOUT_COVID_19
     private Dialog dialogLayoutCOVID;
     private LoopingViewPager loopingViewPager;
-    private AlertDialog waitingDialog;
+
+    //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+    private Dialog dialogLayoutConfirmarProcesso;
+    private ImageView imgConfirm;
+    private TextView txtConfirmTitle,txtConfirmMsg;
+    private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //showBackground in status bar
-        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+//        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_login);
 //        printKeyHash();
 
@@ -117,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initViews(){
 
-        waitingDialog = new SpotsDialog.Builder().setContext(this).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomSpotsDialog).build();
 
         loginRequest.rememberMe = false;
 
@@ -129,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         txtForgotPassword = findViewById(R.id.txtForgotPassword);
         txtRegister = findViewById(R.id.txtRegister);
         btnLogin = findViewById(R.id.btnLogin);
+        btnLoginFacebook = findViewById(R.id.btnLoginFacebook);
 
         txtRemember = findViewById(R.id.txtRemember);
         switchRemember = findViewById(R.id.switchRemember);
@@ -168,6 +175,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MetodosUsados.mostrarMensagem(LoginActivity.this, "Login no Facebook Brevemente!");
+                if (verificarCamposEmailTelefone()) {
+                    verificarConecxaoInternet();
+                }
+            }
+        });
+
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +206,21 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+        dialogLayoutConfirmarProcesso = new Dialog(this);
+        dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
+        dialogLayoutConfirmarProcesso.setCancelable(true);
+        if (dialogLayoutConfirmarProcesso.getWindow()!=null)
+            dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        imgConfirm = dialogLayoutConfirmarProcesso.findViewById(R.id.imgConfirm);
+        txtConfirmTitle = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmTitle);
+        txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
+        dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
+        dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
 
 
 
@@ -275,9 +307,54 @@ public class LoginActivity extends AppCompatActivity {
                 MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet);
             } else {
 
-                autenticacaoLogin();
+                if (switchRemember.isChecked()){
+                    autenticacaoLogin();
+                }else{
+                    mensagemLembrarSessao();
+                }
+
+
             }
         }
+    }
+
+    private void mensagemLembrarSessao() {
+
+
+
+//        Glide.with(this)
+//                .asGif()
+//                .load(R.drawable.better_toogle)
+//                .apply(new RequestOptions().override(150, 150))
+//                .into(imgConfirm);
+
+        txtConfirmTitle.setText("Lembrar sessão");
+        txtConfirmMsg.setText(new StringBuilder("")
+                .append("Não ativou a opcão ")
+                .append("\"Lembrar-me\"").append(". ")
+                .append("Os seus dados não serão guardados.").append("\n")
+                .append(getString(R.string.msg_deseja_continuar)).toString()
+        );
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogLayoutConfirmarProcesso.cancel();
+                autenticacaoLogin();
+            }
+        });
+
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+
+            }
+        });
+
+        dialogLayoutConfirmarProcesso.show();
+
     }
 
 
@@ -335,7 +412,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (message.contains("Não Existe")){
                         Snackbar.make(login_root, getString(R.string.msg_erro_user_not_found), Snackbar.LENGTH_LONG)
-                                .setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.login_register_text_color))
+                                .setActionTextColor(ContextCompat.getColor(LoginActivity.this, R.color.xpress_green))
                                 .setAction(getString(R.string.criar_conta), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -448,7 +525,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-
+        dialogLayoutCOVID.cancel();
+        dialogLayoutConfirmarProcesso.cancel();
         super.onDestroy();
     }
 

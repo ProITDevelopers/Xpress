@@ -12,16 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.greenrobot.eventbus.EventBus;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
-import ao.co.proitconsulting.xpress.EventBus.EncomendaClick;
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.helper.Common;
-import ao.co.proitconsulting.xpress.helper.Utils;
-import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.FacturaItens;
 
 public class EncomendaDetailListAdapter extends RecyclerView.Adapter<EncomendaDetailListAdapter.FacturaViewHolder> {
@@ -49,6 +45,9 @@ public class EncomendaDetailListAdapter extends RecyclerView.Adapter<EncomendaDe
 
         FacturaItens facturaItem = facturaItens.get(position);
         if (facturaItem != null){
+
+            Picasso.with(context).load(facturaItem.imagem).fit().centerCrop()
+                    .placeholder(R.drawable.store_placeholder).into(holder.imgEncomenda);
 
             holder.titleEncomenda.setText(facturaItem.produto);
             holder.descEncomenda.setText("descrição do produto");

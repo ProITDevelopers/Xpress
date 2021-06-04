@@ -7,6 +7,7 @@ import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.MenuCategory;
 import ao.co.proitconsulting.xpress.modelos.Order;
+import ao.co.proitconsulting.xpress.modelos.ProdutoListExtras;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.ReferenciaRequest;
 import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
@@ -126,6 +127,9 @@ public interface ApiInterface {
 //
     @GET("/ListarProdutosEstab/{idE}")
     Call<List<Produtos>> getAllProdutosDoEstabelecimento(@Path("idE") int idEstabelecimento);
+
+    @GET("/api/Produtoextras/listagemextras/{produtoid}")
+    Call<List<ProdutoListExtras>> getProdutosExtras(@Path("produtoid") int idProduto);
 //
 //    @GET("/ListarProdutos")
 //    Call<List<Produtos>> getAllProdutos();

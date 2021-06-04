@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.modelos.Factura;
-import ao.co.proitconsulting.xpress.modelos.Produtos;
 
 public class EncomendaDetailViewModel extends ViewModel {
 

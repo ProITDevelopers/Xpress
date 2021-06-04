@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.ProdutosActivity;
 import ao.co.proitconsulting.xpress.adapters.EstabelecimentoAdapter;
 import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
 import ao.co.proitconsulting.xpress.api.ApiClient;
@@ -275,10 +274,7 @@ public class EstabelecimentoFragment extends Fragment {
                 if (estabelecimento.estadoEstabelecimento!=null){
 
                     if (estabelecimento.estadoEstabelecimento.equals("Aberto")){
-                        Intent intent = new Intent(getContext(), ProdutosActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("estabelecimento",estabelecimento);
-                        startActivity(intent);
+                        MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
                     }else{
                         MetodosUsados.mostrarMensagem(getContext(),"O estabelecimento encontra-se ".concat(estabelecimento.estadoEstabelecimento));
                     }

@@ -3,7 +3,6 @@ package ao.co.proitconsulting.xpress.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -19,9 +18,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import ao.co.proitconsulting.xpress.EventBus.StartEncomendaFrag;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
@@ -56,11 +58,13 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
     private List<OrderItem> orderItems;
 
-    //DIALOG_LAYOUT_SUCESSO
-    private Dialog dialogLayoutSuccess;
-    private ImageView imgStatus;
-    private TextView dialog_txtConfirmSucesso;
-    private Button dialog_btn_sucesso;
+    //DIALOG_LAYOUT_PEDIDO_MESSAGE
+    private Dialog dialogLayoutPedidoMessage;
+    private ImageView imgPedidoStatus;
+    private TextView txtPedidoStatusMsg;
+    private Button dialog_btn_pedido_ok;
+
+
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
@@ -95,7 +99,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
     private void initViews() {
 
-        waitingDialog = new SpotsDialog.Builder().setContext(this).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomSpotsDialog).build();
         realm = Realm.getDefaultInstance();
         realm.where(CartItemProdutos.class).findAllAsync()
                 .addChangeListener(cartItems -> {
@@ -103,16 +107,18 @@ public class EnviarPedidoActivity extends AppCompatActivity {
                 });
 
         //-------------------------------------------------------------//
-        //DIALOG_LAYOUT_SUCESSO
-        dialogLayoutSuccess = new Dialog(this);
-        dialogLayoutSuccess.setContentView(R.layout.layout_sucesso);
-        dialogLayoutSuccess.setCancelable(false);
-        if (dialogLayoutSuccess.getWindow()!=null)
-            dialogLayoutSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_PEDIDO_MESSAGE
+        dialogLayoutPedidoMessage = new Dialog(this);
+        dialogLayoutPedidoMessage.setContentView(R.layout.layout_pedido_message);
+        dialogLayoutPedidoMessage.setCancelable(false);
+        if (dialogLayoutPedidoMessage.getWindow()!=null)
+            dialogLayoutPedidoMessage.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        imgStatus = dialogLayoutSuccess.findViewById(R.id.imgStatus);
-        dialog_txtConfirmSucesso = dialogLayoutSuccess.findViewById(R.id.dialog_txtConfirmSucesso);
-        dialog_btn_sucesso = dialogLayoutSuccess.findViewById(R.id.dialog_btn_sucesso);
+        imgPedidoStatus = dialogLayoutPedidoMessage.findViewById(R.id.imgPedidoStatus);
+        txtPedidoStatusMsg = dialogLayoutPedidoMessage.findViewById(R.id.txtPedidoStatusMsg);
+        dialog_btn_pedido_ok = dialogLayoutPedidoMessage.findViewById(R.id.dialog_btn_pedido_ok);
+
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -322,7 +328,10 @@ public class EnviarPedidoActivity extends AppCompatActivity {
         if (status){
             // as the order placed successfully, clear the cart
             AppDatabase.clearAllCart();
-            imgStatus.setImageResource(R.drawable.phone_success);
+
+
+            imgPedidoStatus.setImageResource(R.drawable.ic_baseline_check_24);
+
 
             if (tipoPagamento.equals(getString(R.string.referencia))){
                 status_message = message.concat("\n").concat("\n")
@@ -335,34 +344,44 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
         }else {
             status_message = message;
-            imgStatus.setImageResource(R.drawable.phone_failed);
+
+            imgPedidoStatus.setImageResource(R.drawable.ic_baseline_clear_24);
         }
 
 
 
         notificationHelper.createNotification(mNotificationTitle,message,false);
-        dialog_txtConfirmSucesso.setText(status_message);
+        txtPedidoStatusMsg.setText(status_message);
 
 
+        if (status){
+            dialog_btn_pedido_ok.setText("Voltar ao menu");
+        }else{
+            dialog_btn_pedido_ok.setText(getString(R.string.cancelar));
+        }
 
-        dialog_btn_sucesso.setOnClickListener(new View.OnClickListener() {
+
+        dialog_btn_pedido_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (status){
-                    dialogLayoutSuccess.cancel();
+                    dialogLayoutPedidoMessage.cancel();
                     // as the order placed successfully, clear the cart
                     AppDatabase.clearAllCart();
-                    imgStatus.setImageResource(R.drawable.phone_success);
 
-                    Intent intent = new Intent(EnviarPedidoActivity.this,MeusPedidosActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    imgPedidoStatus.setImageResource(R.drawable.ic_baseline_check_24);
+
+//                    Intent intent = new Intent(EnviarPedidoActivity.this,MeusPedidosActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+
+                    EventBus.getDefault().postSticky(new StartEncomendaFrag(true));
 
                     finish();
 
                 }else {
-                    dialogLayoutSuccess.cancel();
+                    dialogLayoutPedidoMessage.cancel();
                     finish();
                 }
 
@@ -370,7 +389,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
             }
         });
-        dialogLayoutSuccess.show();
+        dialogLayoutPedidoMessage.show();
     }
 
     private void mensagemTokenExpirado() {
@@ -378,7 +397,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
         //-------------------------------------------------------------//
         //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
 
-        imgConfirm.setImageResource(R.drawable.xpress_logo);
+
         txtConfirmTitle.setText(getString(R.string.a_sessao_expirou));
         txtConfirmMsg.setText(getString(R.string.inicie_outra_vez_a_sessao));
         dialog_btn_deny_processo.setVisibility(View.GONE);
@@ -397,12 +416,13 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().removeAllStickyEvents();
         super.onDestroy();
         if (realm != null) {
             realm.removeAllChangeListeners();
             realm.close();
         }
-        dialogLayoutSuccess.cancel();
+        dialogLayoutPedidoMessage.cancel();
         dialogLayoutConfirmarProcesso.cancel();
     }
 
@@ -417,4 +437,6 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

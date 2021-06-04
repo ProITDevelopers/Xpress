@@ -1,7 +1,7 @@
 package ao.co.proitconsulting.xpress.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,11 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ import ao.co.proitconsulting.xpress.modelos.LocalEncomenda;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.utilityClasses.CartInfoBar;
+import dmax.dialog.SpotsDialog;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -93,7 +95,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //showBackground in status bar
-        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
+//        MetodosUsados.changeStatusBarColor(this, ContextCompat.getColor(this, R.color.white));
         setContentView(R.layout.activity_shopping_cart);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -243,6 +245,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
         if (cartItems != null) {
             cartItems.removeChangeListener(cartItemRealmChangeListener);
         }
@@ -288,6 +291,8 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
         return true;
     }
+
+
 
 
     @Override
@@ -491,10 +496,11 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
     }
 
     private void criarLista(){
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Aguarde...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        AlertDialog waitingDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomSpotsDialog).build();
+        waitingDialog.setMessage("Por favor aguarde...");
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+
 
         List<ListTaxaModel> listTaxaList = new ArrayList<>();
 
@@ -525,10 +531,10 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
         }
 
 
-        enviarLista(listTaxaList,progressDialog);
+        enviarLista(listTaxaList,waitingDialog);
     }
 
-    private void enviarLista(List<ListTaxaModel> listTaxaModelList,ProgressDialog progressDialog) {
+    private void enviarLista(List<ListTaxaModel> listTaxaModelList, AlertDialog waitingDialog) {
 
 
 
@@ -543,7 +549,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
 
                 if (response.isSuccessful()) {
-                    progressDialog.cancel();
+                    waitingDialog.cancel();
                     if (response.body()!=null){
 
                         Common.getTaxaModelList = response.body();
@@ -553,7 +559,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
                 } else {
 
-                    progressDialog.cancel();
+                    waitingDialog.cancel();
 
 
                 }
@@ -562,7 +568,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements CartProdu
 
             @Override
             public void onFailure(@NonNull Call<List<GetTaxaModel>> call, @NonNull Throwable t) {
-                progressDialog.cancel();
+                waitingDialog.cancel();
                 if ("timeout".equals(t.getMessage())) {
                     MetodosUsados.mostrarMensagem(ShoppingCartActivity.this,R.string.msg_erro_internet_timeout);
                 }else {

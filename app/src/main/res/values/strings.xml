@@ -183,5 +183,8 @@
     <string name="hint_prioridade_da_xpress_tua_saude">A maior prioridade da Xpress é a tua saúde e a tua segurança</string>
     <string name="hint_principais_medidas_de_prevencao">Queremos recordar-te das principais medidas de prevenção recomendadas pela organização</string>
     <string name="hint_lava_maos">Lava as tuas mãos com frequência</string>
+    <string name="hint_email_telefone">Email/Telefone</string>
+    <string name="title_quantidade">Quantidade</string>
+    <string name="title_extras">Extras</string>
 
 </resources>

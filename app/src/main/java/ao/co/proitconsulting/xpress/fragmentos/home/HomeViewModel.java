@@ -1,19 +1,14 @@
 package ao.co.proitconsulting.xpress.fragmentos.home;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.ISlideCallbackListener;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HomeViewModel extends ViewModel implements ISlideCallbackListener {
 

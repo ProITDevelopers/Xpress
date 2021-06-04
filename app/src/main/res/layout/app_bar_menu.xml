@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppThemeWhite.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -31,6 +31,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_baseline_shopping_cart_white_24"
+        app:backgroundTint="@color/login_register_topbutton_color"
+        android:tint="@color/login_register_topbutton_icon_color"
         app:badgeBackgroundColor="@color/red"
         app:badgeTextColor="@color/white"/>
 

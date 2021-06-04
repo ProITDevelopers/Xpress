@@ -10,10 +10,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -25,18 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
-import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.EventBus.ProdutoClick;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.helper.Common;
-import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
-import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
+import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
-import io.realm.RealmResults;
 
-import static ao.co.proitconsulting.xpress.helper.Common.SPAN_COUNT_ONE;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_GRID;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST;
+import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST_LEFT;
+import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST_RIGHT;
 
 public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapter.ItemViewHolder>
         implements Filterable {
@@ -68,9 +64,9 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
     @Override
     public int getItemViewType(int position) {
         if (position%2==0) {
-            return VIEW_TYPE_LIST;
+            return VIEW_TYPE_LIST_LEFT;
         } else {
-            return VIEW_TYPE_GRID;
+            return VIEW_TYPE_LIST_RIGHT;
         }
     }
 
@@ -78,7 +74,7 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if (viewType == VIEW_TYPE_LIST) {
+        if (viewType == VIEW_TYPE_LIST_LEFT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_produto_left, parent, false);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_produto_right, parent, false);
@@ -97,8 +93,13 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
 
             Picasso.with(context).load(produto.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
             holder.name.setText(produto.getDescricaoProdutoC());
-            String preco = String.valueOf(produto.getPrecoUnid());
-            holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
+
+//            String preco = String.valueOf(produto.getPrecoUnid());
+//            holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
+
+
+            double displayPrice = Double.parseDouble(String.valueOf(produto.getPrecoUnid()));
+            holder.price.setText(new StringBuilder("").append(Utils.formatPrice(displayPrice)).append(" AKZ").toString());
 
             holder.descricao.setText(produto.getDescricaoProduto());
 
@@ -225,7 +226,7 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
 
         public ItemViewHolder(View itemView, int viewType) {
             super(itemView);
-            if (viewType == VIEW_TYPE_LIST) {
+            if (viewType == VIEW_TYPE_LIST_LEFT) {
                 thumbnail = itemView.findViewById(R.id.imgProdLeft);
                 name =  itemView.findViewById(R.id.titleProdLeft);
                 descricao =  itemView.findViewById(R.id.descProdLeft);

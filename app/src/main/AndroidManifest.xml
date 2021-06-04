@@ -25,10 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".sectionsTests.ShopCartActivity"
-            android:screenOrientation="portrait"/>
-
         <!-- FOTO_CROP_ACTIVITY -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -39,31 +35,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".activities.ProdutoDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyCustomAppTheme"></activity>
-        <activity
-            android:name=".activities.MeusPedidosActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.EnviarPedidoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.CheckOutActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.ShoppingCartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.EditarPerfilActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity
-            android:name=".activities.PerfilActivity"
-            android:label="@string/title_activity_perfil"
-            android:screenOrientation="portrait" /> <!-- MAPA DA GOOGLE -->
+        <!-- MAPA DA GOOGLE -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -75,10 +58,6 @@
             android:name=".activities.MapaActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".activities.ProdutosActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.imagePicker.ImagePickerActivity" />
         <activity
             android:name=".activities.MenuActivity"

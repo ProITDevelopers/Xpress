@@ -1,5 +1,7 @@
 package ao.co.proitconsulting.xpress.helper;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +9,6 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.api.ADAO.GetTaxaModel;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
-import ao.co.proitconsulting.xpress.modelos.FavoritosItem;
 import io.realm.RealmResults;
 
 public class Utils {
@@ -16,8 +17,21 @@ public class Utils {
         float price = 0f;
         for (CartItemProdutos item : cartItems) {
             price += item.produtos.getPrecoUnid() * item.quantity;
+
+
         }
         return price;
+    }
+
+    public static String formatPrice(double price) {
+        if (price != 0){
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            df.setRoundingMode(RoundingMode.UP);
+            String finalPrice = new StringBuilder(df.format(price)).toString();
+            return finalPrice.replace(".",",");
+        }
+        else
+            return "0.00";
     }
 
     public static float getCartTaxa(List<GetTaxaModel> taxaModelList, float totalPrice) {
@@ -30,13 +44,7 @@ public class Utils {
         return taxa;
     }
 
-    public static int getFavoriteQuantity(RealmResults<FavoritosItem> favoritosItems) {
-        int price = 0;
-        for (FavoritosItem item : favoritosItems) {
-            price += item.quantity;
-        }
-        return price;
-    }
+
 
     public static String getOrderTimestamp(String timestamp) {
 //        SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.MeusPedidosActivity;
 import ao.co.proitconsulting.xpress.adapters.EncomendaFacturaAdapter;
-import ao.co.proitconsulting.xpress.adapters.FacturaAdapter;
-import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
@@ -46,6 +45,7 @@ public class EncomendasFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<Factura> facturaList;
 
+    private String errorMessage;
 
     private ConstraintLayout coordinatorLayout;
     private RelativeLayout errorLayout;
@@ -64,7 +64,7 @@ public class EncomendasFragment extends Fragment {
     }
 
     private void initViews() {
-        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
         waitingDialog.setMessage("Por favor aguarde...");
         waitingDialog.setCancelable(false);
 
@@ -143,6 +143,13 @@ public class EncomendasFragment extends Fragment {
 //                    if (response.code()==401){
 //                        mensagemTokenExpirado();
 //                    }
+
+                    try {
+                        errorMessage = response.errorBody().string();
+                        Log.d(TAG, "onResponseEncomendaError: "+errorMessage+", ErrorCode:"+response.code());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
 

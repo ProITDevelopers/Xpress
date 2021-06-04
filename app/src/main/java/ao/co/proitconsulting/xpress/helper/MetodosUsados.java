@@ -18,8 +18,16 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.Normalizer;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 
 import ao.co.proitconsulting.xpress.R;
@@ -34,7 +42,7 @@ public class MetodosUsados {
 
     //=====================SPOTS_DIALOG_LOADING===============================================//
     public static void spotsDialog(Context context) {
-        waitingDialog = new SpotsDialog.Builder().setContext(context).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(context).setTheme(R.style.CustomSpotsDialog).build();
     }
 
     public static void showLoadingDialog(String message){
@@ -175,6 +183,32 @@ public class MetodosUsados {
             return false;
         }
 
+    }
+
+    public static boolean isConnected(int timeOut, String TAG) {
+        InetAddress inetAddress = null;
+        try {
+            Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(new Callable<InetAddress>() {
+                @Override
+                public InetAddress call() {
+                    try {
+                        return InetAddress.getByName("google.com");
+                    } catch (UnknownHostException e) {
+                        return null;
+                    }
+                }
+            });
+            inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS);
+            future.cancel(true);
+        } catch (InterruptedException e) {
+            Log.d(TAG, "isConnected: InterruptedException"+e.getMessage());
+        } catch (ExecutionException e) {
+            Log.d(TAG, "isConnected: ExecutionException"+e.getMessage());
+        } catch (TimeoutException e) {
+            Log.d(TAG, "isConnected: TimeoutException"+e.getMessage());
+        }
+
+        return inetAddress != null && !inetAddress.equals("");
     }
 
 }

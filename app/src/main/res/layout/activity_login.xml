@@ -5,7 +5,7 @@
     android:id="@+id/login_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+
     android:orientation="vertical"
     tools:context=".activities.LoginActivity">
 
@@ -13,8 +13,9 @@
         android:id="@+id/fabPrevious"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/previous_arrow"
-        app:backgroundTint="@color/white"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:backgroundTint="@color/login_register_topbutton_color"
+        android:tint="@color/login_register_topbutton_icon_color"
         android:layout_marginTop="28dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
@@ -32,7 +33,6 @@
             <TextView
                 android:id="@+id/textView"
                 android:text="@string/hint_o_melhor_na_tua_cidade"
-                android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
@@ -40,6 +40,7 @@
                 android:paddingTop="28dp"
                 android:paddingLeft="35dp"
                 android:paddingRight="35dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,11 +65,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Email/Telefone"
+                        android:text="@string/hint_email_telefone"
                         android:textSize="14sp"
                         android:padding="5dp"
                         android:textStyle="bold"
-                        android:textColor="@color/perfil_text_color"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -102,7 +103,7 @@
                         android:padding="5dp"
                         android:layout_gravity="bottom"
                         android:textStyle="bold"
-                        android:textColor="@color/perfil_text_color"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
@@ -228,7 +229,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:textColor="@color/black"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:fontFamily="@font/poppins_regular"
                 />
 

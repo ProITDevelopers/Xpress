@@ -2,7 +2,6 @@ package ao.co.proitconsulting.xpress.fragmentos.produtos_estab;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -31,7 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.asksira.loopingviewpager.LoopingViewPager;
+import com.andremion.counterfab.CounterFab;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,17 +40,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.ProdutoDetailsActivity;
+import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.adapters.ProdutosViewAdapter;
-import ao.co.proitconsulting.xpress.adapters.RecyclerViewOnItemClickListener;
-import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
-import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,6 +64,7 @@ public class ProdutosEstabFragment extends Fragment  {
     private AlertDialog waitingDialog;
 //    private LoopingViewPager loopingViewPager;
     private List<Produtos> produtosList = new ArrayList<>();
+
     private ProdutosViewAdapter itemAdapter;
     private GridLayoutManager gridLayoutManager;
     private RecyclerView recyclewProdutos;
@@ -145,7 +142,7 @@ public class ProdutosEstabFragment extends Fragment  {
     }
 
     private void initViews() {
-        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).build();
+        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
         waitingDialog.setMessage("Por favor aguarde...");
         waitingDialog.setCancelable(false);
 
@@ -160,6 +157,13 @@ public class ProdutosEstabFragment extends Fragment  {
         coordinatorLayout = view.findViewById(R.id.constraintLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
         btnTentarDeNovo = view.findViewById(R.id.btn);
+
+        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            floatingActionButton.show();
+        }
+
+
     }
 
     private void mostarMsnErro(){
@@ -216,12 +220,14 @@ public class ProdutosEstabFragment extends Fragment  {
                         AppDatabase.saveProducts(produtosList);
                         setProdutosAdapters(produtosList);
 
-                        for (Produtos produtos: response.body()) {
-                            Log.d(TAG, "onResponseProduct: "+produtos.descricaoProdutoC+" - "+produtos.estabelecimento);
+
+
+                        for (Produtos produto: response.body()) {
+                            Log.d(TAG, "onResponseProduct: "+produto.descricaoProdutoC+" - "+produto.estabelecimento);
+
                         }
 
 
-                        Log.d(TAG, "onResponseProduct2: "+response.body());
                     }else {
                         waitingDialog.dismiss();
                         MetodosUsados.mostrarMensagem(getContext(),"Sem produtos.");
@@ -236,12 +242,12 @@ public class ProdutosEstabFragment extends Fragment  {
 //                    }
                     try {
                         errorMessage = response.errorBody().string();
-                        Log.d(TAG, "onResponseProductError: "+errorMessage);
+                        Log.d(TAG, "onResponseProductError: "+errorMessage+", ResponseCode: "+response.code());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    Log.d(TAG, "onResponseProductError: "+errorMessage+", ResponseCode: "+response.code());
+
                 }
             }
 
@@ -259,6 +265,8 @@ public class ProdutosEstabFragment extends Fragment  {
             }
         });
     }
+
+
 
 
     private void setProdutosAdapters(List<Produtos> produtosList) {
