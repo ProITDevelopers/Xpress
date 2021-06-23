@@ -179,6 +179,7 @@ public class CategoryEstabAdapter extends RecyclerView.Adapter<CategoryEstabAdap
                 cardViewItem =  itemView.findViewById(R.id.cardViewItem);
             }
 
+            iv.setOnClickListener(this);
             cardViewItem.setOnClickListener(this);
 
 

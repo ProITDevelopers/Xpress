@@ -12,6 +12,7 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="calendar_dialog_bkg">@color/white</color>
     <color name="transparentBlack">#80000000</color>
     <color name="yellow">#eba41d</color>
 
@@ -32,6 +33,7 @@
 
 
     <color name="search_icon_color">@color/xpress_green</color>
+    <color name="search_text_color">@color/black</color>
     <color name="home_sectionName_color">@color/xpress_purple</color>
     <color name="home_item_row_color">@color/xpress_purple</color>
 
@@ -51,10 +53,23 @@
     <color name="produto_detail_qtd_title_color">@color/black</color>
     <color name="produto_detail_qtd_color">@color/black</color>
 
+    <color name="txt_get_address_color">@color/transparentBlack</color>
+    <color name="txt_total_color">@color/xpress_purple</color>
+    <color name="txt_tipo_pagamento_color">@color/black</color>
     <color name="encomenda_estado_color">@color/black</color>
+    <color name="xpress_location_on_color">@color/xpress_purple</color>
+
+    <color name="tab_background_color">@color/white</color>
+    <color name="tab_text_color">@color/black</color>
+    <color name="tab_selected_text_color">@color/xpress_green</color>
+    <color name="encomenda_txt_total_color">@color/perfil_text_color</color>
+    <color name="encomenda_details_txt_color">@color/transparentBlack</color>
+    <color name="txt_filter_name_color">@color/black</color>
+    <color name="txt_config_title">@color/xpress_purple</color>
 
     <color name="login_icon_text_color">#1a1824</color>
 
+    <color name="perfil_text_title_color">#969fa9</color>
     <color name="perfil_text_color">#1a1824</color>
     <color name="perfil_radiobtn_color">@color/xpress_purple</color>
     <color name="perfil_radiotxt_color">@color/transparentBlack</color>

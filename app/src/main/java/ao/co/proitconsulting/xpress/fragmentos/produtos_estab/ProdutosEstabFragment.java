@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.andremion.counterfab.CounterFab;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,12 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.adapters.ProdutosViewAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
-import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import dmax.dialog.SpotsDialog;
@@ -74,6 +71,8 @@ public class ProdutosEstabFragment extends Fragment  {
 
     private ConstraintLayout coordinatorLayout;
     private RelativeLayout errorLayout;
+    private ImageView imgErro;
+    private TextView txtMsgErro;
     private TextView btnTentarDeNovo;
 
     private String errorMessage;
@@ -156,12 +155,11 @@ public class ProdutosEstabFragment extends Fragment  {
 
         coordinatorLayout = view.findViewById(R.id.constraintLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
+        imgErro = view.findViewById(R.id.imgErro);
+        txtMsgErro = view.findViewById(R.id.txtMsgErro);
         btnTentarDeNovo = view.findViewById(R.id.btn);
 
-        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
-        if (floatingActionButton != null) {
-            floatingActionButton.show();
-        }
+
 
 
     }
@@ -193,6 +191,8 @@ public class ProdutosEstabFragment extends Fragment  {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
+                    imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
+                    txtMsgErro.setText(getString(R.string.msg_erro_internet));
                     mostarMsnErro();
                 } else {
                     carregarProductsList();
@@ -217,21 +217,25 @@ public class ProdutosEstabFragment extends Fragment  {
 
                         produtosList = response.body();
 
-                        AppDatabase.saveProducts(produtosList);
+//                        AppDatabase.saveProducts(produtosList);
                         setProdutosAdapters(produtosList);
 
 
 
                         for (Produtos produto: response.body()) {
-                            Log.d(TAG, "onResponseProduct: "+produto.descricaoProdutoC+" - "+produto.estabelecimento);
+                            Log.d(TAG, "onResponseProduct: "+produto.getNomeProduto()+" - "+produto.getEstabProduto());
 
                         }
 
 
                     }else {
                         waitingDialog.dismiss();
-                        MetodosUsados.mostrarMensagem(getContext(),"Sem produtos.");
                         Log.d(TAG, "onResponseProduct3: "+response.body());
+
+                        MetodosUsados.mostrarMensagem(getContext(),"Sem produtos disponíveis!");
+                        imgErro.setImageResource(R.drawable.ic_baseline_store_off_24);
+                        txtMsgErro.setText("Sem produtos disponíveis!");
+                        mostarMsnErro();
                     }
 
                 } else {
@@ -247,6 +251,12 @@ public class ProdutosEstabFragment extends Fragment  {
                         e.printStackTrace();
                     }
 
+                    if (response.code() != 401){
+                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
+                        txtMsgErro.setText(getString(R.string.msg_erro));
+                        mostarMsnErro();
+                    }
+
 
                 }
             }
@@ -255,12 +265,20 @@ public class ProdutosEstabFragment extends Fragment  {
             public void onFailure(@NonNull Call<List<Produtos>> call, @NonNull Throwable t) {
                 waitingDialog.dismiss();
                 Log.d(TAG, "onResponseProductFailed: "+t.getMessage());
-                if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet_timeout);
-                }else {
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro);
+                if (getContext()!=null){
+                    if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
+                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
+                        txtMsgErro.setText(getString(R.string.msg_erro_internet));
+                        mostarMsnErro();
+                    }else  if (t.getMessage().contains("timeout")) {
+                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_alert_24);
+                        txtMsgErro.setText(getString(R.string.msg_erro_internet_timeout));
+                        mostarMsnErro();
+                    }else {
+                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
+                        txtMsgErro.setText(getString(R.string.msg_erro));
+                        mostarMsnErro();
+                    }
                 }
             }
         });
@@ -364,6 +382,10 @@ public class ProdutosEstabFragment extends Fragment  {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
+
+        MenuItem filterItem = menu.findItem(R.id.action_filtros);
+        filterItem.setVisible(false);
+
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -372,7 +394,7 @@ public class ProdutosEstabFragment extends Fragment  {
 
         SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
 //        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
+        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -402,15 +424,15 @@ public class ProdutosEstabFragment extends Fragment  {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_filtros:
-                Toast.makeText(getContext(), "Filtros", Toast.LENGTH_SHORT).show();
-                return true;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id) {
+//            case R.id.action_filtros:
+//                Toast.makeText(getContext(), "Filtros", Toast.LENGTH_SHORT).show();
+//                return true;
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }

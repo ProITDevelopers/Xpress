@@ -34,7 +34,9 @@
         app:backgroundTint="@color/login_register_topbutton_color"
         android:tint="@color/login_register_topbutton_icon_color"
         app:badgeBackgroundColor="@color/red"
-        app:badgeTextColor="@color/white"/>
+        app:badgeTextColor="@color/white"
+        android:visibility="gone"
+        />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -23,10 +23,15 @@
             >
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@color/white"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:civ_border_color="@color/userphoto_nav_bar_border"
                 app:civ_border_width="2dp"
                 />

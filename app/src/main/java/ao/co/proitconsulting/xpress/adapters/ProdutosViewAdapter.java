@@ -29,8 +29,6 @@ import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 
-import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_GRID;
-import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST_LEFT;
 import static ao.co.proitconsulting.xpress.helper.Common.VIEW_TYPE_LIST_RIGHT;
 
@@ -92,13 +90,13 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
 //            produto.ideStabelecimento = ideStabelecimento;
 
             Picasso.with(context).load(produto.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
-            holder.name.setText(produto.getDescricaoProdutoC());
+            holder.name.setText(produto.getNomeProduto());
 
 //            String preco = String.valueOf(produto.getPrecoUnid());
 //            holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
 
 
-            double displayPrice = Double.parseDouble(String.valueOf(produto.getPrecoUnid()));
+            double displayPrice = Double.parseDouble(String.valueOf(produto.getPrecoProduto()));
             holder.price.setText(new StringBuilder("").append(Utils.formatPrice(displayPrice)).append(" AKZ").toString());
 
             holder.descricao.setText(produto.getDescricaoProduto());
@@ -120,7 +118,7 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
 
 //                    listener.onProductAddedCart(position, produto);
 
-                    Snackbar.make(view, produto.getDescricaoProdutoC()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, produto.getNomeProduto()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
                 }
@@ -181,8 +179,8 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
 
                 for (Produtos produto: produtosListFull) {
 
-                    if (produto.descricaoProdutoC!=null){
-                        if (produto.descricaoProdutoC.toLowerCase().contains(filterPattern)){
+                    if (produto.getNomeProduto()!=null){
+                        if (produto.getNomeProduto().toLowerCase().contains(filterPattern)){
                             filteredList.add(produto);
                         }
                     }

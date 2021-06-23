@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <item-->
-<!--        android:drawable="@color/splash_background_color"/>-->
+
+
+    <item>
+
+        <bitmap
+            android:src="@drawable/splash_background"/>
+
+    </item>
 
     <item>
         <bitmap
-            android:src="@drawable/splash_background"/>
+            android:gravity="center"
+            android:src="@drawable/xpress_logo"/>
     </item>
+
 
 </layer-list>

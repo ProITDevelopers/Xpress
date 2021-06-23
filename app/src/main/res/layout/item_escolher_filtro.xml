@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="2"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingRight="12dp"
+    android:paddingLeft="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
+
+    <TextView
+        android:id="@+id/txtFilterName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Extra"
+        android:textSize="16sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/txt_filter_name_color"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_weight="1.80"
+        />
+
+
+
+
+
+    <ImageView
+        android:id="@+id/imgFilterSelected"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_check_24"
+        android:layout_weight="0.20"
+        android:visibility="invisible"
+        app:tint="@color/xpress_green"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        />
+
+</LinearLayout>

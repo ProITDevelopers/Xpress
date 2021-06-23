@@ -11,12 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.andremion.counterfab.CounterFab;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 
@@ -28,7 +26,9 @@ public class PerfilFragment extends Fragment {
     private RoundedImageView imageView;
 
     private TextView txtUserNameInitial,txtNomeCompleto,txtSobrenome,txtTelefone,txtTelefoneAlternativo;
-    private TextView txtEmail,txtSexo,txtUserAddress,txtEndereco;
+    private TextView txtEmail,txtSexo;
+
+    private TextView txtUserAddress,txtInsertAddress;
     private Button btnEditPerfil;
     private UsuarioPerfil usuarioPerfil;
 
@@ -64,8 +64,9 @@ public class PerfilFragment extends Fragment {
         txtSexo = view.findViewById(R.id.txtSexo);
 
 
+
         txtUserAddress = view.findViewById(R.id.txtUserAddress);
-        txtEndereco = view.findViewById(R.id.txtEndereco);
+        txtInsertAddress = view.findViewById(R.id.txtInsertAddress);
 
 
 
@@ -81,10 +82,7 @@ public class PerfilFragment extends Fragment {
             }
         });
 
-        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
-        if (floatingActionButton != null) {
-            floatingActionButton.hide();
-        }
+
     }
 
     @Override
@@ -130,32 +128,54 @@ public class PerfilFragment extends Fragment {
 
             txtEmail.setText(usuarioPerfil.email);
 
+            if (usuarioPerfil.sexo == null)
+                usuarioPerfil.sexo ="M";
+
             if (usuarioPerfil.sexo.equals("F"))
                 txtSexo.setText("Feminino");
             else
                 txtSexo.setText("Masculino");
 
 
-
-
-
-            if (usuarioPerfil.provincia==null || usuarioPerfil.municipio==null || usuarioPerfil.bairro==null ||
-                    usuarioPerfil.rua==null||usuarioPerfil.nCasa==null){
+            String prov="",mun="",bai="",street="",place="";
+            if ( (usuarioPerfil.provincia==null && usuarioPerfil.municipio==null && usuarioPerfil.bairro==null &&
+                    usuarioPerfil.rua==null && usuarioPerfil.nCasa==null) || (usuarioPerfil.provincia.equals("") && usuarioPerfil.municipio.equals("") && usuarioPerfil.bairro.equals("") &&
+                    usuarioPerfil.rua.equals("") && usuarioPerfil.nCasa.equals(""))){
 
                 txtUserAddress.setVisibility(View.GONE);
-                txtEndereco.setVisibility(View.GONE);
-                txtEndereco.setText("");
-
-            }else{
-                txtEndereco.setText("Província "+
-                        usuarioPerfil.provincia +", Município "+
-                        usuarioPerfil.municipio +", "+
-                        "Bairro "+usuarioPerfil.bairro+", "+
-                        "Rua "+usuarioPerfil.rua+", "+
-                        "Casa nº"+usuarioPerfil.nCasa);
+                txtInsertAddress.setVisibility(View.GONE);
+                return;
             }
 
 
+            if (!usuarioPerfil.provincia.equals("")){
+                prov = "Província "+ usuarioPerfil.provincia;
+            }
+
+            if (!usuarioPerfil.municipio.equals("")){
+                mun = ", Município "+usuarioPerfil.municipio;
+
+            }
+
+            if (!usuarioPerfil.bairro.equals("")){
+                bai = ", Bairro "+usuarioPerfil.bairro;
+            }
+
+            if (!usuarioPerfil.rua.equals("")){
+                street = ", Rua "+usuarioPerfil.rua;
+
+            }
+
+            if (!usuarioPerfil.nCasa.equals("")){
+                place = ", Casa nº"+usuarioPerfil.nCasa;
+            }
+
+            txtInsertAddress.setText(new StringBuilder("")
+                    .append(prov)
+                    .append(mun)
+                    .append(bai)
+                    .append(street)
+                    .append(place).toString());
 
 
         }

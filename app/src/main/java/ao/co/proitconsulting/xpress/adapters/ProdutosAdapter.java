@@ -80,8 +80,8 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 //            produto.ideStabelecimento = ideStabelecimento;
 
             Picasso.with(context).load(produto.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
-            holder.name.setText(produto.getDescricaoProdutoC());
-            String preco = String.valueOf(produto.getPrecoUnid());
+            holder.name.setText(produto.getNomeProduto());
+            String preco = String.valueOf(produto.getPrecoProduto());
             holder.price.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
 
 
@@ -96,7 +96,7 @@ public class ProdutosAdapter extends RecyclerView.Adapter<ProdutosAdapter.ItemVi
 
                     listener.onProductAddedCart(position, produto);
 
-                    Snackbar.make(view, produto.getDescricaoProdutoC()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, produto.getNomeProduto()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
                 }

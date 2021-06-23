@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+
     app:cardCornerRadius="20dp"
     app:cardBackgroundColor="@color/xpress_green"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="10dp"
-    android:id="@+id/cardViewCart">
+    >
 
     <LinearLayout
         android:weightSum="2"
@@ -19,11 +17,15 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_weight="1.90"
+            android:id="@+id/cardViewCart"
+            android:layout_weight="1.77"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             >
 
             <androidx.cardview.widget.CardView
@@ -73,12 +75,22 @@
                     android:id="@+id/price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:textColor="#1a1824"
                     android:textStyle="bold"
                     android:fontFamily="@font/montserrat_regular"
+                    />
+                <TextView
+                    android:id="@+id/txtExtras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#1a1824"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:visibility="gone"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     />
 
                 <TextView
@@ -89,20 +101,11 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textColor="#1a1824"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="@font/montserrat_regular"
                     />
 
-                <TextView
-                    android:id="@+id/txtExtras"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:maxLines="1"
-                    android:textColor="#1a1824"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    />
+
 
 
 
@@ -115,7 +118,9 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
 
@@ -124,8 +129,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight="0.10"
-            android:layout_width="wrap_content"
+            android:layout_weight="0.24"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
@@ -147,16 +152,18 @@
 
             <TextView
                 android:id="@+id/product_count"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:padding="8dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
                 android:lineSpacingExtra="2sp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/one"
                 android:textColor="@color/white"
-                android:textSize="17sp"
-                android:textStyle="normal"
-                android:fontFamily="@font/montserrat_regular"/>
+                android:textSize="15sp"
+                android:textStyle="normal" />
 
 
             <ImageView

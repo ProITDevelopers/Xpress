@@ -32,6 +32,7 @@ import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
+import ao.co.proitconsulting.xpress.modelos.EncomendaPedido;
 import ao.co.proitconsulting.xpress.modelos.LocalEncomenda;
 import ao.co.proitconsulting.xpress.modelos.Order;
 import ao.co.proitconsulting.xpress.modelos.OrderItem;
@@ -144,7 +145,7 @@ public class EnviarPedidoActivity extends AppCompatActivity {
 
     private void prepareOrder() {
 
-        List<CartItemProdutos> cartItems = realm.where(CartItemProdutos.class).sort("produtos.estabelecimento").findAll();
+        List<CartItemProdutos> cartItems = realm.where(CartItemProdutos.class).sort("estabProduto").findAll();
 
         orderItems = new ArrayList<>();
         for (int i = 0; i < cartItems.size(); i++) {
@@ -152,11 +153,11 @@ public class EnviarPedidoActivity extends AppCompatActivity {
             OrderItem orderItem = new OrderItem();
             float taxaValor = Float.parseFloat(Common.getTaxaModelList.get(i).valorTaxa);
             if (cartItem!=null){
-                if(cartItem.produtos!=null){
-                    orderItem.produtoId = cartItem.produtos.getIdProduto();
+                if(cartItem!=null){
+                    orderItem.produtoId = cartItem.idProduto;
                     orderItem.quantidade = cartItem.quantity;
                     orderItem.taxaEntrega = taxaValor;
-                    orderItem.ideStabelecimento = cartItem.produtos.idEstabelecimento;
+                    orderItem.ideStabelecimento = cartItem.idEstabelecimento;
                     orderItems.add(orderItem);
                 }
             }
@@ -215,6 +216,8 @@ public class EnviarPedidoActivity extends AppCompatActivity {
         order.localEncomenda = localEncomenda;
         order.orderItems = orderItems;
 
+
+
         if (tipoPagamento.equals(getString(R.string.multicaixa))){
             facturacaoMulticaixa(order);
         }
@@ -228,9 +231,11 @@ public class EnviarPedidoActivity extends AppCompatActivity {
     }
 
     private void facturacaoMulticaixa(Order order) {
+        EncomendaPedido encomendaPedido = new EncomendaPedido();
+        encomendaPedido.localEncomenda = localEncomenda;
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> facturaTPA = apiInterface.facturaTPA(order);
+        Call<ResponseBody> facturaTPA = apiInterface.facturaTPA(encomendaPedido);
         facturaTPA.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {

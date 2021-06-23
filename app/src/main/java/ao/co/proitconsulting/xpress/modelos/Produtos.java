@@ -2,107 +2,164 @@ package ao.co.proitconsulting.xpress.modelos;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.util.List;
 
-public class Produtos extends RealmObject {
+public class Produtos {
 
-    @PrimaryKey
-    public int idProduto;
+    @SerializedName("idProduto")
+    private int idProduto;
 
-    public String categoriaProduto;
-    public String descricaoProdutoC;
-    public String descricaoProduto;
+    @SerializedName("descricaoProdutoC")
+    private String nomeProduto;
 
-    @SerializedName("estabelecimento")
-    public String estabelecimento;
+    @SerializedName("descricaoProduto")
+    private String descricaoProduto;
 
-
-    public int idEstabelecimento;
-
+    @SerializedName("precoUnid")
+    private float precoProduto;
 
     @SerializedName("imagemProduto")
-    public String imagemProduto;
-
-    public float precoUnid;
+    private String imagemProduto;
 
     @SerializedName("emStock")
-    public int emStock;
+    private int emStockProduto;
 
-    public int tempo_de_preparacao;
+    @SerializedName("idCategoria")
+    private int idCategoria;
+
+    @SerializedName("categoriaProduto")
+    private String categoriaProduto;
+
+    @SerializedName("idEstabelecimento")
+    private int idEstabelecimento;
+
+    @SerializedName("estabelecimento")
+    private String estabProduto;
 
     @SerializedName("latitude")
-    public String latitude;
+    private String latitude;
 
     @SerializedName("longitude")
-    public String longitude;
+    private String longitude;
 
-    public RealmList<ProdutoListExtras> produtoListExtras;
+    private List<ProdutoExtra> produtoExtrasList;
 
     //For Cart
-    private RealmList<ProdutoListExtras> userSelectedAddon;
+    private List<ProdutoExtra> userSelectedAddon;
 
-    public RealmList<ProdutoListExtras> getUserSelectedAddon() {
-        return userSelectedAddon;
-    }
 
-    public void setUserSelectedAddon(RealmList<ProdutoListExtras> userSelectedAddon) {
-        this.userSelectedAddon = userSelectedAddon;
-    }
 
     public Produtos() {}
-
 
     public int getIdProduto() {
         return idProduto;
     }
 
-
-
-    public String getCategoriaProduto() {
-        return categoriaProduto;
+    public String getNomeProduto() {
+        return nomeProduto;
     }
-
-
-
-    public String getDescricaoProdutoC() {
-        return descricaoProdutoC;
-    }
-
-
 
     public String getDescricaoProduto() {
         return descricaoProduto;
     }
 
-
-
-    public String getEstabelecimento() {
-        return estabelecimento;
+    public float getPrecoProduto() {
+        return precoProduto;
     }
-
-
 
     public String getImagemProduto() {
         return imagemProduto;
     }
 
-
-    public float getPrecoUnid() {
-        return precoUnid;
+    public int getEmStockProduto() {
+        return emStockProduto;
     }
 
-
-
-    public int getEmStock() {
-        return emStock;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-
-    public int getTempo_de_preparacao() {
-        return tempo_de_preparacao;
+    public String getCategoriaProduto() {
+        return categoriaProduto;
     }
 
+    public int getIdEstabelecimento() {
+        return idEstabelecimento;
+    }
 
+    public String getEstabProduto() {
+        return estabProduto;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public List<ProdutoExtra> getProdutoExtrasList() {
+        return produtoExtrasList;
+    }
+
+    public List<ProdutoExtra> getUserSelectedAddon() {
+        return userSelectedAddon;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
+    }
+
+    public void setDescricaoProduto(String descricaoProduto) {
+        this.descricaoProduto = descricaoProduto;
+    }
+
+    public void setPrecoProduto(float precoProduto) {
+        this.precoProduto = precoProduto;
+    }
+
+    public void setImagemProduto(String imagemProduto) {
+        this.imagemProduto = imagemProduto;
+    }
+
+    public void setEmStockProduto(int emStockProduto) {
+        this.emStockProduto = emStockProduto;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public void setCategoriaProduto(String categoriaProduto) {
+        this.categoriaProduto = categoriaProduto;
+    }
+
+    public void setIdEstabelecimento(int idEstabelecimento) {
+        this.idEstabelecimento = idEstabelecimento;
+    }
+
+    public void setEstabProduto(String estabProduto) {
+        this.estabProduto = estabProduto;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setProdutoExtrasList(List<ProdutoExtra> produtoExtrasList) {
+        this.produtoExtrasList = produtoExtrasList;
+    }
+
+    public void setUserSelectedAddon(List<ProdutoExtra> userSelectedAddon) {
+        this.userSelectedAddon = userSelectedAddon;
+    }
 }

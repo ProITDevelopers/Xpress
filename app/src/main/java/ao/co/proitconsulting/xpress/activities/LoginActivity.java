@@ -24,25 +24,32 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 
 import com.asksira.loopingviewpager.LoopingViewPager;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
@@ -52,6 +59,7 @@ import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
+import ao.co.proitconsulting.xpress.modelos.FaceBookLoginRequest;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
@@ -88,6 +96,13 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView imgConfirm;
     private TextView txtConfirmTitle,txtConfirmMsg;
     private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
+
+    //LOGIN_FACEBOOK
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+    private AccessToken accessToken;
+    private String facebookToken;
+    private FaceBookLoginRequest faceBookLoginRequest = new FaceBookLoginRequest();
 
 
     @Override
@@ -175,15 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MetodosUsados.mostrarMensagem(LoginActivity.this, "Login no Facebook Brevemente!");
-                if (verificarCamposEmailTelefone()) {
-                    verificarConecxaoInternet();
-                }
-            }
-        });
+        
 
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +211,59 @@ public class LoginActivity extends AppCompatActivity {
                     switchRemember.setChecked(false);
                     loginRequest.rememberMe = false;
                 }
+            }
+        });
+        
+        //---------------------------------
+        //---------------------------------
+        loginButton = findViewById(R.id.btnFBLogin);
+        LoginManager.getInstance().logOut();
+        callbackManager = CallbackManager.Factory.create();
+        loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
+
+        btnLoginFacebook.setEnabled(true);
+        btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginButton.performClick();
+                btnLoginFacebook.setEnabled(false);
+            }
+        });
+
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                accessToken = loginResult.getAccessToken();
+
+                btnLoginFacebook.setEnabled(false);
+
+                ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                if (conMgr!=null){
+                    NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+                    if (netInfo == null) {
+                        LoginManager.getInstance().logOut();
+                        MetodosUsados.mostrarMensagem(LoginActivity.this,getString(R.string.msg_erro_internet));
+                        btnLoginFacebook.setEnabled(true);
+                    } else {
+                        loaduserProfile(accessToken);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancel() {
+                btnLoginFacebook.setEnabled(true);
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                btnLoginFacebook.setEnabled(true);
+                Toast.makeText(LoginActivity.this, "FacebookException: "+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -443,7 +503,7 @@ public class LoginActivity extends AppCompatActivity {
                 }else {
                     MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro);
                 }
-                Log.d(TAG,"onFailure" + t.getMessage()+", Error code: "+t.getCause().getMessage());
+                Log.d(TAG,"onFailure" + t.getMessage());
 
 
             }
@@ -463,18 +523,21 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
 
-                    waitingDialog.dismiss();
+
                     if (response.body()!=null){
                         usuarioPerfil = response.body().get(0);
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
 
-
+                        waitingDialog.dismiss();
                         launchHomeScreen();
                     }
 
                 } else {
                     waitingDialog.dismiss();
                     AppPrefsSettings.getInstance().clearAppPrefs();
+                    LoginManager.getInstance().logOut();
+                    btnLoginFacebook.setEnabled(true);
+
                 }
 
 
@@ -500,20 +563,144 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
+
+
+
+
         Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-
-        String title = "Olá, ".concat(usuarioPerfil.primeiroNome+" "+usuarioPerfil.ultimoNome);
-        String message = "Seja bem-vindo(a) ao Xpress Lengueno!";
-//        notificationHelper.createNotification(title,message,false);
 
         Intent serviceIntent = new Intent(this, MySignalRService.class);
         startService(serviceIntent);
 
 
+//        String title = "Olá, ".concat(usuarioPerfil.primeiroNome+" "+usuarioPerfil.ultimoNome);
+//        String message = "Seja bem-vindo(a) ao Xpress Lengueno!";
+//        notificationHelper.createNotification(title,message,false);
+
 
         finish();
+    }
+
+
+    private void loaduserProfile(AccessToken newAccessToken){
+
+
+        facebookToken =newAccessToken.getToken();
+        Log.d(TAG, "facebookToken: "+facebookToken);
+
+        faceBookLoginRequest.accessToken = facebookToken;
+        autenticacaoFaceBook();
+
+//        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+//            @Override
+//            public void onCompleted(JSONObject object, GraphResponse response) {
+//
+//                try {
+//                    String first_name = object.getString("first_name");
+//                    String last_name = object.getString("last_name");
+//                    String email = object.getString("email");
+//                    String id = object.getString("id");
+//                    String name = first_name + " "+last_name;
+//
+//                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=large";
+//
+//
+//                    Log.d(TAG, "facebookToken: "+facebookToken);
+//
+//
+//
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        });
+//
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields","first_name,last_name,email,id");
+//        request.setParameters(parameters);
+//        request.executeAsync();
+
+    }
+
+    private void autenticacaoFaceBook() {
+        waitingDialog.setMessage(getString(R.string.msg_login_auth_verification));
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<UsuarioAuth> call = apiInterface.autenticarFaceBook(faceBookLoginRequest);
+        call.enqueue(new Callback<UsuarioAuth>() {
+            @Override
+            public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
+
+
+                waitingDialog.setMessage(getString(R.string.msg_login_auth_validando));
+                if (response.isSuccessful()) {
+                    if (response.body() != null){
+
+                        UsuarioAuth userToken = response.body();
+
+                        AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
+                        AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
+
+                        AppPrefsSettings.getInstance().setLoggedIn(true);
+
+
+                        carregarMeuPerfil(userToken.tokenuser);
+
+
+                    }
+                } else {
+
+                    waitingDialog.dismiss();
+                    LoginManager.getInstance().logOut();
+                    btnLoginFacebook.setEnabled(true);
+
+                    String message ="";
+
+                    try {
+                        message = response.errorBody().string();
+                        Log.d(TAG, "onLoginResponseError: "+message+", Error code: "+response.code());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    MetodosUsados.mostrarMensagem(LoginActivity.this,message+", ErroCode: "+response.code());
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
+                waitingDialog.dismiss();
+                LoginManager.getInstance().logOut();
+                btnLoginFacebook.setEnabled(true);
+                if (!MetodosUsados.conexaoInternetTrafego(LoginActivity.this,TAG)){
+                    MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet);
+                }else  if (t.getMessage().contains("timeout")) {
+                    MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro_internet_timeout);
+                }else {
+                    MetodosUsados.mostrarMensagem(LoginActivity.this,R.string.msg_erro);
+                }
+                Log.d(TAG,"onFailure" + t.getMessage());
+
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

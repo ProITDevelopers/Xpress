@@ -51,6 +51,9 @@ public class UsuarioPerfil implements Serializable {
     public String imagem;
 
 
+    public Wallet carteiraXpress;
+
+
 
     public UsuarioPerfil() {
     }

@@ -5,7 +5,6 @@
     android:id="@+id/login_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     tools:context=".activities.LoginActivity">
 
@@ -86,6 +85,7 @@
                         android:textColorHint="@color/black"
                         android:maxLines="1"
                         android:backgroundTint="@color/xpress_green"
+
                         />
 
                 </LinearLayout>
@@ -249,7 +249,7 @@
                 android:layout_marginTop="60dp"
                 android:text="@string/hint_btn_login"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:background="@drawable/button_background"
+                android:background="@drawable/button_background_green_lined"
                 android:textColor="@android:color/white"
                 app:layout_constraintTop_toBottomOf="@+id/switchRemember"
                 app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +267,7 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginTop="40dp"
-                android:text="Login no Facebook"
+                android:text="@string/login_no_facebook"
                 android:background="@drawable/facebook_btn_bkgnd"
                 android:textColor="@android:color/white"
                 app:layout_constraintTop_toBottomOf="@+id/btnLogin"
@@ -285,6 +285,17 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:fontFamily="@font/poppins_regular"
                 android:textAllCaps="false"
+                android:visibility="visible"
+                />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/btnFBLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/btnLoginFacebook"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"
                 />
 
 

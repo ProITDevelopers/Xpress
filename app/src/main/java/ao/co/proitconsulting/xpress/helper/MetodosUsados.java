@@ -73,7 +73,7 @@ public class MetodosUsados {
     }
 
     public static void mostrarMensagemSnackBar(View view, String mensagem) {
-        Snackbar.make(view, mensagem, 4000)
+        Snackbar.make(view, mensagem, 3000)
                 .setActionTextColor(Color.WHITE).show();
     }
 
@@ -185,7 +185,7 @@ public class MetodosUsados {
 
     }
 
-    public static boolean isConnected(int timeOut, String TAG) {
+    public static boolean isConnected(int timeOut) {
         InetAddress inetAddress = null;
         try {
             Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(new Callable<InetAddress>() {

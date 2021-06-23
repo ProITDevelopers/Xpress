@@ -4,10 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/relative_XpressConta"
+    android:visibility="gone">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -61,7 +62,7 @@
                     android:id="@+id/editTextBI"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nº do Bilhete de Identidade"
+                    android:hint="@string/num_do_bilhete_de_identidade"
                     android:inputType="text"
                     android:maxLength="14"
                     android:maxLines="1"
@@ -105,8 +106,8 @@
 
 
             <Button
-                android:id="@+id/btnWallet"
-                android:text="Criar Wallet"
+                android:id="@+id/btnCriar_carteira_xpress"
+                android:text="@string/criar_carteira_xpress"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:background="@drawable/button_background_green"
                 android:textColor="@android:color/white"
@@ -115,6 +116,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:textAllCaps="false"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 />
 
 

@@ -1,6 +1,5 @@
 package ao.co.proitconsulting.xpress.fragmentos.encomenda;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,47 +8,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.adapters.EncomendaFacturaAdapter;
-import ao.co.proitconsulting.xpress.api.ApiClient;
-import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.helper.MetodosUsados;
-import ao.co.proitconsulting.xpress.modelos.Factura;
-import dmax.dialog.SpotsDialog;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import ao.co.proitconsulting.xpress.adapters.SectionsPagerAdapter;
 
 public class EncomendasFragment extends Fragment {
 
     private static String TAG = "TAG_EncomendasFragment";
     private View view;
 
-    private AlertDialog waitingDialog;
-    private RecyclerView recyclerView;
-    private List<Factura> facturaList;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+    private TabLayout tabLayout;
 
-    private String errorMessage;
 
     private ConstraintLayout coordinatorLayout;
     private RelativeLayout errorLayout;
+    private ImageView imgErro;
+    private TextView txtMsgErro;
     private TextView btnTentarDeNovo;
+
 
     public EncomendasFragment() {}
 
@@ -64,17 +54,20 @@ public class EncomendasFragment extends Fragment {
     }
 
     private void initViews() {
-        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
-        waitingDialog.setMessage("Por favor aguarde...");
-        waitingDialog.setCancelable(false);
-
-        recyclerView = view.findViewById(R.id.recyclerView);
-
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
+
+        // Set up the ViewPager with the sections adapter.
+        tabLayout = view.findViewById(R.id.tabs);
+        mViewPager = view.findViewById(R.id.viewPager);
+
         errorLayout = view.findViewById(R.id.erroLayout);
+        imgErro = view.findViewById(R.id.imgErro);
+        txtMsgErro = view.findViewById(R.id.txtMsgErro);
         btnTentarDeNovo = view.findViewById(R.id.btn);
+        btnTentarDeNovo.setVisibility(View.INVISIBLE);
 
         verifConecxaoEncomendas();
+
     }
 
     private void verifConecxaoEncomendas() {
@@ -83,10 +76,14 @@ public class EncomendasFragment extends Fragment {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
-                    MetodosUsados.mostrarMensagem(getContext(),getString(R.string.msg_erro_internet));
+
+                    btnTentarDeNovo.setVisibility(View.VISIBLE);
+                    imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
+                    txtMsgErro.setText(getString(R.string.msg_erro_internet));
                     mostarMsnErro();
                 } else {
-                    carregarListaFacturas();
+                    showFrags();
+
                 }
             }
         }
@@ -113,80 +110,21 @@ public class EncomendasFragment extends Fragment {
         });
     }
 
-    private void carregarListaFacturas() {
-
-        waitingDialog.show();
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Factura>> rv = apiInterface.getTodasFacturas();
-        rv.enqueue(new Callback<List<Factura>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Factura>> call, @NonNull Response<List<Factura>> response) {
-
-                facturaList = new ArrayList<>();
-
-                if (response.isSuccessful()) {
-                    if (response.body()!=null){
-                        facturaList = response.body();
-
-                        // Order the list by regist date.
-                        Collections.sort(facturaList, new Factura());
+    private void showFrags(){
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
 
-
-                        setAdapters(facturaList);
-
-
-                    }
-                } else {
-
-                    waitingDialog.dismiss();
-//                    if (response.code()==401){
-//                        mensagemTokenExpirado();
-//                    }
-
-                    try {
-                        errorMessage = response.errorBody().string();
-                        Log.d(TAG, "onResponseEncomendaError: "+errorMessage+", ErrorCode:"+response.code());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
+        // attach tablayout with viewpager
+        tabLayout.setupWithViewPager(mViewPager);
 
+        Log.d(TAG, "showFrags: mSectionsPagerAdapter"+mSectionsPagerAdapter.getCount());
 
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Factura>> call, @NonNull Throwable t) {
-                waitingDialog.dismiss();
-                if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet_timeout);
-                }else {
-                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro);
-                }
-            }
-        });
     }
 
-    private void setAdapters(List<Factura> facturaList) {
-        waitingDialog.dismiss();
 
-        if (facturaList.size()>0){
-
-            Collections.reverse(facturaList);
-
-            EncomendaFacturaAdapter encomendaFacturaAdapter = new EncomendaFacturaAdapter(getContext(),facturaList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(encomendaFacturaAdapter);
-
-        }else {
-            MetodosUsados.mostrarMensagem(getContext(),"Não fez nenhum pedido!");
-        }
-    }
 
     @Override
     public void onDestroyView() {

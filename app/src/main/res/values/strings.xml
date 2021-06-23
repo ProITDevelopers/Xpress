@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Xpress Lengueno</string>
-    <string name="facebook_app_id">412893576490727</string>
-    <string name="fb_login_protocol_scheme">fb412893576490727</string>
+    <!--    <string name="app_name">Xpress Lengueno</string>-->
+    <string name="app_name">Xpress</string>
+
+    <string name="facebook_app_id">2335117853474777</string>
+    <string name="fb_login_protocol_scheme">fb2335117853474777</string>
 
     <string name="xpress_logo">Xpress Logo</string>
     <string name="hint_email">Email</string>
@@ -134,6 +136,8 @@
     <string name="nav_encomendas_title">Encomendas</string>
     <string name="nav_mapa_title">Mapa</string>
     <string name="nav_carteira_title">Carteira Xpress</string>
+    <string name="nav_escolher_filtros_title">Filtros</string>
+    <string name="nav_pesquisar_title">Pesquisar</string>
     <string name="group_redes_sociais_title">Redes Sociais</string>
     <string name="nav_partilhar_title">Partilhar</string>
     <string name="email_ou_num_de_telefone">Email /Nº de telefone</string>
@@ -174,7 +178,7 @@
     <string name="msg_remover_um_item">Essa acção irá remover o item do seu carrinho.</string>
     <string name="msg_remover_todos_items">Essa acção irá remover todos os items do seu carrinho.</string>
     <string name="txt_descricao">Descrição</string>
-    <string name="splash_sign_up_hint">NÃO POSSUI UMA CONTA? SIGN UP</string>
+    <string name="splash_sign_up_hint">NÃO POSSUI UMA CONTA? SIGN UP </string>
     <string name="hint_comecar">COMEÇAR</string>
     <string name="hint_lembrar_me">Lembrar-me</string>
     <string name="hint_o_melhor_na_tua_cidade">Explora o melhor que há na tua cidade!</string>
@@ -186,5 +190,24 @@
     <string name="hint_email_telefone">Email/Telefone</string>
     <string name="title_quantidade">Quantidade</string>
     <string name="title_extras">Extras</string>
+    <string name="n_mero_da_conta">NÚMERO DA CONTA</string>
+    <string name="credito_title">CRÉDITO</string>
+    <string name="num_do_bilhete_de_identidade">Nº do Bilhete de Identidade</string>
+    <string name="criar_carteira_xpress">Criar Carteira Xpress</string>
+    <string name="entrega">Entrega</string>
+    <string name="endereco_de_entrega">Endereço de entrega</string>
+    <string name="comprar">Comprar</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="carteira_xpress">Carteira Xpress</string>
+    <string name="metodo_de_pagamento">Método de pagamento</string>
+    <string name="total">Total</string>
+    <string name="insira_o_c_digo_de_confirma_recebeu_por_sms">Insira o Código de Confirmação \n que recebeu por SMS</string>
+    <string name="msg_permissao_localizacao">Este aplicativo precisa de permissão de localização para continuar!</string>
+    <string name="encontrar_por">Encontrar por</string>
+    <string name="filtros">Filtros</string>
+    <string name="filtros_adicionais">Filtros adicionais</string>
+    <string name="aplicar">Aplicar</string>
+    <string name="login_no_facebook">Login no Facebook</string>
+    <string name="rastrear">Rastrear</string>
 
 </resources>

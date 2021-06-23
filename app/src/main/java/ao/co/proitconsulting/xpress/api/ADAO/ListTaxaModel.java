@@ -12,7 +12,7 @@ public class ListTaxaModel implements Serializable{
     @SerializedName("latitudeOrigem")
     public double latitudeOrigem;
 
-    @SerializedName("longitudeOrigem")
+    @SerializedName("longitudeOrgin")
     public double longitudeOrigem;
 
     @SerializedName("latitudeDestino")

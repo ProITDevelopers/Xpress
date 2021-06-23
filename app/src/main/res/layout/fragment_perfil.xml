@@ -76,14 +76,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="5dp"
                     android:gravity="center"
                     android:maxLines="1"
                     android:maxLength="2"
                     android:visibility="gone"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/nav_menu_username_initial_color"
-                    android:textSize="150sp"
+                    android:textSize="130sp"
                     android:elevation="22dp"
                     android:fontFamily="@font/montserrat_regular"
                     />
@@ -114,14 +113,14 @@
             android:paddingBottom="15dp"
             >
 
+
             <TextView
                 android:id="@+id/txtNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:text="@string/primeiro_nome_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
+                android:textColor="@color/perfil_text_title_color"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
@@ -144,8 +143,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/sobrenome_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
+                android:textColor="@color/perfil_text_title_color"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
@@ -168,8 +166,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/hint_email_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
+                android:textColor="@color/perfil_text_title_color"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
@@ -192,8 +189,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/contactos_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
+                android:textColor="@color/perfil_text_title_color"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
@@ -228,8 +224,7 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/genero_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
+                android:textColor="@color/perfil_text_title_color"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
@@ -253,22 +248,26 @@
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
                 android:text="@string/endereco_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
+                android:textColor="@color/perfil_text_title_color"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
-                android:id="@+id/txtEndereco"
-                android:layout_width="match_parent"
+                android:id="@+id/txtInsertAddress"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/perfil_text_color"
+                android:paddingTop="5dp"
                 android:layout_marginBottom="25dp"
+                android:textColor="@color/perfil_text_color"
                 android:fontFamily="@font/montserrat_regular"
+
                 />
+
+
+
+
 
 
 

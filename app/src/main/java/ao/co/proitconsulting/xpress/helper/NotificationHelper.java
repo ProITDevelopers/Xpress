@@ -40,6 +40,8 @@ public class NotificationHelper {
                 0 /* Request code */, resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+
+
         if (status){
 
             mBuilder = new NotificationCompat.Builder(mContext);

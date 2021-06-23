@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--        <item-->
-<!--            android:id="@+id/action_cart"-->
-<!--            android:orderInCategory="100"-->
-<!--            android:title="@string/carrinho"-->
-<!--            android:icon="@drawable/ic_baseline_shopping_cart_outline_24"-->
-<!--            app:showAsAction="always"-->
-<!--            app:actionLayout="@layout/action_bar_notification_icon"-->
-<!--            />-->
+        <item
+            android:id="@+id/action_cart"
+            android:orderInCategory="102"
+            android:title="@string/carrinho"
+            android:icon="@drawable/ic_baseline_shopping_cart_bagde_24"
+            app:showAsAction="always"
+            app:actionLayout="@layout/action_bar_notification_icon"
+            />
 
     <item
         android:id="@+id/action_settings"

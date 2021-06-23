@@ -83,6 +83,7 @@
                     android:maxLength="9"
                     android:background="@android:color/transparent"
                     android:padding="15dp"
+                    android:enabled="false"
                     />
 
             </RelativeLayout>

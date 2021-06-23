@@ -21,11 +21,14 @@ import androidx.appcompat.widget.AppCompatEditText;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.api.ErrorResponce;
-import ao.co.proitconsulting.xpress.api.ErrorUtils;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.modelos.ReporSenha;
 import retrofit2.Call;
@@ -34,7 +37,7 @@ import retrofit2.Response;
 
 public class AlterarPalavraPasseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "AlterarSenhaActivity";
+    private static final String TAG = "TAG_AltSenhaActivity";
 
 
     //DIALOG_LAYOUT_ALTERAR_PASS_NUM_TELEFONE
@@ -247,8 +250,27 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
 
                 } else {
                     MetodosUsados.hideLoadingDialog();
-                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-                    dialog_editTelefone.setError(errorResponce.getError());
+
+                    String responseErrorMsg ="";
+
+                    try {
+                        responseErrorMsg = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(responseErrorMsg);
+                        responseErrorMsg = jsonObject.getString("message");
+
+                        Log.d(TAG,"Error code: "+response.code()+", ErrorBody msg: "+responseErrorMsg);
+
+
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }catch (JSONException err){
+                        Log.d(TAG, err.toString());
+                    }
+
+                    dialog_editTelefone.setError(responseErrorMsg);
                 }
             }
 
@@ -257,12 +279,12 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
                 MetodosUsados.hideLoadingDialog();
                 if (!MetodosUsados.conexaoInternetTrafego(AlterarPalavraPasseActivity.this,TAG)){
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this,R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
+                }else if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this,R.string.msg_erro_internet_timeout);
                 }else {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this,R.string.msg_erro);
                 }
-                Log.i(TAG,"onFailure" + t.getMessage());
+                Log.d(TAG,"onFailure" + t.getMessage());
             }
         });
     }
@@ -285,8 +307,23 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_corfim_code_reenviado);
                 } else {
                     MetodosUsados.hideLoadingDialog();
-                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, errorResponce.getError());
+                    String responseErrorMsg = "";
+
+                    try {
+                        responseErrorMsg = response.errorBody().string();
+
+                        Log.d(TAG,"Error code: "+response.code()+", ErrorBody msg: "+responseErrorMsg);
+
+
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.d(TAG, e.toString());
+                    }
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, responseErrorMsg);
+
 
                 }
             }
@@ -296,12 +333,12 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
                 MetodosUsados.hideLoadingDialog();
                 if (!MetodosUsados.conexaoInternetTrafego(AlterarPalavraPasseActivity.this,TAG)) {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet);
-                } else if ("timeout".equals(t.getMessage())) {
+                } else if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet_timeout);
                 } else {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro);
                 }
-                Log.i(TAG, "onFailure" + t.getMessage());
+                Log.d(TAG, "onFailure" + t.getMessage());
             }
         });
 
@@ -372,9 +409,35 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
 
                 } else {
                     MetodosUsados.hideLoadingDialog();
-                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
-                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, errorResponce.getError());
-                    dialog_pinCodigoConfirmacao.setError(getString(R.string.msg_confirm_code_incorrecto));
+
+
+                    String responseErrorMsg ="";
+
+                    try {
+
+                        if (response.code() == 500)
+                            responseErrorMsg = getString(R.string.msg_erro);
+                        else{
+                            responseErrorMsg = response.errorBody().string();
+                            JSONObject jsonObject = new JSONObject(responseErrorMsg);
+
+                            responseErrorMsg = jsonObject.getString("message");
+                        }
+
+                        Log.d(TAG,"Error code: "+response.code()+", ErrorBody msg: "+responseErrorMsg);
+
+
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }catch (JSONException err){
+                        Log.d(TAG, err.toString());
+                    }
+
+                    dialog_pinCodigoConfirmacao.setError(responseErrorMsg);
+                    MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, responseErrorMsg);
 
                 }
             }
@@ -383,12 +446,12 @@ public class AlterarPalavraPasseActivity extends AppCompatActivity implements Vi
                 MetodosUsados.hideLoadingDialog();
                 if (!MetodosUsados.conexaoInternetTrafego(AlterarPalavraPasseActivity.this,TAG)) {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet);
-                } else if ("timeout".equals(t.getMessage())) {
+                } else if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro_internet_timeout);
                 } else {
                     MetodosUsados.mostrarMensagem(AlterarPalavraPasseActivity.this, R.string.msg_erro);
                 }
-                Log.i(TAG, "onFailure" + t.getMessage());
+                Log.d(TAG, "onFailure" + t.getMessage());
             }
         });
 

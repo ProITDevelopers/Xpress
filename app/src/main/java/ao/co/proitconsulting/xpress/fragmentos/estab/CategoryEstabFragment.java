@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -201,6 +200,9 @@ public class CategoryEstabFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem filterItem = menu.findItem(R.id.action_filtros);
+        filterItem.setVisible(false);
+
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -209,7 +211,7 @@ public class CategoryEstabFragment extends Fragment {
 
         SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
 //        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.perfil_text_color));
+        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -238,17 +240,17 @@ public class CategoryEstabFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_filtros:
-                Toast.makeText(getContext(), "Filtros", Toast.LENGTH_SHORT).show();
-                return true;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id) {
+//            case R.id.action_filtros:
+//                Toast.makeText(getContext(), "Filtros", Toast.LENGTH_SHORT).show();
+//                return true;
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
 }

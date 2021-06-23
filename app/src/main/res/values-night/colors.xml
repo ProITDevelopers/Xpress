@@ -12,6 +12,7 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="calendar_dialog_bkg">#444444</color>
     <color name="transparentBlack">#80000000</color>
     <color name="yellow">#eba41d</color>
 
@@ -29,10 +30,14 @@
     <color name="side_nav_bar_end_color">@color/xpress_green</color>
 
     <color name="search_icon_color">@color/white</color>
+    <color name="search_text_color">@color/white</color>
     <color name="home_sectionName_color">@color/xpress_green</color>
     <color name="home_item_row_color">@color/xpress_green</color>
 
     <color name="catestab_name_color">@color/xpress_green</color>
+    <color name="txt_filter_name_color">@color/xpress_green</color>
+
+    <color name="txt_config_title">@color/xpress_green</color>
 
     <color name="produto_name_color">@color/xpress_green</color>
     <color name="produto_price_bkg_color">@color/xpress_green</color>
@@ -40,7 +45,17 @@
     <color name="produto_go_btn_solid_transp_color">@color/xpress_green</color>
     <color name="produto_go_btn_arrow_color">@color/white</color>
 
+    <color name="txt_get_address_color">@color/xpress_green</color>
+    <color name="txt_total_color">@color/xpress_green</color>
+    <color name="txt_tipo_pagamento_color">@color/xpress_green</color>
     <color name="encomenda_estado_color">@color/white</color>
+    <color name="xpress_location_on_color">@color/xpress_purple</color>
+
+    <color name="tab_background_color">#444444</color>
+    <color name="tab_text_color">@color/white</color>
+    <color name="tab_selected_text_color">@color/xpress_green</color>
+    <color name="encomenda_txt_total_color">@color/xpress_green</color>
+    <color name="encomenda_details_txt_color">@color/xpress_green</color>
 
     <color name="produto_detail_title_color">@color/xpress_green</color>
     <color name="colorDarkSemiTransparent">#C6000000</color>
@@ -50,6 +65,7 @@
     <color name="produto_detail_qtd_color">@color/xpress_green</color>
 
     <color name="login_icon_text_color">#1a1824</color>
+    <color name="perfil_text_title_color">@color/white</color>
     <color name="perfil_text_color">@color/xpress_green</color>
     <color name="perfil_radiobtn_color">@color/xpress_green</color>
     <color name="perfil_radiotxt_color">@color/xpress_green</color>

@@ -14,23 +14,26 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.Utils;
-import ao.co.proitconsulting.xpress.modelos.ProdutoListExtras;
+import ao.co.proitconsulting.xpress.modelos.ProdutoExtra;
 
 public class ProdutoExtrasAdapter extends RecyclerView.Adapter<ProdutoExtrasAdapter.MyViewHolder> {
 
     private Context context;
-    private List<ProdutoListExtras> produtoListExtrasList;
+    private List<ProdutoExtra> produtoExtrasList;
     private IRecyclerClickListener iRecyclerClickListener;
 
 
+    public void updateData(List<ProdutoExtra> produtoExtrasList) {
+        this.produtoExtrasList.clear();
+        this.produtoExtrasList.addAll(produtoExtrasList);
+        notifyDataSetChanged();
+    }
 
 
-
-    public ProdutoExtrasAdapter(Context context, List<ProdutoListExtras> produtoListExtrasList) {
+    public ProdutoExtrasAdapter(Context context, List<ProdutoExtra> produtoExtrasList) {
         this.context = context;
-        this.produtoListExtrasList = produtoListExtrasList;
+        this.produtoExtrasList = produtoExtrasList;
     }
 
     @NonNull
@@ -44,23 +47,22 @@ public class ProdutoExtrasAdapter extends RecyclerView.Adapter<ProdutoExtrasAdap
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
 
-        ProdutoListExtras produtoListExtras = produtoListExtrasList.get(position);
-        if (produtoListExtras != null){
+        ProdutoExtra produtoExtra = produtoExtrasList.get(position);
+        if (produtoExtra != null){
 
-            holder.txtExtraTitle.setText(produtoListExtras.produtoextras.descricao);
+            holder.txtExtraTitle.setText(produtoExtra.getNomeProdudoExtra());
 
 //            String preco = String.valueOf(produtoListExtras.produtoextras.preco);
 //            holder.txtExtraPrice.setText(context.getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
 
-            double displayPrice = Double.parseDouble(String.valueOf(produtoListExtras.produtoextras.preco));
+            double displayPrice = Double.parseDouble(String.valueOf(produtoExtra.getPrecoProdudoExtra()));
             holder.txtExtraPrice.setText(new StringBuilder("").append(Utils.formatPrice(displayPrice)).append(" AKZ").toString());
 
 
-            if (Common.selectedProduto.getUserSelectedAddon() != null){
-                for (ProdutoListExtras produtoListExtras1 : Common.selectedProduto.getUserSelectedAddon()){
-                    if (produtoListExtras.produtoextras.iDextras== produtoListExtras1.produtoextras.iDextras)
-                        holder.imgExtraSelected.setVisibility(View.VISIBLE);
-                }
+            if (produtoExtra.isSelectedProdudoExtra()){
+                holder.imgExtraSelected.setVisibility(View.VISIBLE);
+            }else{
+                holder.imgExtraSelected.setVisibility(View.INVISIBLE);
             }
 
 
@@ -95,7 +97,7 @@ public class ProdutoExtrasAdapter extends RecyclerView.Adapter<ProdutoExtrasAdap
 
     @Override
     public int getItemCount() {
-        return produtoListExtrasList.size();
+        return produtoExtrasList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
@@ -140,6 +142,7 @@ public class ProdutoExtrasAdapter extends RecyclerView.Adapter<ProdutoExtrasAdap
     public void setItemClickListener(IRecyclerClickListener itemClickListener) {
         this.iRecyclerClickListener = itemClickListener;
     }
+
 
 
 

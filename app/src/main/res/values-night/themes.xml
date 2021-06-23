@@ -52,6 +52,18 @@
         <item name="android:fontFamily">@font/montserrat_regular</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <item name="colorAccent">@color/xpress_green</item>
+        <!--header background-->
+        <item name="android:windowBackground">@color/calendar_dialog_bkg</item>     <!--calendar background-->
+<!--        <item name="android:colorControlActivated" tools:targetApi="l">@color/xpress_green</item> &lt;!&ndash;selected day&ndash;&gt;-->
+        <item name="android:textColorPrimary">@color/white</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/xpress_green</item>    <!--days of the week-->
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

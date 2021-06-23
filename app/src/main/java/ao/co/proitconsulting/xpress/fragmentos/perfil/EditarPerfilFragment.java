@@ -36,7 +36,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.andremion.counterfab.CounterFab;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -50,7 +49,6 @@ import java.io.IOException;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.activities.imagePicker.ImagePickerActivity;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
@@ -58,6 +56,7 @@ import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfilRequest;
+import ao.co.proitconsulting.xpress.modelos.Wallet;
 import dmax.dialog.SpotsDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -73,6 +72,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     private View view;
     public static final int REQUEST_IMAGE = 100;
     private UsuarioPerfil usuarioPerfil;
+    private Wallet wallet = new Wallet();
 
 //    private ConstraintLayout editPerfil_root;
     private CoordinatorLayout editPerfil_root;
@@ -88,7 +88,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     private Button btnSalvar;
 
 
-    private String primeiroNome,sobreNome,telefoneAlternativo;
+    private String primeiroNome,sobreNome,telefone,telefoneAlternativo;
     private String valorGeneroItem,valorCidadeItem;
     private String municipio,bairro,rua,nCasa;
 
@@ -121,10 +121,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void initViews() {
-        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
-        if (floatingActionButton != null) {
-            floatingActionButton.hide();
-        }
+
 
         editPerfil_root = view.findViewById(R.id.editPerfil_root);
 
@@ -267,6 +264,9 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
                 editTelefoneAlternativo.setText(usuarioPerfil.contactoAlternativo);
 
 
+            if (usuarioPerfil.sexo == null)
+                usuarioPerfil.sexo ="M";
+
             if (usuarioPerfil.sexo.equals("F")){
                 radioBtnFem.setChecked(true);
             } else {
@@ -316,7 +316,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
 
         primeiroNome = editPrimeiroNome.getText().toString().trim();
         sobreNome = editUltimoNome.getText().toString().trim();
-
+        telefone = editTelefone.getText().toString().trim();
         telefoneAlternativo = editTelefoneAlternativo.getText().toString().trim();
         municipio = editMunicipio.getText().toString().trim();
         bairro = editBairro.getText().toString().trim();
@@ -362,28 +362,39 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
             return false;
         }
 
+        if (telefone.isEmpty()){
+            editTelefone.setError(getString(R.string.msg_erro_campo_vazio));
+            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Nº de telefone'");
+            return false;
+        }
+
+        if (!telefone.matches("9[1-9][0-9]\\d{6}")){
+            editTelefone.setError(getString(R.string.msg_erro_num_telefone_invalido));
+            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº de telefone' inválido");
+            return false;
+        }
 
 
+        if (telefoneAlternativo.isEmpty()){
+            telefoneAlternativo = "";
+        }
 
-
-//        if (telefoneAlternativo.isEmpty()){
-//            editTelefoneAlternativo.setError(getString(R.string.msg_erro_campo_vazio));
-//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Nº alternativo'");
-//            return false;
-//        }
-//
-//        if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
-//            editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
-//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
-//            return false;
-//        }
 
         if (!telefoneAlternativo.isEmpty()){
+
             if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
                 editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
                 MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
                 return false;
             }
+
+            if (telefoneAlternativo.equals(telefone)){
+                editTelefoneAlternativo.setError("Números iguais.");
+                MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' tem de ser diferente");
+                return false;
+            }
+
+
         }
 
 
@@ -396,7 +407,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         if (!radioBtnMasc.isChecked() && !radioBtnFem.isChecked()){
             radioBtnMasc.setError(getString(R.string.msg_selecione_genero));
             radioBtnFem.setError(getString(R.string.msg_selecione_genero));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Sexo', selecione o género");
+            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'GÉNERO', selecione o género");
             return false;
         }else{
             radioBtnMasc.setError(null);
@@ -414,12 +425,11 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         }
 
         if (municipio.isEmpty()){
-            editMunicipio.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Município'");
-            return false;
-        }
-
-        if (municipio.length()<3){
+//            editMunicipio.setError(getString(R.string.msg_erro_campo_vazio));
+//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Município'");
+//            return false;
+            municipio = "";
+        }else if (municipio.length()<3){
             editMunicipio.setError(getString(R.string.msg_erro_min_tres_letras));
             MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Município', três letras no mínimo");
             return false;
@@ -427,29 +437,31 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
 
 
         if (bairro.isEmpty()){
-            editBairro.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Bairro'");
-            return false;
-        }
-
-        if (bairro.length()<3){
+            bairro = "";
+//            editBairro.setError(getString(R.string.msg_erro_campo_vazio));
+//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Bairro'");
+//            return false;
+        }else if(bairro.length()<3){
             editBairro.setError(getString(R.string.msg_erro_min_tres_letras));
             MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Bairro', três letras no mínimo");
+
             return false;
         }
 
 
         if (rua.isEmpty()){
-            editRua.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Rua'");
-            return false;
+            rua ="";
+//            editRua.setError(getString(R.string.msg_erro_campo_vazio));
+//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Rua'");
+//            return false;
         }
 
 
         if (nCasa.isEmpty()){
-            editNCasa.setError(getString(R.string.msg_erro_campo_vazio));
-            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Nº da casa'");
-            return false;
+            nCasa = "";
+//            editNCasa.setError(getString(R.string.msg_erro_campo_vazio));
+//            MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"Preencha o campo: 'Nº da casa'");
+//            return false;
         }
 
 
@@ -497,7 +509,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
 
                     mensagemSucesso(getString(R.string.dados_salvos_com_sucesso));
 
-
+                    verificarConecxaoNETPerfil();
 
 
 
@@ -692,7 +704,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
                 } else {
                     waitingDialog.cancel();
                     if (response.code()==401){
-                        mensagemTokenExpirado();
+                        MetodosUsados.mostrarMensagem(getContext(),getString(R.string.a_sessao_expirou));
                     }
                 }
             }
@@ -717,8 +729,112 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         Log.d(TAG, "Image cache path: " + url);
 
         txtUserNameInitial.setVisibility(View.GONE);
-        Picasso.with(getContext()).load(url).into(imageView);
+        Picasso.with(getContext()).load(url).fit().centerCrop().into(imageView);
+        verificarConecxaoNETPerfil();
 
+    }
+
+    private void verificarConecxaoNETPerfil() {
+        if(getContext()!=null){
+            ConnectivityManager conMgr =  (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (conMgr!=null) {
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+                if (netInfo != null){
+                    carregarMeuPerfil();
+                }else{
+                    usuarioPerfil = AppPrefsSettings.getInstance().getUser();
+                    carregarMeuPerfilOffline(usuarioPerfil);
+                }
+
+            }
+        }
+
+    }
+
+    private void carregarMeuPerfil() {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<UsuarioPerfil>> usuarioCall = apiInterface.getMeuPerfil();
+        usuarioCall.enqueue(new Callback<List<UsuarioPerfil>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Response<List<UsuarioPerfil>> response) {
+
+                if (response.isSuccessful()) {
+                    if (response.body()!=null && response.body().size()>0){
+                        usuarioPerfil = response.body().get(0);
+
+                        AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
+
+                        carregarMeuPerfilOffline(usuarioPerfil);
+
+                        saldoContaWalletApi();
+
+                    }else{
+                        MetodosUsados.mostrarMensagem(getContext(),
+                                "O seu perfil foi eliminado.");
+                    }
+
+                } else {
+
+                    if (response.code()==401){
+                        mensagemTokenExpirado();
+                    }
+
+                }
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
+                Log.d(TAG, "UsuarioPerfil: "+t.getMessage());
+            }
+        });
+    }
+
+    private void saldoContaWalletApi() {
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Wallet>> call = apiInterface.getSaldoWallet();
+        call.enqueue(new Callback<List<Wallet>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Wallet>> call, @NonNull Response<List<Wallet>> response) {
+
+                //response.body()==null
+                if (response.isSuccessful()) {
+
+                    if (response.body()!=null && response.body().size()>0){
+
+                        wallet = response.body().get(0);
+
+                        usuarioPerfil.carteiraXpress = wallet;
+
+
+                        AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
+
+
+
+
+                    }else{
+                        Log.d(TAG, "onResponse: Algo errado com a Wallet");
+                    }
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Wallet>>call, @NonNull Throwable t) {
+
+
+                Log.d(TAG, "CarteiraXpressFragment: "+t.getMessage());
+
+            }
+        });
     }
 
     /**

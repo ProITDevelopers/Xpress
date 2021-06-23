@@ -5,18 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +27,7 @@ import ao.co.proitconsulting.xpress.activities.ShoppingCartActivity;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
-import ao.co.proitconsulting.xpress.modelos.ProdutoListExtras;
+import ao.co.proitconsulting.xpress.modelos.ProdutoExtra;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import io.realm.RealmResults;
 
@@ -36,12 +36,14 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
     private Context context;
     private List<CartItemProdutos> cartItems = Collections.emptyList();
     private CartProductsAdapterListener listener;
+    private Gson gson;
 
 
 
     public CartProdutosAdapter(Context context, CartProductsAdapterListener listener) {
         this.context = context;
         this.listener = listener;
+        this.gson = new Gson();
 
     }
 
@@ -77,43 +79,36 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
     public void onBindViewHolder(ItemViewHolder holder, int position) {
 
         CartItemProdutos cartItem = cartItems.get(position);
-        Produtos product = cartItem.produtos;
+//        Produtos product = cartItem.produtos;
 
-        Picasso.with(context).load(product.getImagemProduto()).fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
+        Picasso.with(context).load(cartItem.imagemProduto)
+                .fit().centerCrop().placeholder(R.drawable.store_placeholder).into(holder.thumbnail);
 
 
 
-        holder.name.setText(product.getDescricaoProdutoC());
+        holder.name.setText(cartItem.nomeProduto);
 
 //        holder.price.setText(holder.name.getContext().getString(R.string.lbl_item_price_quantity, context.getString(R.string.price_with_currency, product.getPrecoUnid())+ " AKZ", cartItem.quantity));
 
-        double displayPrice = Double.parseDouble(String.valueOf(product.getPrecoUnid()));
+        double displayPrice = Double.parseDouble(String.valueOf(cartItem.precoProduto));
+        double total = displayPrice + cartItem.produtoPrecoExtra;
         holder.price.setText(new StringBuilder("")
-                .append(Utils.formatPrice(displayPrice))
+                .append(Utils.formatPrice(total))
                 .append(" AKZ").append(" x ").append(cartItem.quantity).toString());
 
-        holder.estabelecimento.setText(product.getEstabelecimento());
 
-        if (product.getUserSelectedAddon() != null){
 
-            String extraName,extraValues="";
-            List<String> extraList = new ArrayList<>();
-            double extraPrice = 0.0;
-            for (ProdutoListExtras prExtra: product.getUserSelectedAddon()) {
-                extraName = prExtra.produtoextras.descricao;
-                extraPrice = Double.parseDouble(String.valueOf(prExtra.produtoextras.preco));
-                extraValues = String.valueOf(new StringBuilder("")
-                        .append(extraName).append(" - ")
-                        .append(Utils.formatPrice(extraPrice))
-                        .append(" AKZ"));
-                extraList.add(extraValues);
+        holder.estabelecimento.setText(cartItem.estabProduto);
+
+
+        if (cartItem.produtoExtras!=null){
+            List<ProdutoExtra> produtoExtraList = gson.fromJson(cartItem.produtoExtras,
+                    new TypeToken<List<ProdutoExtra>>(){}.getType());
+            if (produtoExtraList!=null && produtoExtraList.size()>0){
+                holder.txtExtras.setVisibility(View.VISIBLE);
+                holder.txtExtras.setText(new StringBuilder("").append(Utils.getListAddon(produtoExtraList)));
             }
-            holder.txtExtras.setText(new StringBuilder("")
-                    .append("Extras: ").append(new Gson().toJson(extraList)).toString());
 
-
-        }else{
-            holder.txtExtras.setVisibility(View.GONE);
         }
 
 
@@ -121,7 +116,24 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
         holder.setListener(new IRecyclerClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                Common.selectedProduto = cartItems.get(position).produtos;
+                Produtos selectedProduto = new Produtos();
+                selectedProduto.setIdProduto(cartItems.get(position).idProduto);
+                selectedProduto.setNomeProduto(cartItems.get(position).nomeProduto);
+                selectedProduto.setDescricaoProduto(cartItems.get(position).descricaoProduto);
+                selectedProduto.setPrecoProduto(cartItems.get(position).precoProduto);
+                selectedProduto.setImagemProduto(cartItems.get(position).imagemProduto);
+                selectedProduto.setEmStockProduto(cartItems.get(position).emStockProduto);
+                selectedProduto.setIdCategoria(cartItems.get(position).idCategoria);
+                selectedProduto.setCategoriaProduto(cartItems.get(position).categoriaProduto);
+                selectedProduto.setIdEstabelecimento(cartItems.get(position).idEstabelecimento);
+                selectedProduto.setEstabProduto(cartItems.get(position).estabProduto);
+                selectedProduto.setLatitude(cartItems.get(position).latitude);
+                selectedProduto.setLongitude(cartItems.get(position).longitude);
+
+
+
+
+                Common.selectedProduto = selectedProduto;
                 Common.selectedProdutoPosition = position;
                 EventBus.getDefault().postSticky(new CartProdutoClick(true, cartItems.get(position)));
                 ((ShoppingCartActivity) context).finish();
@@ -138,10 +150,39 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
 
         holder.ic_add.setOnClickListener(view -> {
 
+            Produtos product = new Produtos();
+            product.setIdProduto(cartItems.get(position).idProduto);
+            product.setNomeProduto(cartItems.get(position).nomeProduto);
+            product.setDescricaoProduto(cartItems.get(position).descricaoProduto);
+            product.setPrecoProduto(cartItems.get(position).precoProduto);
+            product.setImagemProduto(cartItems.get(position).imagemProduto);
+            product.setIdEstabelecimento(cartItems.get(position).idEstabelecimento);
+            product.setEstabProduto(cartItems.get(position).estabProduto);
+            product.setLatitude(cartItems.get(position).latitude);
+            product.setLongitude(cartItems.get(position).longitude);
+
+
+            product.setEmStockProduto(cartItems.get(position).emStockProduto);
+            product.setIdCategoria(cartItems.get(position).idCategoria);
+            product.setCategoriaProduto(cartItems.get(position).categoriaProduto);
             listener.onProductAddedCart(position, product);
         });
 
         holder.ic_remove.setOnClickListener(view -> {
+            Produtos product = new Produtos();
+            product.setIdProduto(cartItems.get(position).idProduto);
+            product.setNomeProduto(cartItems.get(position).nomeProduto);
+            product.setDescricaoProduto(cartItems.get(position).descricaoProduto);
+            product.setPrecoProduto(cartItems.get(position).precoProduto);
+            product.setImagemProduto(cartItems.get(position).imagemProduto);
+            product.setIdEstabelecimento(cartItems.get(position).idEstabelecimento);
+            product.setEstabProduto(cartItems.get(position).estabProduto);
+            product.setLatitude(cartItems.get(position).latitude);
+            product.setLongitude(cartItems.get(position).longitude);
+
+            product.setEmStockProduto(cartItems.get(position).emStockProduto);
+            product.setIdCategoria(cartItems.get(position).idCategoria);
+            product.setCategoriaProduto(cartItems.get(position).categoriaProduto);
             listener.onProductRemovedFromCart(position, product);
         });
 
@@ -162,7 +203,7 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private CardView cardViewCart;
+        private LinearLayout cardViewCart;
         private ImageView thumbnail;
         private TextView name;
         private TextView price;
@@ -214,4 +255,6 @@ public class CartProdutosAdapter extends RecyclerView.Adapter<CartProdutosAdapte
 
         void onProductRemovedFromCart(int index, Produtos product);
     }
+
+
 }

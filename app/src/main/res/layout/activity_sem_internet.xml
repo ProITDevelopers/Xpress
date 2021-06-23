@@ -21,21 +21,22 @@
             />
 
         <ImageView
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_wifi_off_24"
+            android:id="@+id/imgErro"
+            android:layout_marginTop="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:tint="@color/nav_menu_icon_color"
             />
 
         <TextView
+            android:id="@+id/txtMsgErro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_marginTop="50dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:layout_margin="20dp"
             android:gravity="center"
-            android:text="@string/msg_erro_internet"
             android:layout_gravity="center"/>
 
         <TextView

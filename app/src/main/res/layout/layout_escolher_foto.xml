@@ -30,7 +30,7 @@
                     android:id="@+id/img"
                     android:src="@drawable/xpress_logo"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:scaleType="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="8dp"
@@ -89,6 +89,7 @@
                             android:maxLength="9"
                             android:background="@android:color/transparent"
                             android:padding="15dp"
+                            android:enabled="false"
                             />
 
                     </RelativeLayout>

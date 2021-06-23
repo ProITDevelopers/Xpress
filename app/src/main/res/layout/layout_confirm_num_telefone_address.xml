@@ -30,7 +30,7 @@
                     android:id="@+id/img"
                     android:src="@drawable/xpress_logo"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:scaleType="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="8dp"
@@ -56,10 +56,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:textColor="@color/xpress_purple"
-                    android:text="@string/local_de_entrega"
+                    android:text="@string/endereco_de_entrega"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -96,6 +96,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/numero_telefone"
                             android:textColorHint="@color/white"
+                            android:textCursorDrawable="@null"
                             android:inputType="number"
                             android:maxLength="9"
                             android:background="@android:color/transparent"
@@ -142,6 +143,7 @@
                             android:drawableTint="@color/xpress_purple"
                             android:drawablePadding="15dp"
                             android:textColor="@color/white"
+                            android:textCursorDrawable="@null"
                             />
 
                     </RelativeLayout>
@@ -156,10 +158,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="15dp"
+                    android:padding="10dp"
                     android:textColor="@color/white"
                     android:text="@string/quer_usar_o_seu_n_toque_aqui"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"

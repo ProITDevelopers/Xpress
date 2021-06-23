@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -40,7 +39,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -152,7 +150,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //The External Storage Write Permission is granted to you... Continue your left job...
                 setUpLocation();
             } else {
-                Toast.makeText(this, "This app needs Location permission to continue!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -231,11 +229,11 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                     loadAllAvailableDriver(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()));
 
 
-                    Log.d("EDMTDEV", String.format("Your location was changed : %f / %f",
+                    Log.d(TAG, String.format("Your location was changed : %f / %f",
                             latitude, longitude));
 
                 } else {
-                    Log.d("EDMTDEV", "Can not get your location");
+                    Log.d(TAG, "Can not get your location");
                 }
             }
         });
@@ -280,18 +278,17 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
 
             Log.d(TAG, "onMapReady: darkmodeOn");
-            try {
-
-                boolean isSucess = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(this, R.raw.uber_style_map)
-                );
-
-                if (!isSucess)
-                    Log.d(TAG, "onMapReady_ERROR: Map style load failed !!!");
-
-        } catch (Resources.NotFoundException ex) {
-            ex.printStackTrace();
-        }
+//            try {
+//
+//                boolean isSucess = googleMap.setMapStyle(
+//                    MapStyleOptions.loadRawResourceStyle(this, R.raw.uber_style_map)
+//                );
+//
+//                if (!isSucess)
+//                    Log.d(TAG, "onMapReady_ERROR: Map style load failed !!!");
+//            } catch (Resources.NotFoundException ex) {
+//                ex.printStackTrace();
+//            }
         }else{
             Log.d(TAG, "onMapReady: darkmodeOff");
 
@@ -309,7 +306,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapClick(LatLng latLng) {
 
 
-                if (toolbarTitle.equals("Local de entrega")){
+                if (toolbarTitle.equals(getString(R.string.endereco_de_entrega))){
                     getMyDestination = getMyAddress(latLng);
                     //First, check markerDestination
                     //IF is not null, just remove available marker
@@ -318,7 +315,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                     markerDestination = mMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
                             .position(latLng)
-                            .title("Local de entrega")
+                            .title(getString(R.string.endereco_de_entrega))
                             .snippet(getMyDestination));
 
 
@@ -349,7 +346,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
             Geocoder geo = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geo.getFromLocation(location.latitude, location.longitude, 1);
             if (addresses.isEmpty()) {
-                Log.d("TAG_Mapa", "Waiting for Location");
+                Log.d(TAG, "Waiting for Location");
 //                Toast.makeText(mActivity.getApplicationContext(), "Waiting for Location", Toast.LENGTH_SHORT).show();
 
             }
@@ -372,7 +369,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         String latitude = String.valueOf(marker.getPosition().latitude);
         String longitude = String.valueOf(marker.getPosition().longitude);
 
-        if (toolbarTitle.equals("Local de entrega")){
+        if (toolbarTitle.equals(getString(R.string.endereco_de_entrega))){
             if (marker.getTitle().equals("Eu")){
 //                Toast.makeText(this, ""+marker.getTitle(), Toast.LENGTH_SHORT).show();
                 if (getMyEndereco == null || getMyEndereco.isEmpty()){
@@ -381,7 +378,7 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
                     alertaUsarLocalizacao(getMyEndereco,latitude,longitude);
                 }
 
-            }else if (marker.getTitle().equals("Local de entrega")){
+            }else if (marker.getTitle().equals(getString(R.string.endereco_de_entrega))){
 
                 if (getMyDestination == null || getMyDestination.isEmpty()){
                     MetodosUsados.mostrarMensagem(this,"Nenhum endereço encontrado.");

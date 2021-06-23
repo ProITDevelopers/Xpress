@@ -13,10 +13,10 @@ public class LocalEncomenda implements Serializable {
     public String pontodeReferencia;
 
     @SerializedName("latitude")
-    public String latitude;
+    public Double latitude;
 
     @SerializedName("longitude")
-    public String longitude;
+    public Double longitude;
 
     public LocalEncomenda() {}
 }

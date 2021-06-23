@@ -15,12 +15,12 @@ public class ApiClientADAO {
 //    private static final String BASE_URL_XPRESS = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/";
     private static final String BASE_URL_XPRESS_ADAO = "https://apitaxas.lengueno.com/";
     private static Retrofit retrofit = null;
-    private static int REQUEST_TIMEOUT = 90;
+    private static int REQUEST_TIMEOUT = 60000;
     private static OkHttpClient okHttpClient;
 
 
 
-    public static Retrofit getClient() {
+    public static Retrofit getClient(String BASE_URL_XPRESS_ADAO) {
 
         if (okHttpClient == null)
             initOkHttp();
@@ -44,9 +44,9 @@ public class ApiClientADAO {
     private static void initOkHttp() {
 
         OkHttpClient.Builder httpClient = new OkHttpClient().newBuilder()
-                .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
-                .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
-                .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                .connectTimeout(REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(REQUEST_TIMEOUT, TimeUnit.MILLISECONDS);
 
         httpClient.interceptors().add(new AddKEYADAOInterceptor());
 

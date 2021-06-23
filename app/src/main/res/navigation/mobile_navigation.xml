@@ -55,9 +55,24 @@
         tools:layout="@layout/fragment_encomendas" />
 
     <fragment
+        android:id="@+id/nav_menu_encomendas_actuais"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.encomenda_actual.EncomendasActuaisFragment"
+        tools:layout="@layout/fragment_encomendas_actuais" />
+
+    <fragment
+        android:id="@+id/nav_menu_encomendas_historico"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.encomenda_history.EncomendasHistoricoFragment"
+        tools:layout="@layout/fragment_encomendas_historico" />
+
+    <fragment
         android:id="@+id/nav_menu_encomenda_detail"
         android:name="ao.co.proitconsulting.xpress.fragmentos.encomenda_detail.EncomendaDetailFragment"
         tools:layout="@layout/fragment_encomenda_detail" />
+
+    <fragment
+        android:id="@+id/nav_menu_encomenda_tracker"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.encomenda_tracker.EncomendaTrackerFragment"
+        tools:layout="@layout/fragment_encomenda_tracker" />
 
     <fragment
         android:id="@+id/nav_menu_mapa"
@@ -67,8 +82,20 @@
 
     <fragment
         android:id="@+id/nav_menu_wallet"
-        android:name="ao.co.proitconsulting.xpress.fragmentos.wallet_xpress_saldo.CarteiraXpressSaldoFragment"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.carteira_xpress.CarteiraXpressFragment"
         android:label="@string/nav_carteira_title"
-        tools:layout="@layout/fragment_carteira_xpress_conta" />
+        tools:layout="@layout/fragment_carteira_xpress_saldo" />
+
+    <fragment
+        android:id="@+id/nav_menu_escolher_filtros"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.telafiltros.EscolherFiltrosFragment"
+        android:label="@string/nav_escolher_filtros_title"
+        tools:layout="@layout/fragment_escolher_filtros" />
+
+    <fragment
+        android:id="@+id/nav_menu_pesquisar"
+        android:name="ao.co.proitconsulting.xpress.fragmentos.telasallestab.PerquisarTodosEsbalecimentosFragment"
+        android:label="@string/nav_pesquisar_title"
+        tools:layout="@layout/fragment_pesquisar_todos_estabs" />
 
 </navigation>

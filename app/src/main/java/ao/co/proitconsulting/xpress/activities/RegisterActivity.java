@@ -1,20 +1,17 @@
 package ao.co.proitconsulting.xpress.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -22,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -31,10 +29,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.widget.ImageViewCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -46,6 +42,9 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -55,8 +54,7 @@ import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.activities.imagePicker.ImagePickerActivity;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
-import ao.co.proitconsulting.xpress.api.ErrorResponce;
-import ao.co.proitconsulting.xpress.api.ErrorUtils;
+import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -227,9 +225,10 @@ public class RegisterActivity extends AppCompatActivity {
         txtTermsCondicoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                MetodosUsados.mostrarMensagem(RegisterActivity.this,
-                        "TERMOS E CONDIÇÕES - Brevemente.");
+                Common.getLink = Common.GOOGLE_DRIVE_READ_PDF+Common.TERMS_CONDITIONS_XPRESS_LINK;
+                Intent intent = new Intent(RegisterActivity.this, WebViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -516,7 +515,14 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
+        editConfirmPass.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
+
+        if (!checkboxAcceptTerms.isChecked()){
+            checkboxAcceptTerms.setError("Termos e Condições.");
+            MetodosUsados.mostrarMensagemSnackBar(register_root,"Por favor aceite os termos e condições para continuar.");
+            return false;
+        }
 
 
 
@@ -551,9 +557,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void mensagemRegistoSemFoto() {
 
-
-
-        imgConfirm.setImageResource(R.drawable.ic_baseline_outline_person_add_24);
+//        imgConfirm.setImageResource(R.drawable.ic_baseline_outline_person_add_24);
         txtConfirmTitle.setText(getString(R.string.registo_sem_foto));
         txtConfirmMsg.setText(getString(R.string.msg_deseja_continuar));
 
@@ -648,22 +652,31 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                 } else {
-                    ErrorResponce errorResponce = ErrorUtils.parseError(response);
+
                     MetodosUsados.hideLoadingDialog();
 
+                    String responseErrorMsg ="";
+
                     try {
+                        responseErrorMsg = response.errorBody().string();
+                        JSONObject jsonObject = new JSONObject(responseErrorMsg);
+                        responseErrorMsg = jsonObject.getString("message");
 
-//                        Snackbar
-//                                .make(raiz, response.errorBody().string(), 4000)
-//                                .setActionTextColor(Color.WHITE)
-//                                .show();
+                        Log.d(TAG,"Error code: "+response.code()+", ErrorBody msg: "+responseErrorMsg);
 
-                        Snackbar.make(register_root, errorResponce.getError(), 4000)
-                                .setActionTextColor(Color.WHITE)
-                                .show();
-                    }catch (Exception e){
-                        Log.i(TAG,"autenticacaoVerif snakBar" + e.getMessage());
+
+
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }catch (JSONException err){
+                        Log.d(TAG, err.toString());
                     }
+
+                    Snackbar.make(register_root, responseErrorMsg, 4000)
+                            .setActionTextColor(Color.WHITE)
+                            .show();
                 }
             }
 
@@ -672,12 +685,12 @@ public class RegisterActivity extends AppCompatActivity {
                 MetodosUsados.hideLoadingDialog();
                 if (!MetodosUsados.conexaoInternetTrafego(RegisterActivity.this,TAG)){
                     MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet);
-                }else  if ("timeout".equals(t.getMessage())) {
+                }else  if (t.getMessage().contains("timeout")) {
                     MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet_timeout);
                 }else {
                     MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro);
                 }
-                Log.i(TAG,"onFailure" + t.getMessage());
+                Log.d(TAG,"onFailure" + t.getMessage());
 
             }
         });

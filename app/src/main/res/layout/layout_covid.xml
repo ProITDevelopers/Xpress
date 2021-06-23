@@ -21,7 +21,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:gravity="end"
                 android:elevation="1dp">
 
@@ -31,6 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:src="@drawable/btn_close"
+                    app:tint="@color/white"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -61,12 +62,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:padding="6dp"
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:text="@string/hint_prioridade_da_xpress_tua_saude"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/poppins_regular"
                     />
@@ -74,14 +75,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:padding="6dp"
+                    android:layout_marginTop="15dp"
+                    android:padding="5dp"
                     android:layout_marginBottom="15dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:text="@string/hint_principais_medidas_de_prevencao"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:fontFamily="@font/poppins_regular"
                     />
 
@@ -108,8 +109,8 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:text="@string/hint_lava_maos"
-                    android:textSize="18sp"
-                    android:padding="6dp"
+                    android:textSize="15sp"
+                    android:padding="5dp"
                     android:fontFamily="@font/poppins_regular"
                     />
 

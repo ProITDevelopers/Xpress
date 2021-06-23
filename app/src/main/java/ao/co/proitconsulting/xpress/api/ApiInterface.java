@@ -2,7 +2,9 @@ package ao.co.proitconsulting.xpress.api;
 
 import java.util.List;
 
+import ao.co.proitconsulting.xpress.modelos.EncomendaPedido;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
+import ao.co.proitconsulting.xpress.modelos.FaceBookLoginRequest;
 import ao.co.proitconsulting.xpress.modelos.Factura;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.MenuCategory;
@@ -15,6 +17,8 @@ import ao.co.proitconsulting.xpress.modelos.ReporSenha;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfilRequest;
+import ao.co.proitconsulting.xpress.modelos.Wallet;
+import ao.co.proitconsulting.xpress.modelos.WalletRequest;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -38,8 +42,8 @@ public interface ApiInterface {
     Call<ResponseBody> autenticarCliente2(@Body LoginRequest loginRequest);
 
 
-//    @POST("/FacebookCliente")
-//    Call<UsuarioAuth> autenticarFaceBook(@Body FaceBookLoginRequest faceBookLoginRequest);
+    @POST("/FacebookCliente")
+    Call<UsuarioAuth> autenticarFaceBook(@Body FaceBookLoginRequest faceBookLoginRequest);
 
 
     @POST("/cadastrarcliente")
@@ -99,16 +103,38 @@ public interface ApiInterface {
     @POST("/AlterarFotoPerfilCliente")
     Call<ResponseBody> actualizarFotoPerfil(@Part MultipartBody.Part imagem);
 
+    @POST("/WalletAbrirContaCliente")
+    Call<ResponseBody> criarContaWallet(@Body WalletRequest walletRequest);
+
+    @GET("/WalletConsultarSaldo")
+    Call<List<Wallet>> getSaldoWallet();
+
+
+
+
 
 
     @POST("/FacturaTpa")
-    Call<ResponseBody> facturaTPA(@Body Order order);
+    Call<ResponseBody> facturaTPA(@Body EncomendaPedido encomendaPedido);
+
+    @POST("/FacturaWallet")
+    Call<ResponseBody> facturaWallet(@Body EncomendaPedido encomendaPedido);
+
+    @Multipart
+    @POST("/ConfirmacaoPagamentoWallet/{codigoconfirmacao},{codoperacao}")
+    Call<ResponseBody> enviarConfirCodigoPagamento(
+            @Part("codigoconfirmacao") RequestBody codigoconfirmacao,
+            @Part("codoperacao") RequestBody codoperacao);
+
 
     @POST("/FacturaReferencia")
     Call<List<List<ReferenciaRequest>>> facturaReferencia(@Body Order order);
 
     @GET("/FacturasActualCliente")
-    Call<List<Factura>> getTodasFacturas();
+    Call<List<Factura>> getFacturas_Actuais();
+
+    @GET("/HistoricoFacturasCliente")
+    Call<List<Factura>> getFacturas_Historico();
 //
 //
 //    @GET("/ListarEstabA24h2")
@@ -119,7 +145,19 @@ public interface ApiInterface {
     Call<List<MenuCategory>> getMenuCategories();
 
     @GET("/ListagemEstabelecimentoA")
-    Call<List<Estabelecimento>> getAllEstabelecimentos();
+    Call<List<Estabelecimento>> getEstabelecimentos_TODOS();
+
+
+    @GET("/Listarestabelecimentoproximos/{longitude},{latitude}")
+    Call<List<Estabelecimento>> getEstabelecimentos_PERTO_DE_MIM(
+            @Path("latitude") double latitude,
+            @Path("longitude") double longitude);
+
+    @GET("/Listarmaisfacturados")
+    Call<List<Estabelecimento>> getEstabelecimentos_MAISPOPULARES();
+
+    @GET("/ListarEstabA24h2")
+    Call<List<Estabelecimento>> getEstabelecimentos_ALTASHORAS();
 //
     @GET("/ListarEstabPorTipo/{IdTipoEstabelecimento}")
     Call<List<Estabelecimento>> getEstabelecimentosPorTipo(@Path("IdTipoEstabelecimento") int idTipoEstabelecimento);

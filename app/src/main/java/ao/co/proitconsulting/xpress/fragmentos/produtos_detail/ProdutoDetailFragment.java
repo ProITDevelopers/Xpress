@@ -1,14 +1,8 @@
 package ao.co.proitconsulting.xpress.fragmentos.produtos_detail;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,37 +27,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.andremion.counterfab.CounterFab;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
 import ao.co.proitconsulting.xpress.Callback.ProdutoAddRemoveCartListener;
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.activities.MenuActivity;
 import ao.co.proitconsulting.xpress.activities.ShoppingCartActivity;
 import ao.co.proitconsulting.xpress.adapters.ProdutoExtrasAdapter;
-import ao.co.proitconsulting.xpress.api.ApiClient;
-import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
-import ao.co.proitconsulting.xpress.modelos.ProdutoListExtras;
+import ao.co.proitconsulting.xpress.modelos.ProdutoExtra;
 import ao.co.proitconsulting.xpress.modelos.Produtos;
 import dmax.dialog.SpotsDialog;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmList;
 import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveCartListener {
 
@@ -83,8 +71,8 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
     private RealmResults<CartItemProdutos> cartItems;
     private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
     private int cart_count = 1;
-    private Produtos produtos;
-    private RealmResults<ProdutoListExtras> produtoListExtras;
+
+
     private CartItemProdutos cartItem;
     private ProdutoAddRemoveCartListener listener;
     private int position;
@@ -105,7 +93,9 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
     private RelativeLayout errorLayout;
     private TextView btnTentarDeNovo;
 
-
+    private Gson gson;
+    private List<ProdutoExtra> produtoCartExtraListSelected;
+    private ProdutoExtra produtoExtra;
 
 
 
@@ -133,14 +123,14 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
         produtoDetailViewModel.getProdutoMutableLiveData().observe(this, new Observer<Produtos>() {
             @Override
             public void onChanged(Produtos produto) {
-                Log.d(TAG, "produtoDetailViewModel: "+"Prod: "+produto.descricaoProdutoC+", id: "+produto.idProduto);
+                Log.d(TAG, "produtoDetailViewModel: "+"Prod: "+produto.getNomeProduto()+", id: "+produto.getIdProduto());
 
                 ((AppCompatActivity)getActivity())
                         .getSupportActionBar()
-                        .setTitle(produto.getEstabelecimento());
+                        .setTitle(produto.getEstabProduto());
 
 
-                if (produto.produtoListExtras!=null){
+                if (produto.getProdutoExtrasList()!=null){
                     txtExtras.setVisibility(View.VISIBLE);
                     recyclerViewExtras.setVisibility(View.VISIBLE);
                 }
@@ -158,7 +148,12 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
             @Override
             public void onChanged(String errorMessage) {
                 waitingDialog.dismiss();
-                MetodosUsados.mostrarMensagem(getContext(),errorMessage);
+
+                if (errorMessage.equals(getString(R.string.msg_erro_internet)) ||
+                        errorMessage.equals(getString(R.string.msg_erro_internet))) {
+
+                    MetodosUsados.mostrarMensagem(getContext(),errorMessage);
+                }
 
             }
         });
@@ -169,7 +164,7 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
     }
 
     private void initViews() {
-
+        gson = new Gson();
         Log.d(TAG, "produtoDetailViewModel: "+"_initViews()");
 
         waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
@@ -195,7 +190,8 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerViewExtras.setLayoutManager(mLayoutManager);
         recyclerViewExtras.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewExtras.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        if (getContext()!=null)
+            recyclerViewExtras.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
 
 
@@ -215,10 +211,7 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
         btnTentarDeNovo = view.findViewById(R.id.btn);
         coordinatorLayout.setVisibility(View.INVISIBLE);
 
-        CounterFab floatingActionButton = ((MenuActivity) getActivity()).getFloatingActionButton();
-        if (floatingActionButton != null) {
-            floatingActionButton.hide();
-        }
+
 
     }
 
@@ -238,96 +231,14 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
                 coordinatorLayout.setVisibility(View.VISIBLE);
 
                 errorLayout.setVisibility(View.GONE);
-                carregarProductsListExtras(Common.selectedProduto);
+//                carregarProductsListExtras(Common.selectedProduto);
             }
         });
     }
 
-    private void verifConecxaoProdutoExtras(Produtos produto) {
-        if (getContext()!=null){
-            ConnectivityManager conMgr =  (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (conMgr!=null) {
-                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-                if (netInfo == null){
-                    mostarMsnErro();
-                } else {
-                    carregarProductsListExtras(produto);
-                }
-            }
-        }
-
-    }
-
-    private void carregarProductsListExtras(Produtos produto) {
-        waitingDialog.show();
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<ProdutoListExtras>> rv = apiInterface.getProdutosExtras(produto.idProduto);
-        rv.enqueue(new Callback<List<ProdutoListExtras>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<ProdutoListExtras>> call, @NonNull Response<List<ProdutoListExtras>> response) {
-
-//                if (produtoListExtrasList != null)
-//                    produtoListExtrasList.clear();
-
-//                Common.selectedProduto.produtoListExtras = new RealmList<>();
-
-                if (response.isSuccessful()) {
-
-                    if (response.body()!=null && response.body().size()>0){
-//                        Common.selectedProduto.produtoListExtras.addAll(response.body());
-//                        AppDatabase.updateSingleProduct(Common.selectedProduto);
-
-//                        produtoListExtrasList.addAll(new ArrayList<>(response.body()));
-//                        txtExtras.setVisibility(View.VISIBLE);
-//                        recyclerViewExtras.setVisibility(View.VISIBLE);
-
-//                        MutableLiveData<Produtos> mutableLiveDataProduto = new MutableLiveData<>();
-//                        produto.produtoListExtras = new RealmList<>();
-//                        produto.produtoListExtras.addAll(produtoListExtrasList);
-//                        mutableLiveDataProduto.setValue(produto);
-//                        produtoDetailViewModel.setMutableLiveDataProduto(mutableLiveDataProduto);
-//
-//                        AppDatabase.updateSingleProduct(produto);
-
-                        for (ProdutoListExtras produtoListExtras: response.body()) {
-                            Log.d(TAG, "onResponseProductExtra: "+"Prod: "+produto.descricaoProdutoC+", id: "+produto.idProduto+", Extra: "+produtoListExtras.produtoextras.descricao+" - "+produtoListExtras.produtoextras.preco);
-                        }
-
-                        waitingDialog.dismiss();
 
 
-                    }else {
 
-                        MetodosUsados.mostrarMensagem(getContext(),"Sem Extras.");
-                        waitingDialog.dismiss();
-
-                    }
-
-                } else {
-                    waitingDialog.dismiss();
-//                    if (response.code()==401){
-//                        mensagemTokenExpirado();
-//                    }
-                    try {
-                        errorMessage = response.errorBody().string();
-                        Log.d(TAG, "onResponseProductError: "+errorMessage);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    Log.d(TAG, "onResponseProductExtraError: "+errorMessage+", ResponseCode: "+response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<ProdutoListExtras>> call, @NonNull Throwable t) {
-
-                Log.d(TAG, "onResponseProductFailed: "+t.getMessage());
-                waitingDialog.dismiss();
-
-            }
-        });
-    }
 
 
 
@@ -336,57 +247,20 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
         Log.d(TAG, "produtoDetailViewModel: "+"fillAllViews(Produtos produtoSelected)");
         realm = Realm.getDefaultInstance();
         cartItems = realm.where(CartItemProdutos.class).findAllAsync();
-        waitingDialog.dismiss();
+        cartItem = realm.where(CartItemProdutos.class).equalTo("idProduto", produtoSelected.getIdProduto()).findFirst();
+
         coordinatorLayout.setVisibility(View.VISIBLE);
-//        produtos = realm.where(Produtos.class).equalTo("idProduto", produtoSelected.getIdProduto()).findFirst();
-//        produtoListExtras = realm.where(ProdutoListExtras.class).equalTo("idProduto", produtoSelected.getIdProduto()).findAll();
-
-        cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", produtoSelected.getIdProduto()).findFirst();
+        waitingDialog.dismiss();
 
 
-
-        if (produtoSelected.produtoListExtras!=null){
-            produtoExtrasAdapter = new ProdutoExtrasAdapter(getContext(),produtoSelected.produtoListExtras);
-            recyclerViewExtras.setAdapter(produtoExtrasAdapter);
-            produtoExtrasAdapter.notifyDataSetChanged();
-            produtoExtrasAdapter.setItemClickListener(new IRecyclerClickListener() {
-                @Override
-                public void onItemClickListener(View view, int position) {
-                    ProdutoListExtras produtoListExtras = produtoSelected.produtoListExtras.get(position);
-                    Toast.makeText(getContext(), "Extra: "+produtoListExtras.produtoextras.descricao+"\n"+
-                                    "Preço: "+produtoListExtras.produtoextras.preco,
-                            Toast.LENGTH_SHORT).show();
-
-                    if (view.findViewById(R.id.imgExtraSelected).getVisibility() == View.INVISIBLE){
-                        if (Common.selectedProduto.getUserSelectedAddon() == null)
-                            Common.selectedProduto.setUserSelectedAddon(new RealmList<>());
-                        Common.selectedProduto.getUserSelectedAddon().add(produtoListExtras);
-
-                        view.findViewById(R.id.imgExtraSelected).setVisibility(View.VISIBLE);
-                    }else {
-
-                        view.findViewById(R.id.imgExtraSelected).setVisibility(View.INVISIBLE);
-                        Common.selectedProduto.getUserSelectedAddon().remove(produtoListExtras);
-
-                    }
-                    calculateTotalPrice();
-                }
-            });
-
-        }
-
-        Picasso.with(getContext()).load(produtoSelected.imagemProduto)
+        Picasso.with(getContext()).load(produtoSelected.getImagemProduto())
                 .fit().centerCrop()
                 .placeholder(R.drawable.store_placeholder).into(productImg);
 
-        textViewTitle.setText(produtoSelected.getDescricaoProdutoC());
-        txtProdutoNome.setText(produtoSelected.getDescricaoProdutoC());
+        textViewTitle.setText(produtoSelected.getNomeProduto());
+        txtProdutoNome.setText(produtoSelected.getNomeProduto());
         txtDescricao.setText(produtoSelected.getDescricaoProduto());
-//        String preco = String.valueOf(produtoSelected.getPrecoUnid());
-//        txtProdutoPrice.setText(getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
 
-        double displayPrice = Double.parseDouble(String.valueOf(produtoSelected.getPrecoUnid()));
-        txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(displayPrice)).append(" AKZ").toString());
 
         if (cartItem != null){
             btn_comprar.setText("Finalizar Compra");
@@ -398,17 +272,101 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
 
             if (cartItem.quantity > 1){
                 product_count.setText(String.valueOf(cart_count));
-                product_count_info.setText(" Items");
+                product_count_info.setText(" Itens");
             }
 
             product_count.setVisibility(View.VISIBLE);
             product_count_info.setVisibility(View.VISIBLE);
+
+            if (cartItem.produtoExtras!=null){
+                produtoCartExtraListSelected = gson.fromJson(cartItem.produtoExtras,
+                        new TypeToken<List<ProdutoExtra>>(){}.getType());
+
+
+                for (int i = 0; i < produtoCartExtraListSelected.size(); i++) {
+
+                    produtoExtra = produtoCartExtraListSelected.get(i);
+
+                    if (produtoSelected.getProdutoExtrasList()!=null){
+
+                        for (int j = 0; j < produtoSelected.getProdutoExtrasList().size(); j++) {
+
+                            if (produtoSelected.getProdutoExtrasList().get(j).getiDProdudoExtra() == produtoExtra.getiDProdudoExtra()){
+                                produtoSelected.getProdutoExtrasList().get(j).setSelectedProdudoExtra(true);
+                            }
+
+                        }
+
+                    }
+                }
+                double totalPrice = Double.parseDouble(String.valueOf(produtoSelected.getPrecoProduto())), displayPrice=0.0;
+
+                //Addon
+                for (ProdutoExtra addonModel: produtoCartExtraListSelected)
+                    totalPrice+=Double.parseDouble(String.valueOf(addonModel.getPrecoProdudoExtra()));
+
+
+                displayPrice = totalPrice * (1);
+                displayPrice = Math.round(displayPrice*100.0/100.0);
+
+                txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(displayPrice)).append(" AKZ").toString());
+
+            }else{
+                double price = Double.parseDouble(String.valueOf(produtoSelected.getPrecoProduto()));
+                txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(price)).append(" AKZ").toString());
+            }
+
+
         }else{
             btn_comprar.setText("Adicionar ao Carrinho");
             cart_count = 1;
             product_count.setText(String.valueOf(cart_count));
             product_count_info.setText(" Item");
+            double price = Double.parseDouble(String.valueOf(produtoSelected.getPrecoProduto()));
+            txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(price)).append(" AKZ").toString());
         }
+
+
+        if (produtoSelected.getProdutoExtrasList()!=null){
+            produtoExtrasAdapter = new ProdutoExtrasAdapter(getContext(),produtoSelected.getProdutoExtrasList());
+            recyclerViewExtras.setAdapter(produtoExtrasAdapter);
+            produtoExtrasAdapter.notifyDataSetChanged();
+
+            produtoExtrasAdapter.setItemClickListener(new IRecyclerClickListener() {
+                @Override
+                public void onItemClickListener(View view, int position) {
+                    produtoExtra = produtoSelected.getProdutoExtrasList().get(position);
+                    Toast.makeText(getContext(), "Extra: "+produtoExtra.getNomeProdudoExtra()+"\n"+
+                                    "Preço: "+produtoExtra.getPrecoProdudoExtra(),
+                            Toast.LENGTH_SHORT).show();
+
+                    if (view.findViewById(R.id.imgExtraSelected).getVisibility() == View.INVISIBLE){
+                        if (Common.selectedProduto.getUserSelectedAddon() == null)
+                            Common.selectedProduto.setUserSelectedAddon(new ArrayList<>());
+                        produtoExtra.setSelectedProdudoExtra(true);
+                        Common.selectedProduto.getUserSelectedAddon().add(produtoExtra);
+
+                        view.findViewById(R.id.imgExtraSelected).setVisibility(View.VISIBLE);
+                    }else {
+                        produtoExtra.setSelectedProdudoExtra(false);
+                        view.findViewById(R.id.imgExtraSelected).setVisibility(View.INVISIBLE);
+                        if (Common.selectedProduto.getUserSelectedAddon()!=null)
+                            Common.selectedProduto.getUserSelectedAddon().remove(produtoExtra);
+
+                    }
+                    calculateTotalPrice();
+                }
+            });
+
+        }
+
+
+//        String preco = String.valueOf(produtoSelected.getPrecoUnid());
+//        txtProdutoPrice.setText(getString(R.string.price_with_currency, Float.parseFloat(preco)).concat(" AKZ"));
+
+
+
+
 
 
         ic_remove.setOnClickListener(new View.OnClickListener() {
@@ -424,7 +382,7 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
 
                 }else{
                     product_count.setText(String.valueOf(cart_count));
-                    product_count_info.setText(" Items");
+                    product_count_info.setText(" Itens");
                 }
 
 
@@ -436,12 +394,12 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
             public void onClick(View v) {
                 cart_count+=1;
                 if (cart_count > 1 ){
-                    if (cart_count<=produtoSelected.emStock){
+                    if (cart_count<=produtoSelected.getEmStockProduto()){
                         product_count.setText(String.valueOf(cart_count));
-                        product_count_info.setText(" Items");
+                        product_count_info.setText(" Itens");
                     }else{
                         Toast.makeText(getContext(), "Atingiu o limite de items!", Toast.LENGTH_SHORT).show();
-                        cart_count = produtoSelected.emStock;
+                        cart_count = produtoSelected.getEmStockProduto();
                     }
 
                 }
@@ -506,12 +464,12 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
 
     private void calculateTotalPrice() {
 
-        double totalPrice = Double.parseDouble(String.valueOf(Common.selectedProduto.precoUnid)), displayPrice=0.0;
+        double totalPrice = Double.parseDouble(String.valueOf(Common.selectedProduto.getPrecoProduto())), displayPrice=0.0;
 
         //Addon
         if (Common.selectedProduto.getUserSelectedAddon() != null && Common.selectedProduto.getUserSelectedAddon().size() > 0)
-            for (ProdutoListExtras addonModel: Common.selectedProduto.getUserSelectedAddon())
-                totalPrice+=Double.parseDouble(String.valueOf(addonModel.produtoextras.preco));
+            for (ProdutoExtra addonModel: Common.selectedProduto.getUserSelectedAddon())
+                totalPrice+=Double.parseDouble(String.valueOf(addonModel.getPrecoProdudoExtra()));
 
 
 //           if (cartItem!=null){
@@ -531,12 +489,11 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
     private void checkIfCartAsItems(Produtos produtoSelected){
 
 
+        cartItem = realm.where(CartItemProdutos.class).equalTo("idProduto", produtoSelected.getIdProduto()).findFirst();
 
-
-        cartItem = realm.where(CartItemProdutos.class).equalTo("produtos.idProduto", produtoSelected.getIdProduto()).findFirst();
-        if (cartItem != null) {
+        if (cartItem != null){
             btn_comprar.setText("Finalizar Compra");
-             cart_count = cartItem.quantity;
+            cart_count = cartItem.quantity;
 
             if (cartItem.quantity == 1){
                 product_count.setText(String.valueOf(cartItem.quantity));
@@ -545,22 +502,78 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
 
             if (cartItem.quantity > 1){
                 product_count.setText(String.valueOf(cartItem.quantity));
-                product_count_info.setText(" Items");
+                product_count_info.setText(" Itens");
             }
 
             product_count.setVisibility(View.VISIBLE);
             product_count_info.setVisibility(View.VISIBLE);
+            if (cartItem.produtoExtras!=null){
+                produtoCartExtraListSelected = gson.fromJson(cartItem.produtoExtras,
+                        new TypeToken<List<ProdutoExtra>>(){}.getType());
+
+                for (int i = 0; i < produtoCartExtraListSelected.size(); i++) {
+
+                    produtoExtra = produtoCartExtraListSelected.get(i);
+
+                    if (produtoSelected.getProdutoExtrasList()!=null){
+
+                        for (int j = 0; j < produtoSelected.getProdutoExtrasList().size(); j++) {
+
+                            if (produtoSelected.getProdutoExtrasList().get(j).getiDProdudoExtra() == produtoExtra.getiDProdudoExtra()){
+                                produtoSelected.getProdutoExtrasList().get(j).setSelectedProdudoExtra(true);
+                            }
+
+                        }
+
+                    }
+                }
+                double totalPrice = Double.parseDouble(String.valueOf(produtoSelected.getPrecoProduto())), displayPrice=0.0;
+
+                //Addon
+                for (ProdutoExtra addonModel: produtoCartExtraListSelected)
+                    totalPrice+=Double.parseDouble(String.valueOf(addonModel.getPrecoProdudoExtra()));
 
 
+                displayPrice = totalPrice * (1);
+                displayPrice = Math.round(displayPrice*100.0/100.0);
 
-        } else {
+                txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(displayPrice)).append(" AKZ").toString());
+
+            }else{
+                double price = Double.parseDouble(String.valueOf(produtoSelected.getPrecoProduto()));
+                txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(price)).append(" AKZ").toString());
+                Common.selectedProduto.setUserSelectedAddon(null);
+
+            }
+
+
+        }else{
             btn_comprar.setText("Adicionar ao Carrinho");
             cart_count = 1;
             product_count.setText(String.valueOf(cart_count));
             product_count_info.setText(" Item");
 
+            double price = Double.parseDouble(String.valueOf(produtoSelected.getPrecoProduto()));
+            txtProdutoPrice.setText(new StringBuilder("").append(Utils.formatPrice(price)).append(" AKZ").toString());
 
+            Common.selectedProduto.setUserSelectedAddon(null);
+
+            if (produtoSelected.getProdutoExtrasList()!=null){
+
+                for (int j = 0; j < produtoSelected.getProdutoExtrasList().size(); j++) {
+
+                    produtoSelected.getProdutoExtrasList().get(j).setSelectedProdudoExtra(false);
+
+                }
+//                produtoExtrasAdapter.updateData(produtoSelected.getProdutoExtrasList());
+            }
+
+            if (produtoExtrasAdapter!=null)
+                produtoExtrasAdapter.notifyDataSetChanged();
         }
+
+        if (produtoExtrasAdapter!=null)
+            produtoExtrasAdapter.notifyDataSetChanged();
 
     }
 
@@ -569,12 +582,12 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
     public void onProdutoAddedCart(int index, Produtos product,int quantidadeSelected) {
         AppDatabase.addItemToCart(getContext(),product,cart_count);
 
-        SpannableString message = new SpannableString(product.getDescricaoProdutoC());
-        message.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.xpress_green)),
-                0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        SpannableString message = new SpannableString(product.getNomeProduto());
+//        message.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.xpress_green)),
+//                0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//        MetodosUsados.mostrarMensagem(getContext(),message+" adicionado ao Carrinho!");
 
-        Snackbar.make(view, message+" adicionado ao Carrinho!"+" Qtd: "+cart_count, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
 
 
     }
@@ -591,6 +604,8 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
 
 //        checkIfCartAsItems(Common.selectedProduto);
 
+        EventBus.getDefault().removeAllStickyEvents();
+
         super.onResume();
     }
 
@@ -599,7 +614,6 @@ public class ProdutoDetailFragment extends Fragment implements ProdutoAddRemoveC
     @Override
     public void onDestroyView() {
         EventBus.getDefault().removeAllStickyEvents();
-
         if (cartItems != null) {
             cartItems.addChangeListener(cartRealmChangeListener);
         }

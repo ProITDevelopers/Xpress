@@ -26,8 +26,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.andremion.counterfab.CounterFab;
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,14 +43,17 @@ import ao.co.proitconsulting.xpress.EventBus.CategoryClick;
 import ao.co.proitconsulting.xpress.EventBus.EncomendaClick;
 import ao.co.proitconsulting.xpress.EventBus.EstabelecimentoClick;
 import ao.co.proitconsulting.xpress.EventBus.ProdutoClick;
+import ao.co.proitconsulting.xpress.EventBus.StartCarteiraXpressFrag;
 import ao.co.proitconsulting.xpress.EventBus.StartEncomendaFrag;
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
+import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CartItemProdutos;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
+import ao.co.proitconsulting.xpress.modelos.Wallet;
 import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -64,6 +69,7 @@ public class MenuActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private NavigationView navigationView;
     private UsuarioPerfil usuarioPerfil;
+    private Wallet wallet = new Wallet();
 //    private CircleImageView imgUserPhoto;
     private RoundedImageView imgUserPhoto;
     private TextView txtUserNameInitial, txtUserName, txtUserEmail;
@@ -82,8 +88,8 @@ public class MenuActivity extends AppCompatActivity {
     private RealmResults<CartItemProdutos> cartItems;
     private RealmChangeListener<RealmResults<CartItemProdutos>> cartRealmChangeListener;
     int cart_count = 0;
-//    private NotificationBadge badge;
-//    private ImageView cart_icon;
+    private NotificationBadge badge;
+    private ImageView cart_icon;
     private CounterFab fab;
 
     @Override
@@ -165,7 +171,7 @@ public class MenuActivity extends AppCompatActivity {
         //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
         dialogLayoutConfirmarProcesso = new Dialog(this);
         dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
-        dialogLayoutConfirmarProcesso.setCancelable(true);
+        dialogLayoutConfirmarProcesso.setCancelable(false);
         if (dialogLayoutConfirmarProcesso.getWindow()!=null)
             dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -227,22 +233,26 @@ public class MenuActivity extends AppCompatActivity {
                         .placeholder(R.drawable.photo_placeholder)
                         .into(imgUserPhoto);
             }
-        }else{
-            Picasso.with(this)
-                    .load(R.drawable.photo_placeholder)
-                    .fit().centerCrop()
-                    .into(imgUserPhoto);
-            txtUserName.setText("Convidado");
-            txtUserEmail.setText("convidado@xpresslengueno.co.ao");
-
-            navigationView.getMenu().getItem(1).setVisible(false);
-            navigationView.getMenu().getItem(2).setVisible(false);
-            navigationView.getMenu().getItem(3).setVisible(false);
-            navigationView.getMenu().getItem(4).setVisible(false);
-
-
         }
+
+//        else{
+//            Picasso.with(this)
+//                    .load(R.drawable.photo_placeholder)
+//                    .fit().centerCrop()
+//                    .into(imgUserPhoto);
+//            txtUserName.setText("Convidado");
+//            txtUserEmail.setText("convidado@xpresslengueno.co.ao");
+//
+//            navigationView.getMenu().getItem(1).setVisible(false);
+//            navigationView.getMenu().getItem(2).setVisible(false);
+//            navigationView.getMenu().getItem(3).setVisible(false);
+//            navigationView.getMenu().getItem(4).setVisible(false);
+//
+//
+//        }
     }
+
+
 
     private void mensagemLogOut() {
 
@@ -273,19 +283,24 @@ public class MenuActivity extends AppCompatActivity {
         stopService(serviceIntent);
         AppDatabase.clearData();
         AppPrefsSettings.getInstance().clearAppPrefs();
-        Intent intent = new Intent(this, SplashScreenActivity.class);
+        LoginManager.getInstance().logOut();
+        Intent intent = new Intent(this, WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
 
-    private void verificaoPerfil() {
+    private void verificarConecxaoNETPerfil() {
         ConnectivityManager conMgr =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conMgr!=null) {
             NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
             if (netInfo != null){
                 carregarMeuPerfil();
+            }else{
+                usuarioPerfil = AppPrefsSettings.getInstance().getUser();
+                carregarDadosOffline(usuarioPerfil);
             }
+
         }
     }
 
@@ -297,13 +312,18 @@ public class MenuActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Response<List<UsuarioPerfil>> response) {
 
                 if (response.isSuccessful()) {
-                    if (response.body()!=null){
+                    if (response.body()!=null && response.body().size()>0){
                         usuarioPerfil = response.body().get(0);
 
                         AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
 
                         carregarDadosOffline(usuarioPerfil);
 
+                        saldoContaWalletApi();
+
+                    }else{
+                        MetodosUsados.mostrarMensagem(MenuActivity.this,
+                                "O seu perfil foi eliminado.");
                     }
 
                 } else {
@@ -322,6 +342,49 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
+                Log.d(TAG, "UsuarioPerfil: "+t.getMessage());
+            }
+        });
+    }
+
+    private void saldoContaWalletApi() {
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Wallet>> call = apiInterface.getSaldoWallet();
+        call.enqueue(new Callback<List<Wallet>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Wallet>> call, @NonNull Response<List<Wallet>> response) {
+
+                //response.body()==null
+                if (response.isSuccessful()) {
+
+                    if (response.body()!=null && response.body().size()>0){
+
+                        wallet = response.body().get(0);
+
+                        usuarioPerfil.carteiraXpress = wallet;
+
+
+                        AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
+
+
+
+
+                    }else{
+                        Log.d(TAG, "onResponse: Algo errado com a Wallet");
+                    }
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Wallet>>call, @NonNull Throwable t) {
+
+
+                Log.d(TAG, "CarteiraXpressFragment: "+t.getMessage());
 
             }
         });
@@ -335,7 +398,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialogLayoutConfirmarProcesso.cancel();
-                logOutTemp();
+//                logOutTemp();
+                logOut();
             }
         });
 
@@ -354,7 +418,7 @@ public class MenuActivity extends AppCompatActivity {
     private void logOutTemp() {
 
         AppPrefsSettings.getInstance().deleteToken();
-        Intent intent = new Intent(this, SplashScreenActivity.class);
+        Intent intent = new Intent(this, WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -435,24 +499,33 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onStartCarteiraXpressClick(StartCarteiraXpressFrag event){
+        if (event.isSuccess()){
+//            Toast.makeText(this, "Click to: "+event.getCartItemProduto().produtos.descricaoProdutoC, Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_menu_wallet);
+        }
+    }
+
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_options; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_options, menu);
-//        View view = menu.findItem(R.id.action_cart).getActionView();
-//        badge = (NotificationBadge)view.findViewById(R.id.badge);
-//        cart_icon = (ImageView) view.findViewById(R.id.cart_icon);
-//        cart_icon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MenuActivity.this,ShoppingCartActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////            Intent intent = new Intent(this, ShopCartActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        View view = menu.findItem(R.id.action_cart).getActionView();
+        badge = (NotificationBadge)view.findViewById(R.id.badge);
+        cart_icon = (ImageView) view.findViewById(R.id.cart_icon);
+        cart_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MenuActivity.this,ShoppingCartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            Intent intent = new Intent(this, ShopCartActivity.class);
+                startActivity(intent);
+            }
+        });
         updateCartCount();
 
 //        MenuItem menuItem = menu.findItem(R.id.action_cart);
@@ -461,18 +534,18 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void updateCartCount() {
-//        if (badge == null) return;
+        if (badge == null) return;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (cart_count == 0){
-//                    badge.setVisibility(View.INVISIBLE);
+                    badge.setVisibility(View.INVISIBLE);
 
                     fab.setCount(0);
                 }
                 else{
-//                    badge.setVisibility(View.VISIBLE);
-//                    badge.setText(String.valueOf(cart_count));
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(String.valueOf(cart_count));
                     fab.setCount(cart_count);
                 }
             }
@@ -521,8 +594,7 @@ public class MenuActivity extends AppCompatActivity {
             cartItems.addChangeListener(cartRealmChangeListener);
         }
 
-        usuarioPerfil = AppPrefsSettings.getInstance().getUser();
-        carregarDadosOffline(usuarioPerfil);
+        verificarConecxaoNETPerfil();
 
 //        checkNavigationViewSelection();
 //        verificaoPerfil();
@@ -549,9 +621,9 @@ public class MenuActivity extends AppCompatActivity {
         Log.d(TAG, "super.onDestroy();");
     }
 
-    public CounterFab getFloatingActionButton(){
-        return fab;
-    }
+//    public CounterFab getFloatingActionButton(){
+//        return fab;
+//    }
 
 
 }

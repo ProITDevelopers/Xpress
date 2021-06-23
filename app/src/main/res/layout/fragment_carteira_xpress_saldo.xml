@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/coordinatorLayout_XpressSaldo"
+    android:visibility="gone">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -126,7 +127,7 @@
                 />
 
             <TextView
-                android:id="@+id/txtNomeCompleto"
+                android:id="@+id/txtPrimeiroNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -160,29 +161,6 @@
                 android:fontFamily="@font/montserrat_regular"
                 />
 
-
-            <TextView
-                android:id="@+id/txtUserMail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:textSize="14sp"
-                android:text="@string/hint_email_caps"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:alpha="0.5"
-                android:fontFamily="@font/montserrat_regular"
-                />
-
-            <TextView
-                android:id="@+id/txtEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/perfil_text_color"
-                android:fontFamily="@font/montserrat_regular"
-                />
 
 
             <TextView
@@ -220,21 +198,43 @@
                 />
 
 
-
             <TextView
-                android:id="@+id/txtUserGender"
+                android:id="@+id/txtUserMail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
-                android:text="@string/genero_caps"
+                android:text="@string/hint_email_caps"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
-                android:id="@+id/txtSexo"
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/perfil_text_color"
+                android:fontFamily="@font/montserrat_regular"
+                />
+
+            <TextView
+                android:id="@+id/txtContaTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:textSize="14sp"
+                android:text="@string/n_mero_da_conta"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:alpha="0.5"
+                android:fontFamily="@font/montserrat_regular"
+                />
+
+            <TextView
+                android:id="@+id/txtNumeroConta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -247,19 +247,19 @@
 
 
             <TextView
-                android:id="@+id/txtUserAddress"
+                android:id="@+id/txtCreditTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:textSize="14sp"
-                android:text="@string/endereco_caps"
+                android:text="@string/credito_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:alpha="0.5"
                 android:fontFamily="@font/montserrat_regular"
                 />
 
             <TextView
-                android:id="@+id/txtEndereco"
+                android:id="@+id/txtCreditValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
@@ -272,19 +272,7 @@
 
 
 
-            <Button
-                android:id="@+id/btnEditPerfil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_margin="25dp"
-                android:text="@string/editar_perfil"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:background="@drawable/button_background_green"
-                android:textColor="@android:color/white"
-                android:fontFamily="@font/montserrat_regular"
-                android:textAllCaps="false"
-                />
+
 
 
         </LinearLayout>

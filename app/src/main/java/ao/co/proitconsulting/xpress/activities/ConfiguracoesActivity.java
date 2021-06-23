@@ -102,7 +102,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
 
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"proitdevelopers2@gmail.com"});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"developer@proit-consulting.com"});
         /*intent.putExtra(Intent.EXTRA_SUBJECT, "Query from android app");*/
         intent.putExtra(Intent.EXTRA_SUBJECT, "Consulta do aplicativo Android");
         intent.putExtra(Intent.EXTRA_TEXT, body);

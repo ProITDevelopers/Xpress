@@ -88,6 +88,7 @@
                             android:textColorHint="@color/black"
                             android:backgroundTint="@color/xpress_green"
                             android:fontFamily="@font/poppins_regular"
+
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -110,6 +111,7 @@
                             android:textColorHint="@color/black"
                             android:backgroundTint="@color/xpress_green"
                             android:fontFamily="@font/poppins_regular"
+
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -178,6 +180,7 @@
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
                     android:fontFamily="@font/poppins_regular"
+
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -205,6 +208,7 @@
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
                     android:fontFamily="@font/poppins_regular"
+
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -233,6 +237,7 @@
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
                     android:fontFamily="@font/poppins_regular"
+
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -261,6 +266,7 @@
                     android:textColorHint="@color/black"
                     android:backgroundTint="@color/xpress_green"
                     android:fontFamily="@font/poppins_regular"
+
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -305,7 +311,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/hint_confirmpass"
                 android:text="@string/btn_registar_text"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:background="@drawable/button_background"
+                android:background="@drawable/button_background_green_lined"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="30dp"
                 android:layout_width="0dp"

@@ -39,7 +39,7 @@
                     android:text="@string/alterar_palavra_passe"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/poppins_regular"
                     />
@@ -107,7 +107,7 @@
                         android:layout_gravity="center"
                         android:text="@string/cancelar"
                         android:textColor="@color/white"
-                        android:background="@drawable/button_background_grey"
+                        android:background="@drawable/button_background_grey_lined"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:clickable="true"
@@ -115,6 +115,7 @@
                         android:foreground="?android:attr/selectableItemBackground"
                         android:fontFamily="@font/poppins_regular"
                         android:textAllCaps="false"
+
                         />
 
                     <Button
@@ -125,7 +126,7 @@
                         android:layout_gravity="center"
                         android:text="@string/enviar"
                         android:textColor="@color/white"
-                        android:background="@drawable/button_background"
+                        android:background="@drawable/button_background_green_lined"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"

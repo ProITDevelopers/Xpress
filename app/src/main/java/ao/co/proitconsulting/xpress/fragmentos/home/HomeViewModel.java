@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.ISlideCallbackListener;
-import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 
 public class HomeViewModel extends ViewModel implements ISlideCallbackListener {
@@ -30,8 +29,8 @@ public class HomeViewModel extends ViewModel implements ISlideCallbackListener {
     private void loadTopImagesList() {
 
         List<TopSlideImages> homeTopSlideList = new ArrayList<>();
-        homeTopSlideList.add(new TopSlideImages(R.drawable.img_top1));
-        homeTopSlideList.add(new TopSlideImages(R.drawable.img_top2));
+        homeTopSlideList.add(new TopSlideImages("https://s3.us-east-2.amazonaws.com/xpress-entrega/estafeta/estiloXpress1622828336903Hello_Hanna.png"));
+        homeTopSlideList.add(new TopSlideImages("https://s3.us-east-2.amazonaws.com/xpress-entrega/estafeta/laranja1622828574377Mask_Group.png"));
         slideCallbackListener.onSlideLoadSuccess(homeTopSlideList);
 
     }

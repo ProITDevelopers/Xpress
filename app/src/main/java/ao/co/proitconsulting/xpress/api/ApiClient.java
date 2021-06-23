@@ -15,7 +15,7 @@ public class ApiClient {
 //    private static final String BASE_URL_XPRESS = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/";
     private static final String BASE_URL_XPRESS = "https://apixpress.lengueno.com/";
     private static Retrofit retrofit = null;
-    private static int REQUEST_TIMEOUT = 10000;
+    private static int REQUEST_TIMEOUT = 60000;
     private static OkHttpClient okHttpClient;
 
 

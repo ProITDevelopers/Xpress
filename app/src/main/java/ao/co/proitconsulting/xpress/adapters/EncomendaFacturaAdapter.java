@@ -29,8 +29,6 @@ public class EncomendaFacturaAdapter extends RecyclerView.Adapter<EncomendaFactu
     private List<Factura> facturaList;
 
 
-
-
     public EncomendaFacturaAdapter(Context context, List<Factura> facturaList) {
         this.facturaList = facturaList;
         this.context = context;
@@ -64,7 +62,7 @@ public class EncomendaFacturaAdapter extends RecyclerView.Adapter<EncomendaFactu
                 holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.yellow));
             }
 
-            if (factura.estado.equals("A Caminho")){
+            if (factura.estado.equals("À Caminho")){
                 holder.txtEstado.setTextColor(ContextCompat.getColor(context, R.color.yellow));
             }
 
@@ -75,9 +73,13 @@ public class EncomendaFacturaAdapter extends RecyclerView.Adapter<EncomendaFactu
 
             holder.txtEstado.setText(factura.estado);
 
+            double displayPrice = Double.parseDouble(String.valueOf(factura.total));
+            holder.txtTotal.setText(new StringBuilder("")
+                    .append(Utils.formatPrice(displayPrice))
+                    .append(" AKZ").toString());
 
-            String total = String.valueOf(factura.total);
-            holder.txtTotal.setText(context.getString(R.string.price_with_currency, Float.parseFloat(total)).concat(" AKZ"));
+//            String total = String.valueOf(factura.total);
+//            holder.txtTotal.setText(context.getString(R.string.price_with_currency, Float.parseFloat(total)).concat(" AKZ"));
 
 
 

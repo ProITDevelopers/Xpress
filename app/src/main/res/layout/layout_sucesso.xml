@@ -77,7 +77,7 @@
                         android:layout_gravity="center"
                         android:text="@string/continuar"
                         android:textColor="@color/white"
-                        android:background="@drawable/button_background"
+                        android:background="@drawable/button_background_green_lined"
                         android:layout_height="44dp"
                         android:layout_marginLeft="80dp"
                         android:layout_marginRight="80dp"

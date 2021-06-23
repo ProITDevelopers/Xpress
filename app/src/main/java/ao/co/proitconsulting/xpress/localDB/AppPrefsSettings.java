@@ -16,6 +16,7 @@ public class AppPrefsSettings {
     private static final String KEY_AUTH_TOKEN = "USER_AUTH_TOKEN";
     private static final String KEY_AUTH_TOKEN_TIME = "AUTH_TOKEN_TIME";
     private static final String KEY_CHANGE_VIEW = "CHANGE_VIEW";
+    private static final String KEY_FILTER_VIEW = "ESTAB_FILTER_VIEW";
 
     private static AppPrefsSettings mInstance;
     private static SharedPreferences sharedPreferences;
@@ -107,6 +108,18 @@ public class AppPrefsSettings {
     //GET CHANGE_VIEW
     public int getListGridViewMode() {
         return sharedPreferences.getInt(KEY_CHANGE_VIEW, 1);
+    }
+
+    //SAVE ESTAB_FILTER_VIEW
+    public void saveEstabFilterView(int viewValue) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_FILTER_VIEW, viewValue);
+        editor.apply();
+    }
+
+    //GET ESTAB_FILTER_VIEW
+    public int getEstabFilterView() {
+        return sharedPreferences.getInt(KEY_FILTER_VIEW, 0);
     }
 
     //DELETE KEY_AUTH_TOKEN

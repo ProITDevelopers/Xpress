@@ -53,10 +53,13 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
 
 
 
-        } else if (marker.getTitle().equals("Local de entrega")){
+        } else if (marker.getTitle().equals(myView.getContext().getString(R.string.endereco_de_entrega))){
             txtUserNameInitial.setVisibility(View.GONE);
-            circleImageView.setImageResource(R.drawable.ic_baseline_location_on_24);
+            circleImageView.setImageResource(R.drawable.ic_baseline_xpress_location_on_24);
 
+        }else{
+            txtUserNameInitial.setVisibility(View.GONE);
+            circleImageView.setImageResource(R.drawable.ic_baseline_xpress_location_on_24);
         }
 
 

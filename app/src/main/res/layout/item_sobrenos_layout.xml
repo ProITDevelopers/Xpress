@@ -13,7 +13,7 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        android:textColor="@color/login_register_text_color"
+        android:textColor="@color/txt_config_title"
         android:textSize="16sp"
         android:padding="4dp"
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.Callback.IRecyclerClickListener;
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.helper.Utils;
 import ao.co.proitconsulting.xpress.modelos.FacturaItens;
 
 public class EncomendaDetailListAdapter extends RecyclerView.Adapter<EncomendaDetailListAdapter.FacturaViewHolder> {
@@ -50,7 +51,14 @@ public class EncomendaDetailListAdapter extends RecyclerView.Adapter<EncomendaDe
                     .placeholder(R.drawable.store_placeholder).into(holder.imgEncomenda);
 
             holder.titleEncomenda.setText(facturaItem.produto);
-            holder.descEncomenda.setText("descrição do produto");
+
+            if (facturaItem.itensExtrasFacturas!=null){
+                if (facturaItem.itensExtrasFacturas.size()>0){
+                    holder.descEncomenda.setVisibility(View.VISIBLE);
+                    holder.descEncomenda.setText(new StringBuilder("").append(Utils.getListAddonFactura(facturaItem.itensExtrasFacturas)));
+                }
+            }
+
             holder.txtQuantidade.setText("Qtd: ".concat(String.valueOf(facturaItem.quantidade)));
 
             holder.setListener(new IRecyclerClickListener() {

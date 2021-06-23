@@ -70,10 +70,10 @@ public class CheckOutItemsListView extends ConstraintLayout {
             CartItemProdutos item = items.get(i);
             float taxaValor = Float.parseFloat(Common.getTaxaModelList.get(i).valorTaxa);
 
-            if (item.produtos != null) {
+            if (item != null) {
 
                 Picasso.with(getContext())
-                        .load(item.produtos.getImagemProduto())
+                        .load(item.imagemProduto)
                         .fit()
                         .centerCrop()
                         .placeholder(R.drawable.store_placeholder)
@@ -81,10 +81,10 @@ public class CheckOutItemsListView extends ConstraintLayout {
 
 //                ((CircleImageView) view.findViewById(R.id.thumbnail)).setImageResource(R.drawable.snack_food);
 
-                ((TextView) view.findViewById(R.id.name)).setText(item.produtos.getDescricaoProdutoC());
-                ((TextView) view.findViewById(R.id.estabelecimento)).setText(item.produtos.getEstabelecimento());
+                ((TextView) view.findViewById(R.id.name)).setText(item.nomeProduto);
+                ((TextView) view.findViewById(R.id.estabelecimento)).setText(item.estabProduto);
 
-                ((TextView) view.findViewById(R.id.price)).setText(getContext().getString(R.string.lbl_item_price_quantity, getContext().getString(R.string.price_with_currency, item.produtos.getPrecoUnid())+ " AKZ", item.quantity));
+                ((TextView) view.findViewById(R.id.price)).setText(getContext().getString(R.string.lbl_item_price_quantity, getContext().getString(R.string.price_with_currency, item.precoProduto)+ " AKZ", item.quantity));
                 ((TextView) view.findViewById(R.id.taxa)).setText(getContext().getString(R.string.price_with_currency, taxaValor).concat(" AKZ"));
 
 
