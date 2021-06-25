@@ -50,8 +50,11 @@ public class MySignalRService extends Service {
     @Override
     public void onDestroy() {
 
-        if (mHubConnection.getConnectionState()== HubConnectionState.CONNECTED)
-            mHubConnection.stop();
+        if (mHubConnection!=null){
+            if (mHubConnection.getConnectionState()== HubConnectionState.CONNECTED)
+                mHubConnection.stop();
+        }
+
 
 //        mHubConnection.stop();
         Log.d(TAG, "onMySignalRService: "+"onDestroy()");
@@ -126,8 +129,12 @@ public class MySignalRService extends Service {
 
         },String.class);
 
-        if (mHubConnection.getConnectionState()== HubConnectionState.DISCONNECTED)
-            mHubConnection.start();
+        if (mHubConnection!=null){
+            if (mHubConnection.getConnectionState()== HubConnectionState.DISCONNECTED)
+                mHubConnection.start();
+        }
+
+
 
 
     }

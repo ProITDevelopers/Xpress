@@ -115,7 +115,7 @@ public class EncomendaDetailFragment extends Fragment {
         double valorTaxaPrice = Double.parseDouble(String.valueOf(factura.taxaEntrega));
         double subtotalPrice = Double.parseDouble(String.valueOf(factura.total));
 
-        double totalPrice = Double.parseDouble(String.valueOf(factura.total));
+        double totalPrice = subtotalPrice + valorTaxaPrice;
 
 
 

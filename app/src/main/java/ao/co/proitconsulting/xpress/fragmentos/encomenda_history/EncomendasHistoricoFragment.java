@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,12 +45,17 @@ import retrofit2.Response;
 
 public class EncomendasHistoricoFragment extends Fragment {
 
-    private static String TAG = "TAG_EncomendasFragment";
+    private static String TAG = "TAG_EncomendasHistoricoFrag";
     private View view;
 
     private AlertDialog waitingDialog;
+    private NestedScrollView nestedScrollView;
+    private ProgressBar progress_bar;
     private RecyclerView recyclerView;
     private List<Factura> facturaList;
+
+    private int page = 1;
+    private int limit = 10;
 
     private String errorMessage;
 
@@ -81,7 +88,13 @@ public class EncomendasHistoricoFragment extends Fragment {
         waitingDialog.setMessage("Por favor aguarde...");
         waitingDialog.setCancelable(false);
 
+
+
+        facturaList = new ArrayList<>();
+
+        nestedScrollView = view.findViewById(R.id.scroll_View);
         recyclerView = view.findViewById(R.id.recyclerView);
+        progress_bar = view.findViewById(R.id.progress_bar);
 
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
@@ -94,7 +107,9 @@ public class EncomendasHistoricoFragment extends Fragment {
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
         //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
-        dialogLayoutConfirmarProcesso = new Dialog(getContext());
+        if (getContext()!=null)
+            dialogLayoutConfirmarProcesso = new Dialog(getContext());
+
         dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
         dialogLayoutConfirmarProcesso.setCancelable(false);
         if (dialogLayoutConfirmarProcesso.getWindow()!=null)
@@ -107,6 +122,23 @@ public class EncomendasHistoricoFragment extends Fragment {
         dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
 
         verifConecxaoEncomendas();
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                    //When reach last item position
+                    //Increase page size
+                    page++;
+                    //Show progress bar
+                    progress_bar.setVisibility(View.VISIBLE);
+                    //Call method
+                    carregarListaFacturas(page,limit);
+
+                }
+            }
+        });
     }
 
     private void verifConecxaoEncomendas() {
@@ -115,12 +147,16 @@ public class EncomendasHistoricoFragment extends Fragment {
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
                 if (netInfo == null){
+                    page = 1;
+                    limit = 10;
+                    facturaList = new ArrayList<>();
                     btnTentarDeNovo.setVisibility(View.VISIBLE);
                     imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
                     txtMsgErro.setText(getString(R.string.msg_erro_internet));
                     mostarMsnErro();
                 } else {
-                    carregarListaFacturas();
+                    waitingDialog.show();
+                    carregarListaFacturas(page, limit);
                 }
             }
         }
@@ -147,21 +183,21 @@ public class EncomendasHistoricoFragment extends Fragment {
         });
     }
 
-    private void carregarListaFacturas() {
+    private void carregarListaFacturas(int page, int limit) {
 
-        waitingDialog.show();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 //        Call<List<Factura>> rv = apiInterface.getTodasFacturas();
-        Call<List<Factura>> rv = apiInterface.getFacturas_Historico();
+        Call<List<Factura>> rv = apiInterface.getFacturas_Historico(page,limit);
         rv.enqueue(new Callback<List<Factura>>() {
             @Override
             public void onResponse(@NonNull Call<List<Factura>> call, @NonNull Response<List<Factura>> response) {
 
-                facturaList = new ArrayList<>();
+
 
                 if (response.isSuccessful()) {
+                    waitingDialog.dismiss();
                     if (response.body()!=null && response.body().size()>0){
-                        facturaList = response.body();
+                        facturaList.addAll(response.body());
 
                         // Order the list by regist date.
                         Collections.sort(facturaList, new Factura());
@@ -173,12 +209,13 @@ public class EncomendasHistoricoFragment extends Fragment {
 
                     }else{
                         waitingDialog.dismiss();
-                        MetodosUsados.mostrarMensagem(getContext(),"Não fez nenhum pedido!");
+                        progress_bar.setVisibility(View.GONE);
 
                     }
                 } else {
 
                     waitingDialog.dismiss();
+                    progress_bar.setVisibility(View.GONE);
                     if (response.code()==401){
                         mensagemTokenExpirado();
                     }else{
@@ -204,6 +241,7 @@ public class EncomendasHistoricoFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<List<Factura>> call, @NonNull Throwable t) {
                 waitingDialog.dismiss();
+                progress_bar.setVisibility(View.GONE);
                 if (getContext()!=null){
                     if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
                         btnTentarDeNovo.setVisibility(View.VISIBLE);
@@ -227,7 +265,8 @@ public class EncomendasHistoricoFragment extends Fragment {
     }
 
     private void setAdapters(List<Factura> facturaList) {
-        waitingDialog.dismiss();
+
+        progress_bar.setVisibility(View.GONE);
 
         if (facturaList.size()>0){
 

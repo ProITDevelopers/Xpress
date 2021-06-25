@@ -82,7 +82,7 @@ public class Utils {
         for (ProdutoExtra produtoExtra: produtoExtraList) {
             result.append(produtoExtra.getNomeProdudoExtra()).append(", ");
         }
-        result.substring(1,result.length()-1);
+        result.deleteCharAt(result.lastIndexOf(" "));
         return result.substring(0,result.length()-1);
     }
 
@@ -91,7 +91,7 @@ public class Utils {
         for (FacturaItensExtras itensExtras: facturaItensExtrasList) {
             result.append(itensExtras.nomeExtra).append(", ");
         }
-        result.substring(1,result.length()-1);
+        result.deleteCharAt(result.lastIndexOf(" "));
         return result.substring(0,result.length()-1);
     }
 }

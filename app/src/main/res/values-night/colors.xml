@@ -15,6 +15,8 @@
     <color name="calendar_dialog_bkg">#444444</color>
     <color name="transparentBlack">#80000000</color>
     <color name="yellow">#eba41d</color>
+    <color name="linear_slide_active_dot_color">@color/xpress_green</color>
+    <color name="ic_navigation_color">@color/xpress_green</color>
 
 
     <color name="login_register_topbutton_color">@color/xpress_green</color>

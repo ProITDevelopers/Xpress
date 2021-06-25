@@ -13,10 +13,10 @@ public class ApiClientADAO {
 
 
 //    private static final String BASE_URL_XPRESS = "http://ec2-18-188-197-193.us-east-2.compute.amazonaws.com:8083/";
-    private static final String BASE_URL_XPRESS_ADAO = "https://apitaxas.lengueno.com/";
-    private static Retrofit retrofit = null;
+//    private static final String BASE_URL_XPRESS_ADAO = "https://apitaxas.lengueno.com/";
+    private static Retrofit retrofit,retrofitLogin = null;
     private static int REQUEST_TIMEOUT = 60000;
-    private static OkHttpClient okHttpClient;
+    private static OkHttpClient okHttpClient, okHttpClientLogin;
 
 
 
@@ -57,6 +57,40 @@ public class ApiClientADAO {
     }
 
 
+    public static Retrofit getClientLogin(String BASE_URL_XPRESS_ADAO) {
+
+        if (okHttpClientLogin == null)
+            initOkHttpLogin();
+
+        if (retrofitLogin == null) {
+
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
+
+            retrofitLogin = new Retrofit.Builder()
+                    .baseUrl(BASE_URL_XPRESS_ADAO)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClientLogin)
+                    .build();
+        }
+        return retrofitLogin;
+    }
+
+    private static void initOkHttpLogin() {
+
+        OkHttpClient.Builder httpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
+                .readTimeout(REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(REQUEST_TIMEOUT, TimeUnit.MILLISECONDS);
+
+
+
+        okHttpClientLogin = httpClient.build();
+
+
+    }
 
 
 }

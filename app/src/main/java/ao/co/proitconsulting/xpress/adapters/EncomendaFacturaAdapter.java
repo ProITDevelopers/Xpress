@@ -73,9 +73,14 @@ public class EncomendaFacturaAdapter extends RecyclerView.Adapter<EncomendaFactu
 
             holder.txtEstado.setText(factura.estado);
 
-            double displayPrice = Double.parseDouble(String.valueOf(factura.total));
+            double valorTaxaPrice = Double.parseDouble(String.valueOf(factura.taxaEntrega));
+            double subtotalPrice = Double.parseDouble(String.valueOf(factura.total));
+
+            double totalPrice = subtotalPrice + valorTaxaPrice;
+
+
             holder.txtTotal.setText(new StringBuilder("")
-                    .append(Utils.formatPrice(displayPrice))
+                    .append(Utils.formatPrice(totalPrice))
                     .append(" AKZ").toString());
 
 //            String total = String.valueOf(factura.total);

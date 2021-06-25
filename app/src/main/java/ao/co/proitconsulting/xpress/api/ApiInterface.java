@@ -31,6 +31,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiInterface {
 
@@ -131,10 +132,14 @@ public interface ApiInterface {
     Call<List<List<ReferenciaRequest>>> facturaReferencia(@Body Order order);
 
     @GET("/FacturasActualCliente")
-    Call<List<Factura>> getFacturas_Actuais();
+    Call<List<Factura>> getFacturas_Actuais(
+            @Query("NumeroPagina") int page,
+            @Query("TamanhoPagina") int limit);
 
     @GET("/HistoricoFacturasCliente")
-    Call<List<Factura>> getFacturas_Historico();
+    Call<List<Factura>> getFacturas_Historico(
+            @Query("NumeroPagina") int page,
+            @Query("TamanhoPagina") int limit);
 //
 //
 //    @GET("/ListarEstabA24h2")

@@ -4,10 +4,13 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,17 +22,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,17 +41,27 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.annotations.SerializedName;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ao.co.proitconsulting.xpress.R;
+import ao.co.proitconsulting.xpress.adapters.ViewPagerAdapterSlider;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
 import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
+import ao.co.proitconsulting.xpress.api.ADAO.ApiClientADAO;
+import ao.co.proitconsulting.xpress.api.ADAO.ApiInterfaceADAO;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
@@ -65,19 +79,22 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "TAG_HomeFragment";
-    private HomeViewModel homeViewModel;
+
     private View view;
 
     private LoopingViewPager loopingViewPager;
+    private ViewPager viewPager;
     LinearLayout sliderDotspanel;
     private int dotscount;
     private ImageView[] dots;
+    private Handler slideHandler = new Handler();
+    private static int TIME_DELAY = 3500; // Slide duration 3 seconds
 
     private TabLayout tabLayout;
     private RecyclerView recyclerViewMenu;
 
     private AlertDialog waitingDialog;
-
+    private List<TopSlideImages> topSlideImagesList = new ArrayList<>();
 
 //    private List<MenuCategory> menuCategoryList = new ArrayList<>();
     private List<Estabelecimento> estabelecimentoList = new ArrayList<>();
@@ -107,6 +124,9 @@ public class HomeFragment extends Fragment {
     @SerializedName("longitude")
     private double longitude;
 
+    private String getMyEndereco ="";
+    private TextView txtTopMyLocation;
+
     public HomeFragment(){}
 
     @Override
@@ -118,67 +138,39 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+//
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initViews();
 
+        if (getContext()!=null){
+            Dexter.withContext(getContext())
+                    .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
+                                buildLocationCallBack();
+                                createLocationRequest();
+                                displayLocationOnTop();
+                            }else{
 
-        homeViewModel.getListMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {
-            @Override
-            public void onChanged(List<TopSlideImages> topSlideImages) {
-                TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImages,true);
-                loopingViewPager.setAdapter(topImageSlideAdapter);
-                tabLayout.setupWithViewPager(loopingViewPager,true);
+                                if (getContext()!=null)
+                                    Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-//                dotscount = loopingViewPager.getIndicatorCount()+1;
-//
-//                Log.d(TAG, "loopingViewPager: dotscount "+dotscount);
-//                dots = new ImageView[dotscount];
-//
-//                for(int i = 0; i < dotscount; i++){
-//
-//                    dots[i] = new ImageView(getContext());
-//                    dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_non_active_dot));
-//
-//                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-//                    params.setMargins(8, 0, 8, 0);
-//
-//                    sliderDotspanel.addView(dots[i], params);
-//
-//                }
-//
-//                dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_active_dot));
-//
-//                loopingViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//                    @Override
-//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPageSelected(int position) {
-//                        for(int i = position; i< dotscount; i++){
-//                            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_non_active_dot));
-//                        }
-//
-//                        Log.d(TAG, "onPageSelected: Position "+position);
-//
-//                        dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_active_dot));
-//                    }
-//
-//                    @Override
-//                    public void onPageScrollStateChanged(int state) {
-//
-//                    }
-//                });
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                            token.continuePermissionRequest();
+                            if (getContext()!=null)
+                                Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+                        }
+                    }).check();
+        }
 
 
-            }
-        });
 
 
 
@@ -247,14 +239,19 @@ public class HomeFragment extends Fragment {
 
         loopingViewPager = view.findViewById(R.id.loopingViewPager);
 
-//        sliderDotspanel = view.findViewById(R.id.SliderDots);
+        txtTopMyLocation = view.findViewById(R.id.txtTopMyLocation);
+        viewPager = view.findViewById(R.id.viewPager);
+        sliderDotspanel = view.findViewById(R.id.SliderDots);
+
+        viewPager.setVisibility(View.INVISIBLE);
+        sliderDotspanel.setVisibility(View.INVISIBLE);
 
         recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
 
         tabLayout = view.findViewById(R.id.tab_layout);
 
-        loopingViewPager.setVisibility(View.INVISIBLE);
-        tabLayout.setVisibility(View.INVISIBLE);
+        loopingViewPager.setVisibility(View.GONE);
+        tabLayout.setVisibility(View.GONE);
 
         coordinatorLayout = view.findViewById(R.id.constraintLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
@@ -271,6 +268,126 @@ public class HomeFragment extends Fragment {
 
         if (getContext()!=null)
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+    }
+
+
+
+    //--------------LISTAR_verifConecxaoTOPSLIDEIMAGE-----------------------------///
+    //-----------------------------------------------------------------------///
+    private void verifConecxaoTOPSLIDEIMAGE() {
+
+        if (getActivity()!=null) {
+            ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (conMgr!=null) {
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+                if (netInfo != null){
+                   loadTopImagesList();
+                }
+            }
+        }
+
+    }
+
+    private void loadTopImagesList() {
+
+        ApiInterfaceADAO apiInterface = ApiClientADAO.getClient(Common.BASE_URL_XPRESS_ADAO_TAXA).create(ApiInterfaceADAO.class);
+        Call<List<TopSlideImages>> getTopImageList = apiInterface.getTopSlideImagesList();
+        getTopImageList.enqueue(new Callback<List<TopSlideImages>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<TopSlideImages>> call, @NonNull Response<List<TopSlideImages>> response) {
+
+                if (topSlideImagesList!=null)
+                    topSlideImagesList.clear();
+                else
+                    topSlideImagesList = new ArrayList<>();
+
+                if (response.isSuccessful()) {
+
+                    if (response.body()!=null && response.body().size()>0){
+
+
+                        for (TopSlideImages topSlideImages :response.body()) {
+                            topSlideImagesList.add(topSlideImages);
+                        }
+
+
+                        sliderDotspanel.removeAllViews();
+                        TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImagesList,true);
+                        loopingViewPager.setAdapter(topImageSlideAdapter);
+                        tabLayout.setupWithViewPager(loopingViewPager,true);
+
+                        ViewPagerAdapterSlider viewPagerAdapter = new ViewPagerAdapterSlider(getContext(),topSlideImagesList);
+
+                        viewPager.setAdapter(viewPagerAdapter);
+
+                        dotscount = viewPagerAdapter.getCount();
+                        dots = new ImageView[dotscount];
+
+                        for(int i = 0; i < dotscount; i++){
+
+                            dots[i] = new ImageView(getContext());
+                            if (getContext()!=null)
+                                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_non_active_dot));
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                            params.setMargins(8, 0, 8, 12);
+
+                            sliderDotspanel.addView(dots[i], params);
+
+                        }
+
+                        if (getContext()!=null)
+                            dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_active_dot));
+
+
+                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                            }
+
+                            @Override
+                            public void onPageSelected(int position) {
+
+                                slideHandler.removeCallbacks(sliderRunnable);
+                                slideHandler.postDelayed(sliderRunnable,TIME_DELAY); // Slide duration 3 seconds
+
+                                if (getContext()!=null){
+                                    for(int i = 0; i< dotscount; i++){
+                                        dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_non_active_dot));
+                                    }
+
+                                    dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.linear_slide_active_dot));
+
+                                    if (position+1 == topSlideImagesList.size()){
+
+                                        slideHandler.postDelayed(runnable,TIME_DELAY); // Slide duration 3 seconds
+
+                                    }
+                                }
+
+
+
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<TopSlideImages>> call, @NonNull Throwable t) {
+
+            }
+        });
+
     }
 
 
@@ -323,7 +440,14 @@ public class HomeFragment extends Fragment {
                         }
                         Common.todosEstabelecimentoList.addAll(estabelecimentoList);
 
-                        loopingViewPager.setVisibility(View.VISIBLE);
+                        if (getMyEndereco.equals(""))
+                            txtTopMyLocation.setVisibility(View.GONE);
+                        else
+                            txtTopMyLocation.setVisibility(View.VISIBLE);
+
+//                        loopingViewPager.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
+                        sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
@@ -440,7 +564,13 @@ public class HomeFragment extends Fragment {
                         }
                         Common.todosEstabelecimentoList.addAll(estabelecimentoList);
 
-                        loopingViewPager.setVisibility(View.VISIBLE);
+                        if (getMyEndereco.equals(""))
+                            txtTopMyLocation.setVisibility(View.GONE);
+                        else
+                            txtTopMyLocation.setVisibility(View.VISIBLE);
+//                        loopingViewPager.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
+                        sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
@@ -551,7 +681,14 @@ public class HomeFragment extends Fragment {
                             }
                         }
                         Common.todosEstabelecimentoList.addAll(estabelecimentoList);
-                        loopingViewPager.setVisibility(View.VISIBLE);
+
+                        if (getMyEndereco.equals(""))
+                            txtTopMyLocation.setVisibility(View.GONE);
+                        else
+                            txtTopMyLocation.setVisibility(View.VISIBLE);
+//                        loopingViewPager.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
+                        sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
@@ -663,7 +800,14 @@ public class HomeFragment extends Fragment {
                             }
                         }
                         Common.todosEstabelecimentoList.addAll(estabelecimentoList);
-                        loopingViewPager.setVisibility(View.VISIBLE);
+
+                        if (getMyEndereco.equals(""))
+                            txtTopMyLocation.setVisibility(View.GONE);
+                        else
+                            txtTopMyLocation.setVisibility(View.VISIBLE);
+//                        loopingViewPager.setVisibility(View.VISIBLE);
+                        viewPager.setVisibility(View.VISIBLE);
+                        sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
@@ -817,12 +961,28 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private Runnable sliderRunnable = new Runnable() {
+        @Override
+        public void run() {
+            viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+        }
+    };
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            viewPager.setCurrentItem(0);
+        }
+    };
+
 
 
 
 
     @Override
     public void onResume() {
+
+        verifConecxaoTOPSLIDEIMAGE();
         Log.d(TAG, "onResume: ");
 
         if (Common.todosEstabelecimentoList == null)
@@ -869,10 +1029,13 @@ public class HomeFragment extends Fragment {
 
         super.onResume();
         loopingViewPager.resumeAutoScroll();
+        slideHandler.postDelayed(sliderRunnable,TIME_DELAY); // Slide duration 3 seconds
+
     }
 
     @Override
     public void onPause() {
+        slideHandler.removeCallbacks(sliderRunnable);
         loopingViewPager.pauseAutoScroll();
         super.onPause();
     }
@@ -990,6 +1153,12 @@ public class HomeFragment extends Fragment {
 
                     latitude = Common.mLastLocation.getLatitude();
                     longitude = Common.mLastLocation.getLongitude();
+                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
+
+
+                    getMyEndereco = getMyAddress(center);
+
+                    txtTopMyLocation.setText(getMyEndereco);
 
 
                     verifConecxaoEstabelecimento_PERTO_DE_MIM(latitude,longitude);
@@ -1005,4 +1174,71 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
+    private void displayLocationOnTop() {
+
+        if (getContext()!=null){
+            if (ActivityCompat.checkSelfPermission(getContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+
+
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                Common.mLastLocation = location;
+
+                if (Common.mLastLocation != null) {
+
+
+                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
+                    latitude = Common.mLastLocation.getLatitude();
+                    longitude = Common.mLastLocation.getLongitude();
+
+                    getMyEndereco = getMyAddress(center);
+
+                    txtTopMyLocation.setText(getMyEndereco);
+
+
+
+                    Log.d(TAG, String.format("Your location was changed : %f / %f",
+                            latitude, longitude));
+
+                } else {
+                    Log.d(TAG, "Can not get your location");
+                }
+            }
+        });
+
+    }
+
+    private String getMyAddress(LatLng location) {
+        String address="";
+        try {
+            if (getContext()!=null){
+                Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
+                List<Address> addresses = geo.getFromLocation(location.latitude, location.longitude, 1);
+                if (addresses.isEmpty()) {
+                    Log.d(TAG, "Waiting for Location");
+//                Toast.makeText(mActivity.getApplicationContext(), "Waiting for Location", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    address = addresses.get(0).getAddressLine(0);
+                }
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace(); // getFromLocation() may sometimes fail
+        }
+
+        return address;
+    }
+
+
 }

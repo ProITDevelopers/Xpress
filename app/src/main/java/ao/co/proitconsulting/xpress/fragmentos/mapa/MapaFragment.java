@@ -263,7 +263,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.setInfoWindowAdapter(new CustomInfoWindow(getContext()));
+        if (getContext()!=null)
+            mMap.setInfoWindowAdapter(new CustomInfoWindow(getContext()));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -290,16 +291,19 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
     private String getMyAddress(LatLng location) {
         String address="";
         try {
-            Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
-            List<Address> addresses = geo.getFromLocation(location.latitude, location.longitude, 1);
-            if (addresses.isEmpty()) {
-                Log.d(TAG, "Waiting for Location");
+            if (getContext()!=null){
+                Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
+                List<Address> addresses = geo.getFromLocation(location.latitude, location.longitude, 1);
+                if (addresses.isEmpty()) {
+                    Log.d(TAG, "Waiting for Location");
 //                Toast.makeText(mActivity.getApplicationContext(), "Waiting for Location", Toast.LENGTH_SHORT).show();
 
+                }
+                else {
+                    address = addresses.get(0).getAddressLine(0);
+                }
             }
-            else {
-                address = addresses.get(0).getAddressLine(0);
-            }
+
         }
         catch (Exception e) {
             e.printStackTrace(); // getFromLocation() may sometimes fail

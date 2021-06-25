@@ -104,6 +104,7 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
 
     //DIALOG_LAYOUT_SUCESSO
     private Dialog dialogLayoutSuccess;
+    private ImageView imgStatus;
     private TextView dialog_txtConfirmSucesso;
     private Button dialog_btn_sucesso;
 
@@ -223,6 +224,8 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         if (dialogLayoutSuccess.getWindow()!=null)
             dialogLayoutSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        imgStatus = dialogLayoutSuccess.findViewById(R.id.imgStatus);
+        imgStatus.setVisibility(View.GONE);
         dialog_txtConfirmSucesso = dialogLayoutSuccess.findViewById(R.id.dialog_txtConfirmSucesso);
         dialog_btn_sucesso = dialogLayoutSuccess.findViewById(R.id.dialog_btn_sucesso);
 
@@ -380,22 +383,22 @@ public class EditarPerfilFragment extends Fragment implements AdapterView.OnItem
         }
 
 
-        if (!telefoneAlternativo.isEmpty()){
-
-            if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
-                editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
-                MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
-                return false;
-            }
-
-            if (telefoneAlternativo.equals(telefone)){
-                editTelefoneAlternativo.setError("Números iguais.");
-                MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' tem de ser diferente");
-                return false;
-            }
-
-
-        }
+//        if (!telefoneAlternativo.isEmpty()){
+//
+//            if (!telefoneAlternativo.matches("9[1-9][0-9]\\d{6}")){
+//                editTelefoneAlternativo.setError(getString(R.string.msg_erro_num_telefone_invalido));
+//                MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' inválido");
+//                return false;
+//            }
+//
+//            if (telefoneAlternativo.equals(telefone)){
+//                editTelefoneAlternativo.setError("Números iguais.");
+//                MetodosUsados.mostrarMensagemSnackBar(editPerfil_root,"'Nº alternativo' tem de ser diferente");
+//                return false;
+//            }
+//
+//
+//        }
 
 
 

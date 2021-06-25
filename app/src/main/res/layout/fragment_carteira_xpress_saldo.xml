@@ -195,6 +195,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/perfil_text_color"
                 android:fontFamily="@font/montserrat_regular"
+                android:visibility="gone"
                 />
 
 

@@ -1,17 +1,16 @@
 package ao.co.proitconsulting.xpress.fragmentos.encomenda_tracker;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,22 +21,22 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.maps.android.SphericalUtil;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,13 +53,14 @@ import ao.co.proitconsulting.xpress.api.ADAO.OkHttpUtils;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
+import ao.co.proitconsulting.xpress.modelos.AdaoTokenAuth;
 import ao.co.proitconsulting.xpress.modelos.LoginAdaoRequest;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.utilityClasses.CustomInfoWindow;
+import dmax.dialog.SpotsDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +77,7 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
     private UsuarioPerfil usuarioPerfil;
 
     private SupportMapFragment mapFragment;
-    private FusedLocationProviderClient fusedLocationProviderClient;
+
     private LocationCallback locationCallback;
     private GoogleMap mMap;
     //Play Services
@@ -96,7 +96,9 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
 
 
     private StompClient mStompClient;
+    private AdaoTokenAuth adaoTokenAuth;
 
+    private AlertDialog waitingDialog;
 
 
 //    private Disposable mRestPingDisposable;
@@ -112,16 +114,44 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
 
         usuarioPerfil = AppPrefsSettings.getInstance().getUser();
 
-        if (getContext()!=null)
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-
+        waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
+        waitingDialog.setMessage("Por favor aguarde...");
+        waitingDialog.setCancelable(false);
 
         //Maps
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
-        setUpLocation();
+        if (getContext()!=null){
+            Dexter.withContext(getContext())
+                    .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
+
+
+                                verifConecxao_LOGIN_ADAO();
+
+
+                            }else{
+
+                                if (getContext()!=null)
+                                    Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                            token.continuePermissionRequest();
+                            if (getContext()!=null)
+                                Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+                        }
+                    }).check();
+        }
+
+
 
 
         return view;
@@ -132,73 +162,75 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
             ConnectivityManager conMgr =  (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             if (conMgr!=null) {
                 NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-                if (netInfo == null){
+                if (netInfo != null){
+                    if (verificarNumber())
+                        autenticacaoLoginAdao();
                 } else {
-
-                    autenticacaoLoginAdao();
+                    MetodosUsados.mostrarMensagem(getContext(), getString(R.string.msg_erro_internet));
                 }
             }
         }
     }
 
-    private void autenticacaoLoginAdao() {
+    private boolean verificarNumber(){
         if (usuarioPerfil.contactoMovel == null){
             MetodosUsados.mostrarMensagem(getContext(),"É necessário o seu "+getString(R.string.numero_telefone)+" para continuar.");
-            return;
+            return false;
         }
 
         if (usuarioPerfil.contactoMovel.equals("") || usuarioPerfil.contactoMovel.equals("?")){
             MetodosUsados.mostrarMensagem(getContext(),"Adicione um "+getString(R.string.numero_telefone)+" ao seu Perfil para continuar.");
-            return;
+            return false;
         }
         if (!usuarioPerfil.contactoMovel.matches("9[1-9][0-9]\\d{6}")){
             MetodosUsados.mostrarMensagem(getContext(),"O seu "+getString(R.string.numero_telefone)+" é inválido. Por favor edite o seu Perfil.");
-            return;
+            return false;
         }
 
+        return true;
+    }
+
+    private void autenticacaoLoginAdao() {
+
+        waitingDialog.show();
         LoginAdaoRequest loginAdaoRequest = new LoginAdaoRequest();
         loginAdaoRequest.telefone = usuarioPerfil.contactoMovel;
         loginAdaoRequest.password = usuarioPerfil.contactoMovel;
 
-        ApiInterfaceADAO apiInterface = ApiClientADAO.getClient(Common.BASE_URL_XPRESS_ADAO_LOGIN).create(ApiInterfaceADAO.class);
-        Call<ResponseBody> getToken = apiInterface.autenticarToGetToken(loginAdaoRequest);
-        getToken.enqueue(new Callback<ResponseBody>() {
+        String base_url_adao_login = Common.BASE_URL_XPRESS_ADAO_LOGIN;
+        base_url_adao_login = base_url_adao_login.trim();
+        ApiInterfaceADAO apiInterface = ApiClientADAO.getClientLogin(base_url_adao_login).create(ApiInterfaceADAO.class);
+        Call<AdaoTokenAuth> adaoTokenAuthCall = apiInterface.autenticarToGetToken(loginAdaoRequest);
+        adaoTokenAuthCall.enqueue(new Callback<AdaoTokenAuth>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<AdaoTokenAuth> call, @NonNull Response<AdaoTokenAuth> response) {
 
 
 
                 if (response.isSuccessful()) {
 
                     if (response.body()!=null){
+                        adaoTokenAuth  = response.body();
 
-
-                        try {
-                            String bodyResponse = response.body().string();
-                            JSONObject jsonResponse = new JSONObject(bodyResponse);
-                            String token_acesso = jsonResponse.getString("token_acesso");
-                            startStompClientRequest(token_acesso);
-
-
-                            Log.d(TAG, "mStompClient.topic_onNext: "+String.valueOf(jsonResponse));
-
-
-
-                        } catch (JSONException | IOException e) {
-                            e.printStackTrace();
-                        }
+                        Log.d(TAG, "AdaoTokenAuth_SUCCESS: "+adaoTokenAuth.token_acesso);
+                        setUpLocation();
                     }
 
-                } else {
-
-
+                }else{
+                    waitingDialog.dismiss();
+                    try {
+                        Log.d(TAG, "AdaoTokenAuth_NOT_SUCCESS: "+response.errorBody().string()+", ErrorCode: "+response.code());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-
+            public void onFailure(@NonNull Call<AdaoTokenAuth> call, @NonNull Throwable t) {
+                waitingDialog.dismiss();
+                Log.d(TAG, "AdaoTokenAuth_onFailure: "+t.getMessage());
 
 
             }
@@ -206,6 +238,7 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
     }
 
     private void startStompClientRequest(String TOKEN) {
+        waitingDialog.dismiss();
 
         List<StompHeader> headers = new ArrayList<>();
         headers.add((new StompHeader("X-Authorization",TOKEN)));
@@ -240,7 +273,12 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
         mStompClient.topic("/user/topic/encomenda")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                    Log.d(TAG, "startStompClientdoOnError: "+throwable.getMessage());
+                })
                 .subscribe(new Consumer<StompMessage>() {
+
+
                     @Override
                     public void accept(StompMessage stompMessage) throws Exception {
                         JSONObject jsonResponse = null;
@@ -272,10 +310,7 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
                             LatLng myOriginPosition = new LatLng(latitudeOrigem,longitudeOrigem);
                             LatLng myDestinationPosition = new LatLng(latitudeDestino,longitudeDestino);
                             LatLng myEncomendaPosition = new LatLng(latitudeAtual,longitudeAtual);
-                            if (Common.mLastLocation != null) {
-                                myPosition = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
 
-                            }
 
 
                             String getMyEncomendaEnderecoOrigin = getMyAddress(myOriginPosition);
@@ -285,24 +320,28 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
                             //Add Marker
                             //Here we will clear all map to delete old position of driver
                             mMap.clear();
-                            mUserMarker = mMap.addMarker(new MarkerOptions()
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-                                    .position(myPosition)
-                                    .title("Eu")
-                                    .snippet(getMyEndereco));
+//                            mUserMarker = mMap.addMarker(new MarkerOptions()
+//                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+//                                    .position(myPosition)
+//                                    .title("Eu")
+//                                    .snippet(getMyEndereco));
 
 //                            mOriginMarker = mMap.addMarker(new MarkerOptions()
 //                                    .position(myOriginPosition)
 //                                    .title(nomeEstabelecimento)
 //                                    .snippet(getMyEncomendaEnderecoOrigin));
 
-                            mDestinationMarker = mMap.addMarker(new MarkerOptions()
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
-                                    .position(myDestinationPosition)
-                                    .title(getContext().getString(R.string.endereco_de_entrega))
-                                    .snippet(getMyEncomendaEnderecoDestination));
+                            if (getContext()!=null){
+                                mDestinationMarker = mMap.addMarker(new MarkerOptions()
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                                        .position(myDestinationPosition)
+                                        .title(getContext().getString(R.string.endereco_de_entrega))
+                                        .snippet(getMyEncomendaEnderecoDestination));
+                            }
+
 
                             mEncomendaMarker = mMap.addMarker(new MarkerOptions()
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
                                     .position(myEncomendaPosition)
                                     .title(nomeEstabelecimento)
                                     .snippet(new StringBuilder("EM ").append(estadoEncomenda).append("\n").append(getMyEncomendaEndereco).toString()));
@@ -319,19 +358,25 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
                             e.printStackTrace();
                         }
                     }
+
                 });
 
 
-        if (mStompClient.isConnected()){
-            mStompClient.disconnect();
+        if (mStompClient != null){
+            if (mStompClient.isConnected()){
+                mStompClient.disconnect();
+            }
+
+            mStompClient.connect(headers);
+
+            if (!mStompClient.isConnected()) return;
+            mStompClient.send("/app/tempo/real/encomenda/"+String.valueOf(Common.selectedFactura.idFactura))
+                    .subscribeOn(Schedulers.io()).subscribe();
         }
 
 
-        mStompClient.connect(headers);
 
-        if (!mStompClient.isConnected()) return;
-        mStompClient.send("/app/tempo/real/encomenda/"+String.valueOf(Common.selectedFactura.idFactura))
-                .subscribeOn(Schedulers.io()).subscribe();
+
 
 
     }
@@ -380,7 +425,6 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                Common.mLastLocation = locationResult.getLocations().get(locationResult.getLocations().size() - 1); //Get last location
                 displayLocation();
             }
         };
@@ -398,64 +442,10 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
         }
 
 
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                Common.mLastLocation = location;
-
-                if (Common.mLastLocation != null) {
-
-
-                    //Create LatLng from mLastLocation and this is center point
-                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
-                    // distance in metters
-                    // heading 0 is northSide, 90 is east, 180 is south and 270 is west
-                    // base on compact :)
-                    LatLng northSide = SphericalUtil.computeOffset(center, 100000, 0);
-                    LatLng southSide = SphericalUtil.computeOffset(center, 100000, 180);
-
-                    getMyEndereco = getMyAddress(center);
-
-                    LatLngBounds bounds = LatLngBounds.builder()
-                            .include(northSide)
-                            .include(southSide)
-                            .build();
-
-
-
-                    final double latitude = Common.mLastLocation.getLatitude();
-                    final double longitude = Common.mLastLocation.getLongitude();
-
-
-//                    loadAllAvailableDriver(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()));
-                    verifConecxao_LOGIN_ADAO();
-
-                    Log.d(TAG, String.format("Your location was changed : %f / %f",
-                            latitude, longitude));
-
-                } else {
-                    Log.d(TAG, "Can not get your location");
-                }
-            }
-        });
+        startStompClientRequest(adaoTokenAuth.token_acesso);
 
     }
 
-    private void loadAllAvailableDriver(final LatLng location) {
-
-        //Add Marker
-        //Here we will clear all map to delete old position of driver
-        mMap.clear();
-        mUserMarker = mMap.addMarker(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-                .position(location)
-                .title("Eu")
-                .snippet(getMyEndereco));
-
-
-        //Move camera to this position
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
-    }
 
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -494,7 +484,8 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.setInfoWindowAdapter(new CustomInfoWindow(getContext()));
+        if (getContext()!=null)
+            mMap.setInfoWindowAdapter(new CustomInfoWindow(getContext()));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -515,26 +506,25 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
         }
 
 
-        try {
-            fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback, Looper.myLooper());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     private String getMyAddress(LatLng location) {
         String address="";
         try {
-            Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
-            List<Address> addresses = geo.getFromLocation(location.latitude, location.longitude, 1);
-            if (addresses.isEmpty()) {
-                Log.d(TAG, "Waiting for Location");
+            if (getContext()!=null){
+                Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
+                List<Address> addresses = geo.getFromLocation(location.latitude, location.longitude, 1);
+                if (addresses.isEmpty()) {
+                    Log.d(TAG, "Waiting for Location");
 //                Toast.makeText(mActivity.getApplicationContext(), "Waiting for Location", Toast.LENGTH_SHORT).show();
 
+                }
+                else {
+                    address = addresses.get(0).getAddressLine(0);
+                }
             }
-            else {
-                address = addresses.get(0).getAddressLine(0);
-            }
+
         }
         catch (Exception e) {
             e.printStackTrace(); // getFromLocation() may sometimes fail
@@ -566,8 +556,12 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onDestroy() {
-        if (mStompClient.isConnected())
-            mStompClient.disconnect();
+
+        if (mStompClient!=null){
+            if (mStompClient.isConnected())
+                mStompClient.disconnect();
+        }
+
 
         super.onDestroy();
     }
