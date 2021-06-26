@@ -1,6 +1,8 @@
 package ao.co.proitconsulting.xpress.fragmentos.estab;
 
 import android.app.AlertDialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,6 +76,22 @@ public class CategoryEstabFragment extends Fragment {
                 new ViewModelProvider(this).get(CategoryEstabViewModel.class);
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_categoryestab, container, false);
+
+        if (getActivity()!=null){
+            if (((AppCompatActivity)getActivity())
+                    .getSupportActionBar()!=null){
+                if (getContext()!=null){
+                    final Drawable upArrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_burguer);;
+                    assert upArrow != null;
+                    upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+                    ((AppCompatActivity)getActivity())
+                            .getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                }
+
+            }
+        }
+
         initViews();
 
 //        categoryEstabViewModel.getListMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {

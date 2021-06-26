@@ -2,6 +2,8 @@ package ao.co.proitconsulting.xpress.fragmentos.produtos_estab;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -102,6 +104,22 @@ public class ProdutosEstabFragment extends Fragment  {
                 new ViewModelProvider(this).get(ProdutosEstabViewModel.class);
 
         view = inflater.inflate(R.layout.fragment_produtos_estab, container, false);
+        if (getActivity()!=null){
+            if (((AppCompatActivity)getActivity())
+                    .getSupportActionBar()!=null){
+                if (getContext()!=null){
+                    final Drawable upArrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_burguer);;
+                    assert upArrow != null;
+                    upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+                    ((AppCompatActivity)getActivity())
+                            .getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                }
+
+            }
+        }
+
+
         initViews();
 
 //        produtosEstabViewModel.getTopImagesMutableLiveData().observe(this, new Observer<List<TopSlideImages>>() {

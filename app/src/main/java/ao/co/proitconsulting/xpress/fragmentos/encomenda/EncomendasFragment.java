@@ -1,6 +1,8 @@
 package ao.co.proitconsulting.xpress.fragmentos.encomenda;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -47,6 +51,20 @@ public class EncomendasFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_encomendas, container, false);
+        if (getActivity()!=null){
+            if (((AppCompatActivity)getActivity())
+                    .getSupportActionBar()!=null){
+                if (getContext()!=null){
+                    final Drawable upArrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_burguer);;
+                    assert upArrow != null;
+                    upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+                    ((AppCompatActivity)getActivity())
+                            .getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                }
+
+            }
+        }
 
         initViews();
 

@@ -6,12 +6,12 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_menu_home"
-            android:icon="@drawable/ic_baseline_home_outline_24"
+            android:icon="@drawable/ic_home"
             app:iconTint="@color/nav_menu_icon_color"
             android:title="@string/nav_home_title"/>
 
         <item android:id="@+id/nav_menu_perfil"
-            android:icon="@drawable/ic_baseline_person_outline_24"
+            android:icon="@drawable/ic_perfil"
             app:iconTint="@color/nav_menu_icon_color"
             android:title="@string/nav_meu_perfil_title"/>
 
@@ -20,17 +20,17 @@
         android:title="Favoritos"/>-->
 
         <item android:id="@+id/nav_menu_encomendas"
-            android:icon="@drawable/ic_baseline_shopping_bag_24"
+            android:icon="@drawable/ic_encomenda"
             app:iconTint="@color/nav_menu_icon_color"
             android:title="@string/nav_encomendas_title"/>
 
         <item android:id="@+id/nav_menu_mapa"
-            android:icon="@drawable/ic_baseline_location_on_outline_24"
+            android:icon="@drawable/ic_mapa"
             app:iconTint="@color/nav_menu_icon_color"
             android:title="@string/nav_mapa_title"/>
 
         <item android:id="@+id/nav_menu_wallet"
-            android:icon="@drawable/ic_baseline_account_wallet_24"
+            android:icon="@drawable/ic_carteira"
             app:iconTint="@color/nav_menu_icon_color"
             android:title="@string/nav_carteira_title"/>
 

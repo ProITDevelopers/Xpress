@@ -3,6 +3,8 @@ package ao.co.proitconsulting.xpress.fragmentos.mapa;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -82,6 +86,22 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
                              ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_mapa, container, false);
+        if (getActivity()!=null){
+            if (((AppCompatActivity)getActivity())
+                    .getSupportActionBar()!=null){
+                if (getContext()!=null){
+                    final Drawable upArrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_burguer);;
+                    assert upArrow != null;
+                    upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+                    ((AppCompatActivity)getActivity())
+                            .getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                }
+
+            }
+        }
+
+
         if (getContext()!=null)
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 

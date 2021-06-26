@@ -2,11 +2,19 @@ package ao.co.proitconsulting.xpress.fragmentos.telafiltros;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -28,6 +36,13 @@ public class EscolherFiltrosFragment extends Fragment implements EscolherFiltros
     private EscolherFiltrosAdapter escolherFiltrosAdapter;
 
     public EscolherFiltrosFragment() {}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,5 +83,23 @@ public class EscolherFiltrosFragment extends Fragment implements EscolherFiltros
     @Override
     public void onItemClickListener(int position, View view) {
         escolherFiltrosAdapter.selectedItem();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem filterItem = menu.findItem(R.id.action_filtros);
+        filterItem.setVisible(false);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(false);
+
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_options_search, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -26,9 +28,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -82,7 +86,7 @@ public class HomeFragment extends Fragment {
 
     private View view;
 
-    private LoopingViewPager loopingViewPager;
+
     private ViewPager viewPager;
     LinearLayout sliderDotspanel;
     private int dotscount;
@@ -90,8 +94,17 @@ public class HomeFragment extends Fragment {
     private Handler slideHandler = new Handler();
     private static int TIME_DELAY = 3500; // Slide duration 3 seconds
 
-    private TabLayout tabLayout;
+    private TextView textViewMenuTitle;
     private RecyclerView recyclerViewMenu;
+
+    private TextView txtPertoDMimTitle;
+    private RecyclerView recyclerViewMenuPertoDMim;
+
+    private TextView txtMaisPopularsTitle;
+    private RecyclerView recyclerViewMenuMaisPopulars;
+
+    private TextView txtAltashorasTitle;
+    private RecyclerView recyclerViewMenuAltashoras;
 
     private AlertDialog waitingDialog;
     private List<TopSlideImages> topSlideImagesList = new ArrayList<>();
@@ -142,6 +155,22 @@ public class HomeFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        if (getActivity()!=null){
+            if (((AppCompatActivity)getActivity())
+                    .getSupportActionBar()!=null){
+                if (getContext()!=null){
+                    final Drawable upArrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_menu_burguer);;
+                    assert upArrow != null;
+                    upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+                    ((AppCompatActivity)getActivity())
+                            .getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                }
+
+            }
+        }
+
+
         initViews();
 
         if (getContext()!=null){
@@ -179,65 +208,12 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    //    private void carregarListaMenuCategory() {
-//        waitingDialog.show();
-//
-//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        Call<List<MenuCategory>> rv = apiInterface.getMenuCategories();
-//        rv.enqueue(new Callback<List<MenuCategory>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<List<MenuCategory>> call, @NonNull Response<List<MenuCategory>> response) {
-//
-//                if (response.isSuccessful()) {
-//
-//                    if (menuCategoryList!=null)
-//                        menuCategoryList.clear();
-//
-//                    if (response.body()!=null){
-//
-//                        if (response.body().size()>0){
-//                            for (MenuCategory menuCategory: response.body()) {
-//                                if (menuCategory!=null){
-//                                    menuCategoryList.add(menuCategory);
-//                                    Log.d(TAG, "onResponseMenuCategory: "+menuCategory.getDescricao());
-//                                }
-//                            }
-//
-//                            carregarListaEstabelicimentos();
-//
-//
-//                        }
-//
-//                    }
-//
-//                } else {
-//
-//                    waitingDialog.dismiss();
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<List<MenuCategory>> call, @NonNull Throwable t) {
-//                waitingDialog.dismiss();
-//                if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-//                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet);
-//                }else  if ("timeout".equals(t.getMessage())) {
-//                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro_internet_timeout);
-//                }else {
-//                    MetodosUsados.mostrarMensagem(getContext(),R.string.msg_erro);
-//                }
-//            }
-//        });
-//    }
 
     private void initViews() {
         waitingDialog = new SpotsDialog.Builder().setContext(getContext()).setTheme(R.style.CustomSpotsDialog).build();
         waitingDialog.setMessage("Por favor aguarde...");
         waitingDialog.setCancelable(false);
 
-        loopingViewPager = view.findViewById(R.id.loopingViewPager);
 
         txtTopMyLocation = view.findViewById(R.id.txtTopMyLocation);
         viewPager = view.findViewById(R.id.viewPager);
@@ -246,12 +222,19 @@ public class HomeFragment extends Fragment {
         viewPager.setVisibility(View.INVISIBLE);
         sliderDotspanel.setVisibility(View.INVISIBLE);
 
+        textViewMenuTitle = view.findViewById(R.id.textViewMenuTitle);
         recyclerViewMenu = view.findViewById(R.id.recyclerViewMenu);
 
-        tabLayout = view.findViewById(R.id.tab_layout);
+        txtPertoDMimTitle = view.findViewById(R.id.txtPertoDMimTitle);
+        recyclerViewMenuPertoDMim = view.findViewById(R.id.recyclerViewMenuPertoDMim);
 
-        loopingViewPager.setVisibility(View.GONE);
-        tabLayout.setVisibility(View.GONE);
+        txtMaisPopularsTitle = view.findViewById(R.id.txtMaisPopularsTitle);
+        recyclerViewMenuMaisPopulars = view.findViewById(R.id.recyclerViewMenuMaisPopulars);
+
+        txtAltashorasTitle = view.findViewById(R.id.txtAltashorasTitle);
+        recyclerViewMenuAltashoras = view.findViewById(R.id.recyclerViewMenuAltashoras);
+
+
 
         coordinatorLayout = view.findViewById(R.id.constraintLayout);
         errorLayout = view.findViewById(R.id.erroLayout);
@@ -312,9 +295,7 @@ public class HomeFragment extends Fragment {
 
 
                         sliderDotspanel.removeAllViews();
-                        TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(getContext(),topSlideImagesList,true);
-                        loopingViewPager.setAdapter(topImageSlideAdapter);
-                        tabLayout.setupWithViewPager(loopingViewPager,true);
+
 
                         ViewPagerAdapterSlider viewPagerAdapter = new ViewPagerAdapterSlider(getContext(),topSlideImagesList);
 
@@ -450,6 +431,39 @@ public class HomeFragment extends Fragment {
                         sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
+                        carregarListaEstabelicimentos_TODOS_MAIS_POPULARES();
+
+                        if (getContext()!=null){
+                            Dexter.withContext(getContext())
+                                    .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                                    .withListener(new MultiplePermissionsListener() {
+                                        @Override
+                                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                                            if (report.areAllPermissionsGranted()) {
+                                                buildLocationCallBack();
+                                                createLocationRequest();
+                                                displayLocationOther();
+                                            }else{
+
+                                                txtPertoDMimTitle.setVisibility(View.GONE);
+                                                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                            token.continuePermissionRequest();
+                                            if (getContext()!=null)
+                                                Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+                                            txtPertoDMimTitle.setVisibility(View.GONE);
+                                            recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                                        }
+                                    }).check();
+                        }
+
+
 
 
                     }else{
@@ -572,6 +586,9 @@ public class HomeFragment extends Fragment {
                         viewPager.setVisibility(View.VISIBLE);
                         sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
+
+                        textViewMenuTitle.setText(getString(R.string.perto_de_mim));
+                        textViewMenuTitle.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
 
@@ -690,6 +707,8 @@ public class HomeFragment extends Fragment {
                         viewPager.setVisibility(View.VISIBLE);
                         sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
+                        textViewMenuTitle.setText(getString(R.string.mais_populares));
+                        textViewMenuTitle.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
 
@@ -809,6 +828,8 @@ public class HomeFragment extends Fragment {
                         viewPager.setVisibility(View.VISIBLE);
                         sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
+                        textViewMenuTitle.setText(getString(R.string.altas_horas));
+                        textViewMenuTitle.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
 
 
@@ -976,7 +997,237 @@ public class HomeFragment extends Fragment {
     };
 
 
+    private void carregarListaEstabelicimentos_TODOS_PERTO_DE_MIM(double latitude,double longitude) {
 
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_PERTO_DE_MIM(latitude,longitude);
+        rv.enqueue(new Callback<List<Estabelecimento>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
+
+                if (response.isSuccessful()) {
+
+                    if (response.body()!=null && response.body().size()>0){
+                        List<Estabelecimento> estabelecimentoListPertoDMim = new ArrayList<>();
+
+                        for (Estabelecimento estab: response.body()) {
+                            if (estab!=null){
+                                if (estab.estadoEstabelecimento!=null){
+                                    estabelecimentoListPertoDMim.add(estab);
+                                }
+                            }
+                        }
+
+                        txtPertoDMimTitle.setVisibility(View.VISIBLE);
+                        recyclerViewMenuPertoDMim.setVisibility(View.VISIBLE);
+                        getCategoriesFromEstabelecimentoOther(estabelecimentoListPertoDMim,recyclerViewMenuPertoDMim);
+
+
+
+
+
+                    }else{
+                        txtPertoDMimTitle.setVisibility(View.GONE);
+                        recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                    }
+
+                } else {
+
+                    txtPertoDMimTitle.setVisibility(View.GONE);
+                    recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
+                txtPertoDMimTitle.setVisibility(View.GONE);
+                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                Log.d(TAG, "onResponseEstabFailed: "+t.getMessage());
+                if (getContext()!=null){
+                    if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
+                        MetodosUsados.mostrarMensagem(getContext(),getString(R.string.msg_erro_internet));
+                    }else  if (t.getMessage().contains("timeout")) {
+                        MetodosUsados.mostrarMensagem(getContext(),getString(R.string.msg_erro_internet_timeout));
+                    }
+                }
+            }
+        });
+    }
+
+    private void carregarListaEstabelicimentos_TODOS_MAIS_POPULARES() {
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_MAISPOPULARES();
+        rv.enqueue(new Callback<List<Estabelecimento>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
+
+                if (response.isSuccessful()) {
+
+
+                    if (response.body()!=null && response.body().size()>0){
+                        List<Estabelecimento>estabelecimentoList = new ArrayList<>();
+                        for (Estabelecimento estab: response.body()) {
+                            if (estab!=null){
+                                if (estab.estadoEstabelecimento!=null){
+                                    estabelecimentoList.add(estab);
+
+                                }
+                            }
+                        }
+
+
+                        txtMaisPopularsTitle.setVisibility(View.VISIBLE);
+                        recyclerViewMenuMaisPopulars.setVisibility(View.VISIBLE);
+                        getCategoriesFromEstabelecimentoOther(estabelecimentoList,recyclerViewMenuMaisPopulars);
+                        carregarListaEstabelicimentos_TODOS_ALTASHORAS();
+
+
+                    }else{
+                        txtMaisPopularsTitle.setVisibility(View.GONE);
+                        recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    txtMaisPopularsTitle.setVisibility(View.GONE);
+                    recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
+                txtMaisPopularsTitle.setVisibility(View.GONE);
+                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void carregarListaEstabelicimentos_TODOS_ALTASHORAS() {
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_ALTASHORAS();
+        rv.enqueue(new Callback<List<Estabelecimento>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
+
+                if (response.isSuccessful()) {
+
+
+                    if (response.body()!=null && response.body().size()>0){
+                        List<Estabelecimento>estabelecimentoList = new ArrayList<>();
+                        for (Estabelecimento estab: response.body()) {
+                            if (estab!=null){
+                                if (estab.estadoEstabelecimento!=null){
+                                    estabelecimentoList.add(estab);
+                                }
+                            }
+                        }
+
+                        txtAltashorasTitle.setVisibility(View.VISIBLE);
+                        recyclerViewMenuAltashoras.setVisibility(View.VISIBLE);
+                        getCategoriesFromEstabelecimentoOther(estabelecimentoList,recyclerViewMenuAltashoras);
+
+
+
+                    }else{
+                        txtAltashorasTitle.setVisibility(View.GONE);
+                        recyclerViewMenuAltashoras.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    txtAltashorasTitle.setVisibility(View.GONE);
+                    recyclerViewMenuAltashoras.setVisibility(View.GONE);
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
+                txtAltashorasTitle.setVisibility(View.GONE);
+                recyclerViewMenuAltashoras.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    private void getCategoriesFromEstabelecimentoOther(List<Estabelecimento> estabelecimentoList,
+                                                  RecyclerView recyclerView) {
+        List<MenuCategory> menuCategoryList = new ArrayList<>();
+
+        for (int i = 0; i <estabelecimentoList.size() ; i++) {
+            Estabelecimento estab = estabelecimentoList.get(i);
+            MenuCategory menuCategory = new MenuCategory();
+            menuCategory.setIdTipo(estab.tipoDeEstabelecimento.idTipo);
+            menuCategory.setDescricao(estab.tipoDeEstabelecimento.descricao);
+            menuCategoryList.add(menuCategory);
+        }
+
+//        // Order the list by regist date.
+//        Collections.sort(menuCategories, new MenuCategory());
+
+//        List<MenuCategory> allEvents = new ArrayList<>(menuCategoryList);
+        List<MenuCategory> noRepeat = new ArrayList<>();
+
+        for (MenuCategory event : menuCategoryList) {
+            boolean isFound = false;
+            // check if the event name exists in noRepeat
+            for (MenuCategory e : noRepeat) {
+                if (e.getDescricao().equals(event.getDescricao()) || (e.equals(event))) {
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound) noRepeat.add(event);
+        }
+
+
+        menuCategoryList.clear();
+        List<CategoriaEstabelecimento> categoriaEstabelecimentoList = new ArrayList<>();
+
+        fillListOther(noRepeat,estabelecimentoList,categoriaEstabelecimentoList,recyclerView);
+    }
+
+    private void fillListOther(List<MenuCategory> menuCategoryList,List<Estabelecimento> estabelecimentoList ,
+                               List<CategoriaEstabelecimento> categoriaEstabelecimentoList,RecyclerView recyclerView) {
+
+
+
+        for (int i = 0; i <menuCategoryList.size() ; i++) {
+
+            List<Estabelecimento> newEstab = new ArrayList<>();
+            for (Estabelecimento e : estabelecimentoList) {
+                if (e.tipoDeEstabelecimento.idTipo == menuCategoryList.get(i).getIdTipo()){
+                    if (!newEstab.contains(e)){
+                        newEstab.add(e);
+                    }
+                }
+            }
+            categoriaEstabelecimentoList.add(new CategoriaEstabelecimento(menuCategoryList.get(i), newEstab));
+        }
+
+        menuCategoryList.clear();
+        setUpAdaptersOther(recyclerView,categoriaEstabelecimentoList);
+
+
+
+    }
+
+    private void setUpAdaptersOther(RecyclerView recyclerView,List<CategoriaEstabelecimento> categoriaEstabelecimentoList) {
+
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+        MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(getContext(),categoriaEstabelecimentoList);
+        recyclerView.setAdapter(mainRecyclerAdapter);
+    }
 
 
     @Override
@@ -999,12 +1250,19 @@ public class HomeFragment extends Fragment {
 //----------------------------------------------------------------------///
             //LISTAR_ESTABELECIMENTOS_TODOS
             case 0:
+                textViewMenuTitle.setVisibility(View.GONE);
                 verifConecxaoEstabelecimento_TODOS();
                 break;
 //----------------------------------------------------------------------///
             //LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM
             case 1:
 
+                txtPertoDMimTitle.setVisibility(View.GONE);
+                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                txtMaisPopularsTitle.setVisibility(View.GONE);
+                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
+                txtAltashorasTitle.setVisibility(View.GONE);
+                recyclerViewMenuAltashoras.setVisibility(View.GONE);
                 buildLocationCallBack();
                 createLocationRequest();
                 displayLocation();
@@ -1012,23 +1270,36 @@ public class HomeFragment extends Fragment {
 //----------------------------------------------------------------------///
             //LISTAR_ESTABELECIMENTOS_MAIS_POPULARES
             case 2:
+                txtPertoDMimTitle.setVisibility(View.GONE);
+                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                txtMaisPopularsTitle.setVisibility(View.GONE);
+                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
+                txtAltashorasTitle.setVisibility(View.GONE);
+                recyclerViewMenuAltashoras.setVisibility(View.GONE);
                 verifConecxaoEstabelecimento_MAIS_POPULARES();
                 break;
 //----------------------------------------------------------------------///
             //LISTAR_ESTABELECIMENTOS_ALTAS_HORAS
             case 3:
+                txtPertoDMimTitle.setVisibility(View.GONE);
+                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                txtMaisPopularsTitle.setVisibility(View.GONE);
+                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
+                txtAltashorasTitle.setVisibility(View.GONE);
+                recyclerViewMenuAltashoras.setVisibility(View.GONE);
                 verifConecxaoEstabelecimento_ALTASHORAS();
                 break;
 //----------------------------------------------------------------------///
             //LISTAR_ESTABELECIMENTOS_TODOS
             default:
+                textViewMenuTitle.setVisibility(View.GONE);
                 verifConecxaoEstabelecimento_TODOS();
                 break;
         }
 
 
         super.onResume();
-        loopingViewPager.resumeAutoScroll();
+
         slideHandler.postDelayed(sliderRunnable,TIME_DELAY); // Slide duration 3 seconds
 
     }
@@ -1036,7 +1307,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         slideHandler.removeCallbacks(sliderRunnable);
-        loopingViewPager.pauseAutoScroll();
+
         super.onPause();
     }
 
@@ -1055,35 +1326,8 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_options_search, menu);
-//        MenuItem searchItem = menu.findItem(R.id.action_search);
-//
-//        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//        searchView.setQueryHint(getString(R.string.pesquisar));
-//
-//        SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-//        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-//        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
-//        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//
-//
-//
-//
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (mainRecyclerAdapter!=null)
-//                    mainRecyclerAdapter.getFilter().filter(newText);
-//
-//
-//                return false;
-//            }
-//        });
+        inflater.inflate(R.menu.menu_fragment_home_options_search, menu);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -1095,9 +1339,9 @@ public class HomeFragment extends Fragment {
                 mostraTelaDePesquisas();
                 return true;
 
-            case R.id.action_filtros:
-                mostraTelaDosFiltros();
-                return true;
+//            case R.id.action_filtros:
+//                mostraTelaDosFiltros();
+//                return true;
 
         }
         return super.onOptionsItemSelected(item);
@@ -1108,10 +1352,7 @@ public class HomeFragment extends Fragment {
                 .navigate(R.id.nav_menu_pesquisar);
     }
 
-    private void mostraTelaDosFiltros() {
-        NavHostFragment.findNavController(HomeFragment.this)
-                .navigate(R.id.nav_menu_escolher_filtros);
-    }
+
 
     private void buildLocationCallBack() {
         locationCallback = new LocationCallback() {
@@ -1203,6 +1444,50 @@ public class HomeFragment extends Fragment {
 
                     txtTopMyLocation.setText(getMyEndereco);
 
+
+
+                    Log.d(TAG, String.format("Your location was changed : %f / %f",
+                            latitude, longitude));
+
+                } else {
+                    Log.d(TAG, "Can not get your location");
+                }
+            }
+        });
+
+    }
+
+    private void displayLocationOther() {
+
+        if (getContext()!=null){
+            if (ActivityCompat.checkSelfPermission(getContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        }
+
+
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                Common.mLastLocation = location;
+
+                if (Common.mLastLocation != null) {
+
+
+                    latitude = Common.mLastLocation.getLatitude();
+                    longitude = Common.mLastLocation.getLongitude();
+                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
+
+
+                    getMyEndereco = getMyAddress(center);
+
+                    txtTopMyLocation.setText(getMyEndereco);
+
+
+                    carregarListaEstabelicimentos_TODOS_PERTO_DE_MIM(latitude,longitude);
 
 
                     Log.d(TAG, String.format("Your location was changed : %f / %f",

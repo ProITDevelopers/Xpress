@@ -17,6 +17,7 @@
     <color name="yellow">#eba41d</color>
     <color name="linear_slide_active_dot_color">@color/xpress_purple</color>
     <color name="ic_navigation_color">@color/xpress_purple</color>
+    <color name="ic_menu_burguer_color">@color/xpress_green</color>
 
 
 
@@ -37,6 +38,7 @@
     <color name="search_icon_color">@color/xpress_green</color>
     <color name="search_text_color">@color/black</color>
     <color name="home_sectionName_color">@color/xpress_purple</color>
+    <color name="home_section_title_name_color">@color/xpress_green</color>
     <color name="home_item_row_color">@color/xpress_purple</color>
 
     <color name="catestab_name_color">@color/xpress_purple</color>

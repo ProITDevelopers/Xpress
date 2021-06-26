@@ -21,6 +21,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +29,7 @@ import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.CategoryEstabAdapter;
+import ao.co.proitconsulting.xpress.fragmentos.home.HomeFragment;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 
@@ -140,8 +142,7 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        MenuItem filterItem = menu.findItem(R.id.action_filtros);
-        filterItem.setVisible(false);
+
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
@@ -178,5 +179,23 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
         inflater.inflate(R.menu.menu_fragment_options_search, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+
+            case R.id.action_filtros:
+                mostraTelaDosFiltros();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void mostraTelaDosFiltros() {
+        NavHostFragment.findNavController(PerquisarTodosEsbalecimentosFragment.this)
+                .navigate(R.id.nav_menu_escolher_filtros);
     }
 }

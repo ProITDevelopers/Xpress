@@ -7,7 +7,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
-
+        <!--do this for changing the color-->
+        <item name="drawerArrowStyle">@style/DrawerHamburgerStyle</item>
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
 
         <!--  Status bar color.  -->
 <!--        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>-->
@@ -81,8 +83,15 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
 
+    </style>
 
+    <style name="DrawerHamburgerStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">false</item>
+        <item name="color">@color/xpress_green</item>
+    </style>
 
+    <style name="MyOverflowButtonStyle" parent="@style/Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/xpress_green</item>
     </style>
 
 <!--    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->

@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,8 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -68,6 +74,14 @@ public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "TAG_MenuActivity" ;
     private AppBarConfiguration mAppBarConfiguration;
     private NavigationView navigationView;
+
+
+//    private DrawerLayout drawerLayout;
+//    private ActionBarDrawerToggle actionBarDrawerToggle;
+//    private TextView textView;
+//    private Toolbar toolbar;
+
+
     private UsuarioPerfil usuarioPerfil;
     private Wallet wallet = new Wallet();
 //    private CircleImageView imgUserPhoto;
@@ -113,6 +127,8 @@ public class MenuActivity extends AppCompatActivity {
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
+
+
         navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
 
@@ -139,6 +155,18 @@ public class MenuActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        if (getSupportActionBar()!=null){
+            final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_menu_burguer);
+            assert upArrow != null;
+            upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+//            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+//
+//            getSupportActionBar().setHomeButtonEnabled(true);
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+
 
 
         View view = navigationView.getHeaderView(0);

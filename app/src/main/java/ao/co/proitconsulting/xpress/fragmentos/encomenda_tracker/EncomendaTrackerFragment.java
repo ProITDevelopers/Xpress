@@ -294,6 +294,7 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
                             String telefoneEstafeta = jsonResponse.getString("telefoneEstafeta");
                             double latitudeDestino = Double.parseDouble(jsonResponse.getString("latitudeDestino"));
                             double longitudeDestino = Double.parseDouble(jsonResponse.getString("longitudeDestino"));
+                            String nomeEstafeta = jsonResponse.getString("nomeEstafeta");
 
 //                            {"numeroFatura":"904",
 //                                    "nomeCliente":"Adão Gaspar",
@@ -343,8 +344,10 @@ public class EncomendaTrackerFragment extends Fragment implements OnMapReadyCall
                             mEncomendaMarker = mMap.addMarker(new MarkerOptions()
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_marker))
                                     .position(myEncomendaPosition)
-                                    .title(nomeEstabelecimento)
-                                    .snippet(new StringBuilder("EM ").append(estadoEncomenda).append("\n").append(getMyEncomendaEndereco).toString()));
+                                    .title(nomeEstafeta)
+                                    .snippet(new StringBuilder(telefoneEstafeta).append("\n")
+                                            .append(estadoEncomenda).append("\n")
+                                            .append(getMyEncomendaEndereco).toString()));
 
 
                             //Move camera to this position

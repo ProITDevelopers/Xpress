@@ -209,5 +209,8 @@
     <string name="aplicar">Aplicar</string>
     <string name="login_no_facebook">Login no Facebook</string>
     <string name="rastrear">Rastrear</string>
+    <string name="perto_de_mim">Perto de mim</string>
+    <string name="mais_populares">Mais populares</string>
+    <string name="altas_horas">Altas horas</string>
 
 </resources>
