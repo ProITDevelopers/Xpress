@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -136,6 +139,11 @@ public class CheckOutActivity extends AppCompatActivity {
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle(getString(R.string.checkout));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_baseline_arrow_back_24);
+            assert upArrow != null;
+            upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
         initViews();
         if (getIntent()!=null){

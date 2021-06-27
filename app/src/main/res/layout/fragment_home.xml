@@ -97,7 +97,6 @@
                     android:maxLines="1"
                     android:layout_marginTop="25dp"
                     android:ellipsize="end"
-                    android:gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +128,6 @@
                     android:maxLines="1"
                     android:layout_marginTop="5dp"
                     android:ellipsize="end"
-                    android:gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,44 +143,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/txtPertoDMimTitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:paddingTop="20dp"
+                    android:paddingTop="10dp"
                     android:paddingBottom="20dp"
                     android:visibility="gone"
                     />
 
 
-                <TextView
-                    android:id="@+id/txtMaisPopularsTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="@string/mais_populares"
-                    android:textColor="@color/home_section_title_name_color"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:maxLines="1"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewMenuPertoDMim"
-                    android:fontFamily="@font/poppins_regular"
-                    android:visibility="gone"
-                    />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewMenuMaisPopulars"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/txtMaisPopularsTitle"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:visibility="gone"
-                    />
 
                 <TextView
                     android:id="@+id/txtAltashorasTitle"
@@ -196,11 +163,10 @@
                     android:maxLines="1"
                     android:layout_marginTop="5dp"
                     android:ellipsize="end"
-                    android:gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewMenuMaisPopulars"
+                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewMenuPertoDMim"
                     android:fontFamily="@font/poppins_regular"
                     android:visibility="gone"
                     />
@@ -212,7 +178,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/txtAltashorasTitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:paddingTop="20dp"
+                    android:paddingTop="10dp"
                     android:paddingBottom="20dp"
                     android:visibility="gone"
                     />

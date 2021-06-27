@@ -32,14 +32,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.asksira.loopingviewpager.LoopingViewPager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -47,7 +45,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.annotations.SerializedName;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -62,15 +59,14 @@ import java.util.Locale;
 
 import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.adapters.ViewPagerAdapterSlider;
+import ao.co.proitconsulting.xpress.adapters.homeEstab.ChildRecyclerAdapter;
 import ao.co.proitconsulting.xpress.adapters.homeEstab.MainRecyclerAdapter;
-import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ADAO.ApiClientADAO;
 import ao.co.proitconsulting.xpress.api.ADAO.ApiInterfaceADAO;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
-import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.CategoriaEstabelecimento;
 import ao.co.proitconsulting.xpress.modelos.Estabelecimento;
 import ao.co.proitconsulting.xpress.modelos.MenuCategory;
@@ -100,8 +96,7 @@ public class HomeFragment extends Fragment {
     private TextView txtPertoDMimTitle;
     private RecyclerView recyclerViewMenuPertoDMim;
 
-    private TextView txtMaisPopularsTitle;
-    private RecyclerView recyclerViewMenuMaisPopulars;
+
 
     private TextView txtAltashorasTitle;
     private RecyclerView recyclerViewMenuAltashoras;
@@ -228,8 +223,7 @@ public class HomeFragment extends Fragment {
         txtPertoDMimTitle = view.findViewById(R.id.txtPertoDMimTitle);
         recyclerViewMenuPertoDMim = view.findViewById(R.id.recyclerViewMenuPertoDMim);
 
-        txtMaisPopularsTitle = view.findViewById(R.id.txtMaisPopularsTitle);
-        recyclerViewMenuMaisPopulars = view.findViewById(R.id.recyclerViewMenuMaisPopulars);
+
 
         txtAltashorasTitle = view.findViewById(R.id.txtAltashorasTitle);
         recyclerViewMenuAltashoras = view.findViewById(R.id.recyclerViewMenuAltashoras);
@@ -431,7 +425,7 @@ public class HomeFragment extends Fragment {
                         sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
-                        carregarListaEstabelicimentos_TODOS_MAIS_POPULARES();
+                        carregarListaEstabelicimentos_TODOS_ALTASHORAS();
 
                         if (getContext()!=null){
                             Dexter.withContext(getContext())
@@ -590,6 +584,7 @@ public class HomeFragment extends Fragment {
                         textViewMenuTitle.setText(getString(R.string.perto_de_mim));
                         textViewMenuTitle.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
+
 
 
 
@@ -1018,6 +1013,11 @@ public class HomeFragment extends Fragment {
                             }
                         }
 
+                        if (getMyEndereco.equals(""))
+                            txtTopMyLocation.setVisibility(View.GONE);
+                        else
+                            txtTopMyLocation.setVisibility(View.VISIBLE);
+
                         txtPertoDMimTitle.setVisibility(View.VISIBLE);
                         recyclerViewMenuPertoDMim.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimentoOther(estabelecimentoListPertoDMim,recyclerViewMenuPertoDMim);
@@ -1057,56 +1057,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void carregarListaEstabelicimentos_TODOS_MAIS_POPULARES() {
 
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_MAISPOPULARES();
-        rv.enqueue(new Callback<List<Estabelecimento>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
-
-                if (response.isSuccessful()) {
-
-
-                    if (response.body()!=null && response.body().size()>0){
-                        List<Estabelecimento>estabelecimentoList = new ArrayList<>();
-                        for (Estabelecimento estab: response.body()) {
-                            if (estab!=null){
-                                if (estab.estadoEstabelecimento!=null){
-                                    estabelecimentoList.add(estab);
-
-                                }
-                            }
-                        }
-
-
-                        txtMaisPopularsTitle.setVisibility(View.VISIBLE);
-                        recyclerViewMenuMaisPopulars.setVisibility(View.VISIBLE);
-                        getCategoriesFromEstabelecimentoOther(estabelecimentoList,recyclerViewMenuMaisPopulars);
-                        carregarListaEstabelicimentos_TODOS_ALTASHORAS();
-
-
-                    }else{
-                        txtMaisPopularsTitle.setVisibility(View.GONE);
-                        recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
-                    }
-
-                } else {
-                    txtMaisPopularsTitle.setVisibility(View.GONE);
-                    recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
-
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
-                txtMaisPopularsTitle.setVisibility(View.GONE);
-                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
-            }
-        });
-    }
 
     private void carregarListaEstabelicimentos_TODOS_ALTASHORAS() {
 
@@ -1128,6 +1079,8 @@ public class HomeFragment extends Fragment {
                                 }
                             }
                         }
+
+
 
                         txtAltashorasTitle.setVisibility(View.VISIBLE);
                         recyclerViewMenuAltashoras.setVisibility(View.VISIBLE);
@@ -1160,39 +1113,39 @@ public class HomeFragment extends Fragment {
 
     private void getCategoriesFromEstabelecimentoOther(List<Estabelecimento> estabelecimentoList,
                                                   RecyclerView recyclerView) {
-        List<MenuCategory> menuCategoryList = new ArrayList<>();
 
-        for (int i = 0; i <estabelecimentoList.size() ; i++) {
-            Estabelecimento estab = estabelecimentoList.get(i);
-            MenuCategory menuCategory = new MenuCategory();
-            menuCategory.setIdTipo(estab.tipoDeEstabelecimento.idTipo);
-            menuCategory.setDescricao(estab.tipoDeEstabelecimento.descricao);
-            menuCategoryList.add(menuCategory);
-        }
+        setUpAdaptersOther(recyclerView,estabelecimentoList);
 
-//        // Order the list by regist date.
-//        Collections.sort(menuCategories, new MenuCategory());
-
-//        List<MenuCategory> allEvents = new ArrayList<>(menuCategoryList);
-        List<MenuCategory> noRepeat = new ArrayList<>();
-
-        for (MenuCategory event : menuCategoryList) {
-            boolean isFound = false;
-            // check if the event name exists in noRepeat
-            for (MenuCategory e : noRepeat) {
-                if (e.getDescricao().equals(event.getDescricao()) || (e.equals(event))) {
-                    isFound = true;
-                    break;
-                }
-            }
-            if (!isFound) noRepeat.add(event);
-        }
-
-
-        menuCategoryList.clear();
-        List<CategoriaEstabelecimento> categoriaEstabelecimentoList = new ArrayList<>();
-
-        fillListOther(noRepeat,estabelecimentoList,categoriaEstabelecimentoList,recyclerView);
+//        List<MenuCategory> menuCategoryList = new ArrayList<>();
+//
+//        for (int i = 0; i <estabelecimentoList.size() ; i++) {
+//            Estabelecimento estab = estabelecimentoList.get(i);
+//            MenuCategory menuCategory = new MenuCategory();
+//            menuCategory.setIdTipo(estab.tipoDeEstabelecimento.idTipo);
+//            menuCategory.setDescricao(estab.tipoDeEstabelecimento.descricao);
+//            menuCategoryList.add(menuCategory);
+//        }
+//
+//
+//        List<MenuCategory> noRepeat = new ArrayList<>();
+//
+//        for (MenuCategory event : menuCategoryList) {
+//            boolean isFound = false;
+//            // check if the event name exists in noRepeat
+//            for (MenuCategory e : noRepeat) {
+//                if (e.getDescricao().equals(event.getDescricao()) || (e.equals(event))) {
+//                    isFound = true;
+//                    break;
+//                }
+//            }
+//            if (!isFound) noRepeat.add(event);
+//        }
+//
+//
+//        menuCategoryList.clear();
+//        List<CategoriaEstabelecimento> categoriaEstabelecimentoList = new ArrayList<>();
+//
+//        fillListOther(noRepeat,estabelecimentoList,categoriaEstabelecimentoList,recyclerView);
     }
 
     private void fillListOther(List<MenuCategory> menuCategoryList,List<Estabelecimento> estabelecimentoList ,
@@ -1214,19 +1167,24 @@ public class HomeFragment extends Fragment {
         }
 
         menuCategoryList.clear();
-        setUpAdaptersOther(recyclerView,categoriaEstabelecimentoList);
+//        setUpAdaptersOther(recyclerView,categoriaEstabelecimentoList);
 
 
 
     }
 
-    private void setUpAdaptersOther(RecyclerView recyclerView,List<CategoriaEstabelecimento> categoriaEstabelecimentoList) {
+    private void setUpAdaptersOther(RecyclerView recyclerView,List<Estabelecimento> estabelecimentoList) {
 
 
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+//        MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(getContext(),categoriaEstabelecimentoList);
+//        recyclerView.setAdapter(mainRecyclerAdapter);
+
+        ChildRecyclerAdapter childRecyclerAdapter = new ChildRecyclerAdapter(getContext(), estabelecimentoList);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
-        MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(getContext(),categoriaEstabelecimentoList);
-        recyclerView.setAdapter(mainRecyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false));
+        recyclerView.setAdapter(childRecyclerAdapter);
     }
 
 
@@ -1246,56 +1204,56 @@ public class HomeFragment extends Fragment {
             coordinatorLayout.setVisibility(View.VISIBLE);
         }
 
-        switch (AppPrefsSettings.getInstance().getEstabFilterView()){
-//----------------------------------------------------------------------///
-            //LISTAR_ESTABELECIMENTOS_TODOS
-            case 0:
-                textViewMenuTitle.setVisibility(View.GONE);
-                verifConecxaoEstabelecimento_TODOS();
-                break;
-//----------------------------------------------------------------------///
-            //LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM
-            case 1:
+        textViewMenuTitle.setVisibility(View.GONE);
+        verifConecxaoEstabelecimento_TODOS();
 
-                txtPertoDMimTitle.setVisibility(View.GONE);
-                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-                txtMaisPopularsTitle.setVisibility(View.GONE);
-                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
-                txtAltashorasTitle.setVisibility(View.GONE);
-                recyclerViewMenuAltashoras.setVisibility(View.GONE);
-                buildLocationCallBack();
-                createLocationRequest();
-                displayLocation();
-                break;
-//----------------------------------------------------------------------///
-            //LISTAR_ESTABELECIMENTOS_MAIS_POPULARES
-            case 2:
-                txtPertoDMimTitle.setVisibility(View.GONE);
-                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-                txtMaisPopularsTitle.setVisibility(View.GONE);
-                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
-                txtAltashorasTitle.setVisibility(View.GONE);
-                recyclerViewMenuAltashoras.setVisibility(View.GONE);
-                verifConecxaoEstabelecimento_MAIS_POPULARES();
-                break;
-//----------------------------------------------------------------------///
-            //LISTAR_ESTABELECIMENTOS_ALTAS_HORAS
-            case 3:
-                txtPertoDMimTitle.setVisibility(View.GONE);
-                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-                txtMaisPopularsTitle.setVisibility(View.GONE);
-                recyclerViewMenuMaisPopulars.setVisibility(View.GONE);
-                txtAltashorasTitle.setVisibility(View.GONE);
-                recyclerViewMenuAltashoras.setVisibility(View.GONE);
-                verifConecxaoEstabelecimento_ALTASHORAS();
-                break;
-//----------------------------------------------------------------------///
-            //LISTAR_ESTABELECIMENTOS_TODOS
-            default:
-                textViewMenuTitle.setVisibility(View.GONE);
-                verifConecxaoEstabelecimento_TODOS();
-                break;
-        }
+//        switch (AppPrefsSettings.getInstance().getEstabFilterView()){
+////----------------------------------------------------------------------///
+//            //LISTAR_ESTABELECIMENTOS_TODOS
+//            case 0:
+//                textViewMenuTitle.setVisibility(View.GONE);
+//                verifConecxaoEstabelecimento_TODOS();
+//                break;
+////----------------------------------------------------------------------///
+//            //LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM
+//            case 1:
+//
+//                txtPertoDMimTitle.setVisibility(View.GONE);
+//                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+//
+//                txtAltashorasTitle.setVisibility(View.GONE);
+//                recyclerViewMenuAltashoras.setVisibility(View.GONE);
+//                buildLocationCallBack();
+//                createLocationRequest();
+//                displayLocation();
+//                break;
+////----------------------------------------------------------------------///
+//            //LISTAR_ESTABELECIMENTOS_MAIS_POPULARES
+//            case 2:
+//                txtPertoDMimTitle.setVisibility(View.GONE);
+//                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+//
+//                txtAltashorasTitle.setVisibility(View.GONE);
+//                recyclerViewMenuAltashoras.setVisibility(View.GONE);
+//                verifConecxaoEstabelecimento_MAIS_POPULARES();
+//                break;
+////----------------------------------------------------------------------///
+//            //LISTAR_ESTABELECIMENTOS_ALTAS_HORAS
+//            case 3:
+//                txtPertoDMimTitle.setVisibility(View.GONE);
+//                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+//
+//                txtAltashorasTitle.setVisibility(View.GONE);
+//                recyclerViewMenuAltashoras.setVisibility(View.GONE);
+//                verifConecxaoEstabelecimento_ALTASHORAS();
+//                break;
+////----------------------------------------------------------------------///
+//            //LISTAR_ESTABELECIMENTOS_TODOS
+//            default:
+//                textViewMenuTitle.setVisibility(View.GONE);
+//                verifConecxaoEstabelecimento_TODOS();
+//                break;
+//        }
 
 
         super.onResume();
@@ -1485,6 +1443,8 @@ public class HomeFragment extends Fragment {
                     getMyEndereco = getMyAddress(center);
 
                     txtTopMyLocation.setText(getMyEndereco);
+
+
 
 
                     carregarListaEstabelicimentos_TODOS_PERTO_DE_MIM(latitude,longitude);

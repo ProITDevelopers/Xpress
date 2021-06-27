@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -25,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -114,6 +117,11 @@ public class MapaActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle(toolbarTitle);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_baseline_arrow_back_24);
+            assert upArrow != null;
+            upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);

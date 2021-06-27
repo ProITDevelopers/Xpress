@@ -18,7 +18,9 @@ public class PerquisarTodosEsbalecimentosViewModel extends ViewModel {
     public MutableLiveData<List<Estabelecimento>> getMutableLiveData_ALLEstab() {
         if (mutableLiveData_ALLEstab == null)
             mutableLiveData_ALLEstab = new MutableLiveData<>();
+
         mutableLiveData_ALLEstab.setValue(Common.todosEstabelecimentoList);
+
 
         return mutableLiveData_ALLEstab;
     }

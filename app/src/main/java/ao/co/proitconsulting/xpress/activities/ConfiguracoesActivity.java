@@ -3,12 +3,15 @@ package ao.co.proitconsulting.xpress.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +39,11 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle(getString(R.string.action_settings));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.ic_baseline_arrow_back_24);
+            assert upArrow != null;
+            upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
         layoutManager = new LinearLayoutManager(this);

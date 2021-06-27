@@ -35,7 +35,7 @@
     <color name="search_icon_color">@color/white</color>
     <color name="search_text_color">@color/white</color>
     <color name="home_sectionName_color">@color/xpress_green</color>
-    <color name="home_section_title_name_color">@color/white</color>
+    <color name="home_section_title_name_color">@color/xpress_green</color>
     <color name="home_item_row_color">@color/xpress_green</color>
 
     <color name="catestab_name_color">@color/xpress_green</color>
