@@ -11,9 +11,13 @@ import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.HubConnectionState;
 
+import java.util.concurrent.TimeUnit;
+
 import ao.co.proitconsulting.xpress.helper.NotificationHelper;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class MySignalRService extends Service {
 
@@ -51,8 +55,17 @@ public class MySignalRService extends Service {
     public void onDestroy() {
 
         if (mHubConnection!=null){
-            if (mHubConnection.getConnectionState()== HubConnectionState.CONNECTED)
+
+            if (mHubConnection.getConnectionState() == null){
                 mHubConnection.stop();
+
+            }else{
+                if (mHubConnection.getConnectionState()== HubConnectionState.CONNECTED)
+                    mHubConnection.stop();
+            }
+
+
+
         }
 
 
@@ -130,8 +143,23 @@ public class MySignalRService extends Service {
         },String.class);
 
         if (mHubConnection!=null){
-            if (mHubConnection.getConnectionState()== HubConnectionState.DISCONNECTED)
-                mHubConnection.start();
+
+            if (mHubConnection.getConnectionState() == null){
+                mHubConnection.stop();
+
+                Completable.timer(2, TimeUnit.SECONDS,
+                        AndroidSchedulers.mainThread())
+                        .subscribe(() -> {
+                            mHubConnection.start();
+                        });
+
+            }else{
+                if (mHubConnection.getConnectionState()== HubConnectionState.DISCONNECTED)
+                    mHubConnection.start();
+            }
+
+
+
         }
 
 

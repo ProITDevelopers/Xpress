@@ -2,9 +2,16 @@ package ao.co.proitconsulting.xpress.fragmentos.telasallestab;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,12 +23,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -32,12 +42,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.annotations.SerializedName;
 
@@ -93,6 +104,14 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
     @SerializedName("longitude")
     private double longitude;
 
+    private boolean mLocationPermissionGranted = false;
+
+    //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+    private Dialog dialogLayoutConfirmarProcesso;
+    private ImageView imgConfirm;
+    private TextView txtConfirmTitle,txtConfirmMsg;
+    private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
+
     public PerquisarTodosEsbalecimentosFragment() {
     }
 
@@ -111,6 +130,21 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
 //                new ViewModelProvider(this).get(PerquisarTodosEsbalecimentosViewModel.class);
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_pesquisar_todos_estabs, container, false);
+
+        if (getActivity()!=null){
+            if (((AppCompatActivity)getActivity())
+                    .getSupportActionBar()!=null){
+                if (getContext()!=null){
+                    final Drawable upArrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_arrow_back_24);;
+                    assert upArrow != null;
+                    upArrow.setColorFilter(getResources().getColor(R.color.ic_menu_burguer_color), PorterDuff.Mode.SRC_ATOP);
+                    ((AppCompatActivity)getActivity())
+                            .getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                }
+
+            }
+        }
 
 
         initViews();
@@ -166,6 +200,26 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
 
         if (getContext()!=null)
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+        if (getContext()!=null)
+            dialogLayoutConfirmarProcesso = new Dialog(getContext());
+        dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
+        dialogLayoutConfirmarProcesso.setCancelable(false);
+        if (dialogLayoutConfirmarProcesso.getWindow()!=null)
+            dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        imgConfirm = dialogLayoutConfirmarProcesso.findViewById(R.id.imgConfirm);
+        txtConfirmTitle = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmTitle);
+        txtConfirmTitle.setVisibility(View.INVISIBLE);
+        txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
+        dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
+        dialog_btn_deny_processo.setText(getString(R.string.no_thanks));
+        dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
+        dialog_btn_accept_processo.setText(getString(R.string.ok));
     }
 
     //--------------LISTAR_ESTABELECIMENTOS_TODOS-----------------------------///
@@ -204,6 +258,8 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
                         estabelecimentoList.clear();
                     else
                         estabelecimentoList = new ArrayList<>();
+
+                    Common.todosEstabelecimentoList=new ArrayList<>();
 
                     if (response.body()!=null && response.body().size()>0){
 
@@ -321,6 +377,8 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
                     else
                         estabelecimentoList = new ArrayList<>();
 
+                    Common.todosEstabelecimentoList=new ArrayList<>();
+
                     if (response.body()!=null && response.body().size()>0){
 
 
@@ -432,6 +490,8 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
                         estabelecimentoList.clear();
                     else
                         estabelecimentoList = new ArrayList<>();
+
+                    Common.todosEstabelecimentoList=new ArrayList<>();
 
                     if (response.body()!=null && response.body().size()>0){
 
@@ -545,6 +605,8 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
                         estabelecimentoList.clear();
                     else
                         estabelecimentoList = new ArrayList<>();
+
+                    Common.todosEstabelecimentoList=new ArrayList<>();
 
                     if (response.body()!=null && response.body().size()>0){
 
@@ -675,9 +737,16 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
             //LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM
             case 1:
 
-                buildLocationCallBack();
-                createLocationRequest();
-                displayLocation();
+                if(checkMapServices()){
+                    if(mLocationPermissionGranted){
+                        //PERTO DE MIM
+                        getMyLoCation();
+
+                    }else{
+                        getLocationPermission();
+                    }
+
+                }
                 break;
 //----------------------------------------------------------------------///
             //LISTAR_ESTABELECIMENTOS_MAIS_POPULARES
@@ -746,8 +815,6 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
 
                     latitude = Common.mLastLocation.getLatitude();
                     longitude = Common.mLastLocation.getLongitude();
-                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
-
 
 
                     verifConecxaoEstabelecimento_PERTO_DE_MIM(latitude,longitude);
@@ -824,5 +891,147 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
     private void mostraTelaDosFiltros() {
         NavHostFragment.findNavController(PerquisarTodosEsbalecimentosFragment.this)
                 .navigate(R.id.nav_menu_escolher_filtros);
+    }
+
+    private boolean checkMapServices(){
+        if(isServicesOK()){
+            if(isMapsEnabled()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void buildAlertMessageNoGps() {
+
+        txtConfirmMsg.setText(getString(R.string.msg_ligar_gps));
+
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+                mostraTelaDosFiltros();
+            }
+        });
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+                Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(enableGpsIntent, Common.PERMISSIONS_REQUEST_ENABLE_GPS);
+
+            }
+        });
+
+        dialogLayoutConfirmarProcesso.show();
+    }
+
+    public boolean isMapsEnabled(){
+        if (getContext()!=null) {
+            final LocationManager manager = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
+
+
+            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                buildAlertMessageNoGps();
+                return false;
+            }
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (getContext()!=null && getActivity()!=null){
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+//                AppPrefsSettings.getInstance().setLocationStatus(mLocationPermissionGranted);
+                getMyLoCation();
+
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
+
+    }
+
+    private void getMyLoCation() {
+        buildLocationCallBack();
+        createLocationRequest();
+        displayLocation();
+    }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getContext());
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            if (getActivity()!=null){
+                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, Common.ERROR_DIALOG_REQUEST);
+                dialog.show();
+            }
+
+        }else{
+            if (getContext()!=null)
+                Toast.makeText(getContext(), "Você não pode fazer solicitações de localização.", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+
+        switch (requestCode) {
+            case Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: called.");
+        switch (requestCode) {
+            case Common.PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if(mLocationPermissionGranted){
+                    getMyLoCation();
+                }
+                else{
+                    getLocationPermission();
+                }
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ public class AppPrefsSettings {
     private static final String KEY_AUTH_TOKEN_TIME = "AUTH_TOKEN_TIME";
     private static final String KEY_CHANGE_VIEW = "CHANGE_VIEW";
     private static final String KEY_FILTER_VIEW = "ESTAB_FILTER_VIEW";
+    private static final String KEY_LOCATION_ENABLE = "LOCATION_ENABLE";
 
     private static AppPrefsSettings mInstance;
     private static SharedPreferences sharedPreferences;
@@ -120,6 +121,19 @@ public class AppPrefsSettings {
     //GET ESTAB_FILTER_VIEW
     public int getEstabFilterView() {
         return sharedPreferences.getInt(KEY_FILTER_VIEW, 0);
+    }
+
+
+    //SAVE LOCATION ENABLE
+    public void setLocationStatus(boolean locationStatus){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_LOCATION_ENABLE, locationStatus);
+        editor.apply();
+    }
+
+    //GET LOCATION ENABLE
+    public boolean getLocationStatus() {
+        return sharedPreferences.getBoolean(KEY_LOCATION_ENABLE, false);
     }
 
     //DELETE KEY_AUTH_TOKEN

@@ -2,13 +2,18 @@ package ao.co.proitconsulting.xpress.fragmentos.home;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -38,6 +44,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -46,11 +54,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.annotations.SerializedName;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -135,6 +138,14 @@ public class HomeFragment extends Fragment {
     private String getMyEndereco ="";
     private TextView txtTopMyLocation;
 
+    private boolean mLocationPermissionGranted = false;
+
+    //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+    private Dialog dialogLayoutConfirmarProcesso;
+    private ImageView imgConfirm;
+    private TextView txtConfirmTitle,txtConfirmMsg;
+    private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
+
     public HomeFragment(){}
 
     @Override
@@ -167,35 +178,6 @@ public class HomeFragment extends Fragment {
 
 
         initViews();
-
-        if (getContext()!=null){
-            Dexter.withContext(getContext())
-                    .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                    .withListener(new MultiplePermissionsListener() {
-                        @Override
-                        public void onPermissionsChecked(MultiplePermissionsReport report) {
-                            if (report.areAllPermissionsGranted()) {
-                                buildLocationCallBack();
-                                createLocationRequest();
-                                displayLocationOnTop();
-                            }else{
-
-                                if (getContext()!=null)
-                                    Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                            token.continuePermissionRequest();
-                            if (getContext()!=null)
-                                Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
-                        }
-                    }).check();
-        }
-
-
-
 
 
 
@@ -245,6 +227,26 @@ public class HomeFragment extends Fragment {
 
         if (getContext()!=null)
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+        if (getContext()!=null)
+            dialogLayoutConfirmarProcesso = new Dialog(getContext());
+        dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
+        dialogLayoutConfirmarProcesso.setCancelable(false);
+        if (dialogLayoutConfirmarProcesso.getWindow()!=null)
+            dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        imgConfirm = dialogLayoutConfirmarProcesso.findViewById(R.id.imgConfirm);
+        txtConfirmTitle = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmTitle);
+        txtConfirmTitle.setVisibility(View.INVISIBLE);
+        txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
+        dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
+        dialog_btn_deny_processo.setText(getString(R.string.no_thanks));
+        dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
+        dialog_btn_accept_processo.setText(getString(R.string.ok));
     }
 
 
@@ -415,47 +417,60 @@ public class HomeFragment extends Fragment {
                         }
                         Common.todosEstabelecimentoList.addAll(estabelecimentoList);
 
-                        if (getMyEndereco.equals(""))
-                            txtTopMyLocation.setVisibility(View.GONE);
-                        else
-                            txtTopMyLocation.setVisibility(View.VISIBLE);
+
 
 //                        loopingViewPager.setVisibility(View.VISIBLE);
                         viewPager.setVisibility(View.VISIBLE);
                         sliderDotspanel.setVisibility(View.VISIBLE);
 //                        tabLayout.setVisibility(View.VISIBLE);
                         getCategoriesFromEstabelecimento();
+
+                        if(checkMapServices()){
+
+                            if(mLocationPermissionGranted){
+                                getMyLoCation();
+
+                                //PERTO DE MIM
+                                buildLocationCallBackOther();
+                                createLocationRequest();
+                                displayLocationOther();
+                            }
+                            else{
+                                txtPertoDMimTitle.setVisibility(View.GONE);
+                                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+                                getLocationPermission();
+                            }
+                        }
                         carregarListaEstabelicimentos_TODOS_ALTASHORAS();
 
-                        if (getContext()!=null){
-                            Dexter.withContext(getContext())
-                                    .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                                    .withListener(new MultiplePermissionsListener() {
-                                        @Override
-                                        public void onPermissionsChecked(MultiplePermissionsReport report) {
-                                            if (report.areAllPermissionsGranted()) {
-                                                buildLocationCallBack();
-                                                createLocationRequest();
-                                                displayLocationOther();
-                                            }else{
-
-                                                txtPertoDMimTitle.setVisibility(View.GONE);
-                                                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
 
 
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                                            token.continuePermissionRequest();
-                                            if (getContext()!=null)
-                                                Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
-                                            txtPertoDMimTitle.setVisibility(View.GONE);
-                                            recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-                                        }
-                                    }).check();
-                        }
+//                        if (getContext()!=null){
+//                            Dexter.withContext(getContext())
+//                                    .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+//                                    .withListener(new MultiplePermissionsListener() {
+//                                        @Override
+//                                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+//                                            if (report.areAllPermissionsGranted()) {
+//
+//                                            }else{
+//
+//
+//
+//
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+//                                            token.continuePermissionRequest();
+//                                            if (getContext()!=null)
+//                                                Toast.makeText(getContext(), getContext().getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+//                                            txtPertoDMimTitle.setVisibility(View.GONE);
+//                                            recyclerViewMenuPertoDMim.setVisibility(View.GONE);
+//                                        }
+//                                    }).check();
+//                        }
 
 
 
@@ -521,370 +536,6 @@ public class HomeFragment extends Fragment {
     //-------------LISTAR_ESTABELECIMENTOS_TODOS-----------------------------///
     //----------------------------------------------------------------------///
 
-
-    //-------------LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM-----------------------------///
-    //----------------------------------------------------------------------///
-    private void verifConecxaoEstabelecimento_PERTO_DE_MIM(double latitude,double longitude) {
-
-        if (getActivity()!=null) {
-            ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (conMgr!=null) {
-                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-                if (netInfo == null){
-                    imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
-                    txtMsgErro.setText(getString(R.string.msg_erro_internet));
-                    mostarMsnErro();
-                } else {
-//                    carregarListaMenuCategory();
-                    carregarListaEstabelicimentos_PERTO_DE_MIM(latitude,longitude);
-                }
-            }
-        }
-
-    }
-
-    private void carregarListaEstabelicimentos_PERTO_DE_MIM(double latitude,double longitude) {
-        waitingDialog.show();
-
-
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_PERTO_DE_MIM(latitude,longitude);
-        rv.enqueue(new Callback<List<Estabelecimento>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
-
-                if (response.isSuccessful()) {
-                    waitingDialog.setMessage("Carregando...");
-                    if (estabelecimentoList!=null)
-                        estabelecimentoList.clear();
-
-                    if (response.body()!=null && response.body().size()>0){
-
-
-                        for (Estabelecimento estab: response.body()) {
-                            if (estab!=null){
-                                if (estab.estadoEstabelecimento!=null){
-                                    estabelecimentoList.add(estab);
-
-                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+" - "+estab.tipoDeEstabelecimento.descricao);
-                                }
-                            }
-                        }
-                        Common.todosEstabelecimentoList.addAll(estabelecimentoList);
-
-                        if (getMyEndereco.equals(""))
-                            txtTopMyLocation.setVisibility(View.GONE);
-                        else
-                            txtTopMyLocation.setVisibility(View.VISIBLE);
-//                        loopingViewPager.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.VISIBLE);
-                        sliderDotspanel.setVisibility(View.VISIBLE);
-//                        tabLayout.setVisibility(View.VISIBLE);
-
-                        textViewMenuTitle.setText(getString(R.string.perto_de_mim));
-                        textViewMenuTitle.setVisibility(View.VISIBLE);
-                        getCategoriesFromEstabelecimento();
-
-
-
-
-                    }else{
-                        waitingDialog.dismiss();
-                        MetodosUsados.mostrarMensagem(getContext(),"Sem estabelecimentos disponíveis!");
-                        imgErro.setImageResource(R.drawable.ic_baseline_store_off_24);
-                        txtMsgErro.setText("Sem estabelecimentos disponíveis!");
-                        mostarMsnErro();
-                        Common.todosEstabelecimentoList = null;
-                    }
-
-                } else {
-
-//                    progressBar.setVisibility(View.GONE);
-                    waitingDialog.dismiss();
-                    try {
-                        errorMessage = response.errorBody().string();
-                        Log.d(TAG, "onResponseEstabError: "+errorMessage+", ResponseCode: "+response.code());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (response.code() != 401){
-                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro));
-                        mostarMsnErro();
-                    }
-
-                    Common.todosEstabelecimentoList = null;
-
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
-                waitingDialog.dismiss();
-                Log.d(TAG, "onResponseEstabFailed: "+t.getMessage());
-                if (getContext()!=null){
-                    if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro_internet));
-                        mostarMsnErro();
-                    }else  if (t.getMessage().contains("timeout")) {
-                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_alert_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro_internet_timeout));
-                        mostarMsnErro();
-                    }else {
-                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro));
-                        mostarMsnErro();
-                    }
-                }
-            }
-        });
-    }
-    //-------------LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM-----------------------------///
-    //----------------------------------------------------------------------///
-
-
-    //-------------LISTAR_ESTABELECIMENTOS_MAIS_POPULARES-----------------------------///
-    //----------------------------------------------------------------------///
-    private void verifConecxaoEstabelecimento_MAIS_POPULARES() {
-
-        if (getActivity()!=null) {
-            ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (conMgr!=null) {
-                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-                if (netInfo == null){
-                    imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
-                    txtMsgErro.setText(getString(R.string.msg_erro_internet));
-                    mostarMsnErro();
-                } else {
-//                    carregarListaMenuCategory();
-                    carregarListaEstabelicimentos_MAIS_POPULARES();
-                }
-            }
-        }
-
-    }
-
-    private void carregarListaEstabelicimentos_MAIS_POPULARES() {
-        waitingDialog.show();
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_MAISPOPULARES();
-        rv.enqueue(new Callback<List<Estabelecimento>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
-
-                if (response.isSuccessful()) {
-                    waitingDialog.setMessage("Carregando...");
-                    if (estabelecimentoList!=null)
-                        estabelecimentoList.clear();
-
-                    if (response.body()!=null && response.body().size()>0){
-
-
-                        for (Estabelecimento estab: response.body()) {
-                            if (estab!=null){
-                                if (estab.estadoEstabelecimento!=null){
-                                    estabelecimentoList.add(estab);
-
-                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+" - "+estab.tipoDeEstabelecimento.descricao);
-                                }
-                            }
-                        }
-                        Common.todosEstabelecimentoList.addAll(estabelecimentoList);
-
-                        if (getMyEndereco.equals(""))
-                            txtTopMyLocation.setVisibility(View.GONE);
-                        else
-                            txtTopMyLocation.setVisibility(View.VISIBLE);
-//                        loopingViewPager.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.VISIBLE);
-                        sliderDotspanel.setVisibility(View.VISIBLE);
-//                        tabLayout.setVisibility(View.VISIBLE);
-                        textViewMenuTitle.setText(getString(R.string.mais_populares));
-                        textViewMenuTitle.setVisibility(View.VISIBLE);
-                        getCategoriesFromEstabelecimento();
-
-
-
-                    }else{
-                        waitingDialog.dismiss();
-                        MetodosUsados.mostrarMensagem(getContext(),"Sem estabelecimentos disponíveis!");
-                        imgErro.setImageResource(R.drawable.ic_baseline_store_off_24);
-                        txtMsgErro.setText("Sem estabelecimentos disponíveis!");
-                        mostarMsnErro();
-                        Common.todosEstabelecimentoList=null;
-                    }
-
-                } else {
-
-//                    progressBar.setVisibility(View.GONE);
-                    waitingDialog.dismiss();
-                    try {
-                        errorMessage = response.errorBody().string();
-                        Log.d(TAG, "onResponseEstabError: "+errorMessage+", ResponseCode: "+response.code());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (response.code() != 401){
-                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro));
-                        mostarMsnErro();
-                    }
-
-                    Common.todosEstabelecimentoList=null;
-
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
-                waitingDialog.dismiss();
-                Log.d(TAG, "onResponseEstabFailed: "+t.getMessage());
-                if (getContext()!=null){
-                    if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro_internet));
-                        mostarMsnErro();
-                    }else  if (t.getMessage().contains("timeout")) {
-                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_alert_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro_internet_timeout));
-                        mostarMsnErro();
-                    }else {
-                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro));
-                        mostarMsnErro();
-                    }
-                }
-            }
-        });
-    }
-    //-------------LISTAR_ESTABELECIMENTOS_MAIS_POPULARES-----------------------------///
-    //----------------------------------------------------------------------///
-
-
-    //-------------LISTAR_ESTABELECIMENTOS_ALTAS_HORAS-----------------------------///
-    //----------------------------------------------------------------------///
-    private void verifConecxaoEstabelecimento_ALTASHORAS() {
-
-        if (getActivity()!=null) {
-            ConnectivityManager conMgr =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (conMgr!=null) {
-                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-                if (netInfo == null){
-                    imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
-                    txtMsgErro.setText(getString(R.string.msg_erro_internet));
-                    mostarMsnErro();
-                } else {
-//                    carregarListaMenuCategory();
-                    carregarListaEstabelicimentos_ALTASHORAS();
-                }
-            }
-        }
-
-    }
-
-    private void carregarListaEstabelicimentos_ALTASHORAS() {
-        waitingDialog.show();
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Estabelecimento>> rv = apiInterface.getEstabelecimentos_ALTASHORAS();
-        rv.enqueue(new Callback<List<Estabelecimento>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Estabelecimento>> call, @NonNull Response<List<Estabelecimento>> response) {
-
-                if (response.isSuccessful()) {
-                    waitingDialog.setMessage("Carregando...");
-                    if (estabelecimentoList!=null)
-                        estabelecimentoList.clear();
-
-                    if (response.body()!=null && response.body().size()>0){
-
-
-                        for (Estabelecimento estab: response.body()) {
-                            if (estab!=null){
-                                if (estab.estadoEstabelecimento!=null){
-                                    estabelecimentoList.add(estab);
-
-                                    Log.d(TAG, "onResponseEstab: "+estab.nomeEstabelecimento+" - "+estab.tipoDeEstabelecimento.descricao);
-                                }
-                            }
-                        }
-                        Common.todosEstabelecimentoList.addAll(estabelecimentoList);
-
-                        if (getMyEndereco.equals(""))
-                            txtTopMyLocation.setVisibility(View.GONE);
-                        else
-                            txtTopMyLocation.setVisibility(View.VISIBLE);
-//                        loopingViewPager.setVisibility(View.VISIBLE);
-                        viewPager.setVisibility(View.VISIBLE);
-                        sliderDotspanel.setVisibility(View.VISIBLE);
-//                        tabLayout.setVisibility(View.VISIBLE);
-                        textViewMenuTitle.setText(getString(R.string.altas_horas));
-                        textViewMenuTitle.setVisibility(View.VISIBLE);
-                        getCategoriesFromEstabelecimento();
-
-
-
-                    }else{
-                        waitingDialog.dismiss();
-                        MetodosUsados.mostrarMensagem(getContext(),"Sem estabelecimentos disponíveis!");
-                        imgErro.setImageResource(R.drawable.ic_baseline_store_off_24);
-                        txtMsgErro.setText("Sem estabelecimentos disponíveis!");
-                        mostarMsnErro();
-                        Common.todosEstabelecimentoList=null;
-                    }
-
-                } else {
-
-//                    progressBar.setVisibility(View.GONE);
-                    waitingDialog.dismiss();
-                    try {
-                        errorMessage = response.errorBody().string();
-                        Log.d(TAG, "onResponseEstabError: "+errorMessage+", ResponseCode: "+response.code());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (response.code() != 401){
-                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro));
-                        mostarMsnErro();
-                    }
-                    Common.todosEstabelecimentoList=null;
-
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Estabelecimento>> call, @NonNull Throwable t) {
-                waitingDialog.dismiss();
-                Log.d(TAG, "onResponseEstabFailed: "+t.getMessage());
-                if (getContext()!=null){
-                    if (!MetodosUsados.conexaoInternetTrafego(getContext(),TAG)){
-                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro_internet));
-                        mostarMsnErro();
-                    }else  if (t.getMessage().contains("timeout")) {
-                        imgErro.setImageResource(R.drawable.ic_baseline_wifi_alert_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro_internet_timeout));
-                        mostarMsnErro();
-                    }else {
-                        imgErro.setImageResource(R.drawable.ic_baseline_report_problem_24);
-                        txtMsgErro.setText(getString(R.string.msg_erro));
-                        mostarMsnErro();
-                    }
-                }
-            }
-        });
-    }
-    //-------------LISTAR_ESTABELECIMENTOS_ALTAS_HORAS-----------------------------///
-    //----------------------------------------------------------------------///
 
 
     private void getCategoriesFromEstabelecimento() {
@@ -1013,10 +664,7 @@ public class HomeFragment extends Fragment {
                             }
                         }
 
-                        if (getMyEndereco.equals(""))
-                            txtTopMyLocation.setVisibility(View.GONE);
-                        else
-                            txtTopMyLocation.setVisibility(View.VISIBLE);
+
 
                         txtPertoDMimTitle.setVisibility(View.VISIBLE);
                         recyclerViewMenuPertoDMim.setVisibility(View.VISIBLE);
@@ -1056,7 +704,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
 
 
     private void carregarListaEstabelicimentos_TODOS_ALTASHORAS() {
@@ -1116,70 +763,11 @@ public class HomeFragment extends Fragment {
 
         setUpAdaptersOther(recyclerView,estabelecimentoList);
 
-//        List<MenuCategory> menuCategoryList = new ArrayList<>();
-//
-//        for (int i = 0; i <estabelecimentoList.size() ; i++) {
-//            Estabelecimento estab = estabelecimentoList.get(i);
-//            MenuCategory menuCategory = new MenuCategory();
-//            menuCategory.setIdTipo(estab.tipoDeEstabelecimento.idTipo);
-//            menuCategory.setDescricao(estab.tipoDeEstabelecimento.descricao);
-//            menuCategoryList.add(menuCategory);
-//        }
-//
-//
-//        List<MenuCategory> noRepeat = new ArrayList<>();
-//
-//        for (MenuCategory event : menuCategoryList) {
-//            boolean isFound = false;
-//            // check if the event name exists in noRepeat
-//            for (MenuCategory e : noRepeat) {
-//                if (e.getDescricao().equals(event.getDescricao()) || (e.equals(event))) {
-//                    isFound = true;
-//                    break;
-//                }
-//            }
-//            if (!isFound) noRepeat.add(event);
-//        }
-//
-//
-//        menuCategoryList.clear();
-//        List<CategoriaEstabelecimento> categoriaEstabelecimentoList = new ArrayList<>();
-//
-//        fillListOther(noRepeat,estabelecimentoList,categoriaEstabelecimentoList,recyclerView);
-    }
-
-    private void fillListOther(List<MenuCategory> menuCategoryList,List<Estabelecimento> estabelecimentoList ,
-                               List<CategoriaEstabelecimento> categoriaEstabelecimentoList,RecyclerView recyclerView) {
-
-
-
-        for (int i = 0; i <menuCategoryList.size() ; i++) {
-
-            List<Estabelecimento> newEstab = new ArrayList<>();
-            for (Estabelecimento e : estabelecimentoList) {
-                if (e.tipoDeEstabelecimento.idTipo == menuCategoryList.get(i).getIdTipo()){
-                    if (!newEstab.contains(e)){
-                        newEstab.add(e);
-                    }
-                }
-            }
-            categoriaEstabelecimentoList.add(new CategoriaEstabelecimento(menuCategoryList.get(i), newEstab));
-        }
-
-        menuCategoryList.clear();
-//        setUpAdaptersOther(recyclerView,categoriaEstabelecimentoList);
-
-
 
     }
+
 
     private void setUpAdaptersOther(RecyclerView recyclerView,List<Estabelecimento> estabelecimentoList) {
-
-
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
-//        MainRecyclerAdapter mainRecyclerAdapter = new MainRecyclerAdapter(getContext(),categoriaEstabelecimentoList);
-//        recyclerView.setAdapter(mainRecyclerAdapter);
 
         ChildRecyclerAdapter childRecyclerAdapter = new ChildRecyclerAdapter(getContext(), estabelecimentoList);
         recyclerView.setHasFixedSize(true);
@@ -1190,6 +778,8 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
+
+
 
         verifConecxaoTOPSLIDEIMAGE();
         Log.d(TAG, "onResume: ");
@@ -1205,56 +795,8 @@ public class HomeFragment extends Fragment {
         }
 
         textViewMenuTitle.setVisibility(View.GONE);
+
         verifConecxaoEstabelecimento_TODOS();
-
-//        switch (AppPrefsSettings.getInstance().getEstabFilterView()){
-////----------------------------------------------------------------------///
-//            //LISTAR_ESTABELECIMENTOS_TODOS
-//            case 0:
-//                textViewMenuTitle.setVisibility(View.GONE);
-//                verifConecxaoEstabelecimento_TODOS();
-//                break;
-////----------------------------------------------------------------------///
-//            //LISTAR_ESTABELECIMENTOS_PERTO_DE_MIM
-//            case 1:
-//
-//                txtPertoDMimTitle.setVisibility(View.GONE);
-//                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-//
-//                txtAltashorasTitle.setVisibility(View.GONE);
-//                recyclerViewMenuAltashoras.setVisibility(View.GONE);
-//                buildLocationCallBack();
-//                createLocationRequest();
-//                displayLocation();
-//                break;
-////----------------------------------------------------------------------///
-//            //LISTAR_ESTABELECIMENTOS_MAIS_POPULARES
-//            case 2:
-//                txtPertoDMimTitle.setVisibility(View.GONE);
-//                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-//
-//                txtAltashorasTitle.setVisibility(View.GONE);
-//                recyclerViewMenuAltashoras.setVisibility(View.GONE);
-//                verifConecxaoEstabelecimento_MAIS_POPULARES();
-//                break;
-////----------------------------------------------------------------------///
-//            //LISTAR_ESTABELECIMENTOS_ALTAS_HORAS
-//            case 3:
-//                txtPertoDMimTitle.setVisibility(View.GONE);
-//                recyclerViewMenuPertoDMim.setVisibility(View.GONE);
-//
-//                txtAltashorasTitle.setVisibility(View.GONE);
-//                recyclerViewMenuAltashoras.setVisibility(View.GONE);
-//                verifConecxaoEstabelecimento_ALTASHORAS();
-//                break;
-////----------------------------------------------------------------------///
-//            //LISTAR_ESTABELECIMENTOS_TODOS
-//            default:
-//                textViewMenuTitle.setVisibility(View.GONE);
-//                verifConecxaoEstabelecimento_TODOS();
-//                break;
-//        }
-
 
         super.onResume();
 
@@ -1272,6 +814,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy()");
+        dialogLayoutConfirmarProcesso.dismiss();
         super.onDestroy();
     }
 
@@ -1310,18 +853,6 @@ public class HomeFragment extends Fragment {
                 .navigate(R.id.nav_menu_pesquisar);
     }
 
-
-
-    private void buildLocationCallBack() {
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                Common.mLastLocation = locationResult.getLocations().get(locationResult.getLocations().size() - 1); //Get last location
-                displayLocation();
-            }
-        };
-    }
-
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -1330,49 +861,28 @@ public class HomeFragment extends Fragment {
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
     }
 
-    private void displayLocation() {
-
-        if (getContext()!=null){
-            if (ActivityCompat.checkSelfPermission(getContext(),
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-        }
-
-
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+    private void buildLocationCallBackOnTop() {
+        locationCallback = new LocationCallback() {
             @Override
-            public void onSuccess(Location location) {
-                Common.mLastLocation = location;
-
-                if (Common.mLastLocation != null) {
-
-
-                    latitude = Common.mLastLocation.getLatitude();
-                    longitude = Common.mLastLocation.getLongitude();
-                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
-
-
-                    getMyEndereco = getMyAddress(center);
-
-                    txtTopMyLocation.setText(getMyEndereco);
-
-
-                    verifConecxaoEstabelecimento_PERTO_DE_MIM(latitude,longitude);
-
-
-                    Log.d(TAG, String.format("Your location was changed : %f / %f",
-                            latitude, longitude));
-
-                } else {
-                    Log.d(TAG, "Can not get your location");
-                }
+            public void onLocationResult(LocationResult locationResult) {
+                Common.mLastLocation = locationResult.getLocations().get(locationResult.getLocations().size() - 1); //Get last location
+                displayLocationOnTop();
             }
-        });
-
+        };
     }
+
+    private void buildLocationCallBackOther() {
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Common.mLastLocation = locationResult.getLocations().get(locationResult.getLocations().size() - 1); //Get last location
+                displayLocationOther();
+            }
+        };
+    }
+
+
+
 
     private void displayLocationOnTop() {
 
@@ -1390,21 +900,25 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(Location location) {
                 Common.mLastLocation = location;
-
                 if (Common.mLastLocation != null) {
 
 
-                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
-                    latitude = Common.mLastLocation.getLatitude();
-                    longitude = Common.mLastLocation.getLongitude();
+
+                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
 
                     getMyEndereco = getMyAddress(center);
 
+
+                    latitude = Common.mLastLocation.getLatitude();
+                    longitude = Common.mLastLocation.getLongitude();
+
                     txtTopMyLocation.setText(getMyEndereco);
+                    txtTopMyLocation.setVisibility(View.VISIBLE);
 
 
 
-                    Log.d(TAG, String.format("Your location was changed : %f / %f",
+
+                    Log.d(TAG, String.format("displayLocationOnTop(): Your location was changed : %f / %f",
                             latitude, longitude));
 
                 } else {
@@ -1437,20 +951,19 @@ public class HomeFragment extends Fragment {
 
                     latitude = Common.mLastLocation.getLatitude();
                     longitude = Common.mLastLocation.getLongitude();
-                    LatLng center = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());latitude = Common.mLastLocation.getLatitude();
 
+                    LatLng center = new LatLng(latitude, longitude);
 
                     getMyEndereco = getMyAddress(center);
 
+
                     txtTopMyLocation.setText(getMyEndereco);
-
-
-
+                    txtTopMyLocation.setVisibility(View.VISIBLE);
 
                     carregarListaEstabelicimentos_TODOS_PERTO_DE_MIM(latitude,longitude);
 
 
-                    Log.d(TAG, String.format("Your location was changed : %f / %f",
+                    Log.d(TAG, String.format("displayLocationOther(): Your location was changed : %f / %f",
                             latitude, longitude));
 
                 } else {
@@ -1483,6 +996,157 @@ public class HomeFragment extends Fragment {
         }
 
         return address;
+    }
+
+    private boolean checkMapServices(){
+        if(isServicesOK()){
+            if(isMapsEnabled()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void buildAlertMessageNoGps() {
+
+        txtConfirmMsg.setText(getString(R.string.msg_ligar_gps));
+
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+
+            }
+        });
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+                Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(enableGpsIntent, Common.PERMISSIONS_REQUEST_ENABLE_GPS);
+
+            }
+        });
+
+        dialogLayoutConfirmarProcesso.show();
+    }
+
+    public boolean isMapsEnabled(){
+        if (getContext()!=null) {
+            final LocationManager manager = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
+
+
+            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                buildAlertMessageNoGps();
+                return false;
+            }
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (getContext()!=null && getActivity()!=null){
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+                getMyLoCation();
+
+                //PERTO DE MIM
+                buildLocationCallBackOther();
+                createLocationRequest();
+                displayLocationOther();
+
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
+
+    }
+
+    private void getMyLoCation() {
+        buildLocationCallBackOnTop();
+        createLocationRequest();
+        displayLocationOnTop();
+    }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getContext());
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            if (getActivity()!=null){
+                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, Common.ERROR_DIALOG_REQUEST);
+                dialog.show();
+            }
+
+        }else{
+            if (getContext()!=null)
+                Toast.makeText(getContext(), "Você não pode fazer solicitações de localização.", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+//        AppPrefsSettings.getInstance().setLocationStatus(mLocationPermissionGranted);
+        switch (requestCode) {
+            case Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+//                    AppPrefsSettings.getInstance().setLocationStatus(mLocationPermissionGranted);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: called.");
+        switch (requestCode) {
+            case Common.PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if(mLocationPermissionGranted){
+                    getMyLoCation();
+
+                    //PERTO DE MIM
+                    buildLocationCallBackOther();
+                    createLocationRequest();
+                    displayLocationOther();
+                }
+                else{
+                    getLocationPermission();
+                }
+            }
+        }
     }
 
 

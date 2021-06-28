@@ -212,5 +212,7 @@
     <string name="perto_de_mim">Perto de mim</string>
     <string name="mais_populares">Mais populares</string>
     <string name="altas_horas">Altas horas</string>
+    <string name="msg_ligar_gps">Para continuar, ative a localização do dispositivo, a qual utiliza o serviço de localização da Google.</string>
+    <string name="no_thanks">Não, Obrigado</string>
 
 </resources>

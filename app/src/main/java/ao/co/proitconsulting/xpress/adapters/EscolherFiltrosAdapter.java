@@ -151,7 +151,7 @@ public class EscolherFiltrosAdapter extends RecyclerView.Adapter<EscolherFiltros
                             isPermited = true;
                         }else{
                             isPermited = false;
-                            Toast.makeText(context, context.getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+
                         }
                     }
 

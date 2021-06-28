@@ -1,27 +1,39 @@
 package ao.co.proitconsulting.xpress.fragmentos.mapa;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -79,6 +91,13 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
     private String getMyEndereco;
 
 
+    private boolean mLocationPermissionGranted = false;
+
+    //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+    private Dialog dialogLayoutConfirmarProcesso;
+    private ImageView imgConfirm;
+    private TextView txtConfirmTitle,txtConfirmMsg;
+    private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
 
     public MapaFragment() {}
 
@@ -111,33 +130,212 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
+        if (getContext()!=null)
+            dialogLayoutConfirmarProcesso = new Dialog(getContext());
+        dialogLayoutConfirmarProcesso.setContentView(R.layout.layout_confirmar_processo);
+        dialogLayoutConfirmarProcesso.setCancelable(false);
+        if (dialogLayoutConfirmarProcesso.getWindow()!=null)
+            dialogLayoutConfirmarProcesso.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
-        setUpLocation();
+        imgConfirm = dialogLayoutConfirmarProcesso.findViewById(R.id.imgConfirm);
+        txtConfirmTitle = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmTitle);
+        txtConfirmTitle.setVisibility(View.INVISIBLE);
+        txtConfirmMsg = dialogLayoutConfirmarProcesso.findViewById(R.id.txtConfirmMsg);
+        dialog_btn_deny_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_deny_processo);
+        dialog_btn_deny_processo.setText(getString(R.string.no_thanks));
+        dialog_btn_accept_processo = dialogLayoutConfirmarProcesso.findViewById(R.id.dialog_btn_accept_processo);
+        dialog_btn_accept_processo.setText(getString(R.string.ok));
+
+
+
+        if(checkMapServices()){
+            if(mLocationPermissionGranted){
+                getMyLoCation();
+            }else{
+                getLocationPermission();
+            }
+
+        }
 
 
 
         return view;
     }
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //The External Storage Write Permission is granted to you... Continue your left job...
-                setUpLocation();
-            } else {
-                Toast.makeText(getContext(), getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+    public void onResume() {
+        if(checkMapServices()){
+            if(mLocationPermissionGranted){
+                getMyLoCation();
+            }else{
+                getLocationPermission();
+            }
+
+        }
+        super.onResume();
+    }
+
+    private void getMyLoCation() {
+        buildLocationCallBack();
+        createLocationRequest();
+        displayLocation();
+    }
+
+    private boolean checkMapServices(){
+        if(isServicesOK()){
+            if(isMapsEnabled()){
+                return true;
             }
         }
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        return false;
     }
+
+    private void buildAlertMessageNoGps() {
+
+        txtConfirmMsg.setText(getString(R.string.msg_ligar_gps));
+
+        dialog_btn_deny_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+            }
+        });
+
+        dialog_btn_accept_processo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogLayoutConfirmarProcesso.cancel();
+                Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(enableGpsIntent, Common.PERMISSIONS_REQUEST_ENABLE_GPS);
+
+            }
+        });
+
+        dialogLayoutConfirmarProcesso.show();
+    }
+
+    public boolean isMapsEnabled(){
+        if (getContext()!=null) {
+            final LocationManager manager = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
+
+
+            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                buildAlertMessageNoGps();
+                return false;
+            }
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (getContext()!=null && getActivity()!=null){
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+                getMyLoCation();
+
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
+
+    }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getContext());
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            if (getActivity()!=null){
+                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, Common.ERROR_DIALOG_REQUEST);
+                dialog.show();
+            }
+
+        }else{
+            if (getContext()!=null)
+                Toast.makeText(getContext(), "Você não pode fazer solicitações de localização.", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+
+        switch (requestCode) {
+            case Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: called.");
+        switch (requestCode) {
+            case Common.PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if(mLocationPermissionGranted){
+                    getMyLoCation();
+                }
+                else{
+                    getLocationPermission();
+                }
+            }
+        }
+    }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if (requestCode == MY_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                //The External Storage Write Permission is granted to you... Continue your left job...
+//                setUpLocation();
+//            } else {
+//                Toast.makeText(getContext(), getString(R.string.msg_permissao_localizacao), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+////        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
 
 
     private void setUpLocation() {
 
-        if (getContext()!=null && getActivity()!=null){
+        if (getActivity()!=null && getContext()!=null){
             if (ActivityCompat.checkSelfPermission(getContext(),
                     android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(getContext(),
@@ -147,7 +345,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
                 ActivityCompat.requestPermissions(getActivity(), new String[]{
                         android.Manifest.permission.ACCESS_COARSE_LOCATION,
                         android.Manifest.permission.ACCESS_FINE_LOCATION
-                }, MY_PERMISSION_REQUEST_CODE);
+                }, Common.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             } else {
 
 
@@ -157,6 +355,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
 
             }
         }
+
+
+
 
 
     }
@@ -220,6 +421,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
 
                 } else {
                     Log.d(TAG, "Can not get your location");
+//                    displayLocation();
                 }
             }
         });
@@ -305,7 +507,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
         }
 
 
-        fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback, Looper.myLooper());
+        try {
+            fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback, Looper.myLooper());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String getMyAddress(LatLng location) {
@@ -346,5 +552,11 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback, Google
         }
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        dialogLayoutConfirmarProcesso.dismiss();
+        super.onDestroy();
     }
 }
