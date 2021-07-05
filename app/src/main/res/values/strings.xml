@@ -5,19 +5,15 @@
     <string name="facebook_app_id">2335117853474777</string>
     <string name="fb_login_protocol_scheme">fb2335117853474777</string>
 
-    <string name="xpress_logo">Xpress Logo</string>
     <string name="hint_email">Email</string>
     <string name="hint_email_caps">EMAIL</string>
     <string name="hint_password">Palavra-passe</string>
     <string name="hint_forgot_password">Esqueceu a palavra-passe?</string>
     <string name="hint_btn_login">Entrar</string>
-    <string name="hint_registe_se">Não tem uma conta? Registe-se</string>
     <string name="nome_de_usuario">Nome de usuário</string>
-    <string name="motoboy_logo">Motoboy Logo</string>
     <string name="foto_de_usuario">Foto de usuario</string>
     <string name="primeiro_nome">Primeiro nome</string>
     <string name="primeiro_nome_caps">PRIMEIRO NOME</string>
-    <string name="sobrenome">Sobrenome</string>
     <string name="sobrenome_caps">ÚLTIMO NOME</string>
     <string name="numero_telefone">Nº de telefone</string>
     <string name="telefone_alternativo">Nº alternativo</string>
@@ -27,7 +23,6 @@
     <string name="numero_da_casa">Nº da casa</string>
     <string name="btn_registar_text">Registar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="entrar_com_outra_conta">Entrar com outra conta</string>
     <string name="alterar_palavra_passe">Alterar palavra-passe</string>
     <string name="alterar_palavra_passe_telef">Insira o seu nº de telefone para alterar a sua palavra-passe.</string>
     <string name="hit_enviar_telef">Insira o nº de telefone e o endereço para fazer o seu pedido</string>
@@ -82,7 +77,6 @@
     <string name="reenviando_num_telefone">A reenviar o nº de telefone…</string>
     <string name="enviando_confirm_code">Enviando o código de confirmação…</string>
     <string name="msg_confirm_code_min_three">3 dígitos no mínimo.</string>
-    <string name="msg_confirm_code_incorrecto">Código incorrecto.</string>
 
     <string-array name="cidade">
         <item>Bengo</item>
@@ -105,17 +99,12 @@
         <item>Zaire</item>
     </string-array>
     <string name="title_activity_menu">MenuActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Definições</string>
 
 
-    <string name="xpress.co.ao">xpressentregas.com</string>
     <string name="enviar_email_client">Enviar email</string>
-    <string name="genero_sexo">Sexo:</string>
 
     <!--    <string name="msg_error_unable_select_profile_pic">Unable to set profile image. Please try again!</string>-->
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
@@ -124,13 +113,11 @@
     <string name="order_id">Encomenda #%s</string>
     <string name="lbl_item_price_quantity">%s x %d</string>
     <string name="cart_info_bar_items">%d Items</string>
-    <string name="cart_info_bar_total">Total: %.2f</string>
 
     <string name="dialog_permission_title">Conceder permissões</string>
     <string name="dialog_permission_message">Este aplicativo precisa de permissão para usar este recurso. Você pode concedê-los nas configurações do aplicativo.</string>
     <string name="go_to_settings">VÁ PARA AS CONFIGURAÇÕES</string>
     <string name="pesquisar">pesquisar</string>
-    <string name="txt_xpress">Xpress</string>
     <string name="nav_home_title">Início</string>
     <string name="nav_meu_perfil_title">Meu Perfil</string>
     <string name="nav_encomendas_title">Encomendas</string>
@@ -138,9 +125,6 @@
     <string name="nav_carteira_title">Carteira Xpress</string>
     <string name="nav_escolher_filtros_title">Filtros</string>
     <string name="nav_pesquisar_title">Pesquisar</string>
-    <string name="group_redes_sociais_title">Redes Sociais</string>
-    <string name="nav_partilhar_title">Partilhar</string>
-    <string name="email_ou_num_de_telefone">Email /Nº de telefone</string>
     <string name="escolher_fotografia">Escolher fotografia</string>
     <string name="carrinho">Carrinho</string>
     <string name="a_sessao_expirou">A sua sessão expirou!</string>
@@ -148,31 +132,21 @@
     <string name="minha_localizacao">Minha localização</string>
     <string name="txt_deseja_usar_esse_endereco">Deseja usar este endereço?</string>
     <string name="one">1</string>
-    <string name="title_activity_perfil">PerfilActivity</string>
 
-    <string name="nome_completo">Nome Completo</string>
-    <string name="contactos">Contactos</string>
     <string name="contactos_caps">TELEFONE</string>
-    <string name="genero">Género</string>
     <string name="genero_caps">GÉNERO</string>
-    <string name="provincia">Província</string>
     <string name="endereco">Endereço</string>
     <string name="endereco_caps">LOCALIDADE</string>
     <string name="editar_perfil">Editar Perfil</string>
     <string name="salvar">Salvar</string>
-    <string name="dados_salvos_com_sucesso">Seus dados foram salvos com sucesso!</string>
     <string name="salvando_foto">Salvando a foto…</string>
-    <string name="foto_atualizada_com_sucesso">Foto de perfil atualizada com sucesso!</string>
     <string name="checkout">Checkout</string>
-    <string name="local_de_entrega">Local de entrega</string>
     <string name="quer_usar_o_seu_n_toque_aqui">Quer usar o seu nº? Toque aqui!</string>
     <string name="continuar">Continuar</string>
     <string name="tipo_de_pagamento">Tipo de Pagamento</string>
     <string name="escolha_o_tipo_de_pagamento">Escolha o tipo de pagamento</string>
     <string name="multicaixa">Multicaixa</string>
-    <string name="referencia">Referência</string>
     <string name="enviar_pedido">Enviar Pedido</string>
-    <string name="pedido_enviado_com_sucesso">O seu pedido foi enviado com sucesso!</string>
     <string name="pedido_nao_foi_enviado">O seu pedido não foi enviado!</string>
     <string name="msg_tem_certeza">Tem a certeza?</string>
     <string name="msg_remover_um_item">Essa acção irá remover o item do seu carrinho.</string>
@@ -184,9 +158,6 @@
     <string name="hint_o_melhor_na_tua_cidade">Explora o melhor que há na tua cidade!</string>
     <string name="hint_produtos_tua_disposicao">Todos os produtos à tua disposição!</string>
     <string name="hint_termos_e_condicoes">ACEITO OS TERMOS E CONDIÇÕES</string>
-    <string name="hint_prioridade_da_xpress_tua_saude">A maior prioridade da Xpress é a tua saúde e a tua segurança</string>
-    <string name="hint_principais_medidas_de_prevencao">Queremos recordar-te das principais medidas de prevenção recomendadas pela organização</string>
-    <string name="hint_lava_maos">Lava as tuas mãos com frequência</string>
     <string name="hint_email_telefone">Email/Telefone</string>
     <string name="title_quantidade">Quantidade</string>
     <string name="title_extras">Extras</string>
@@ -204,15 +175,16 @@
     <string name="insira_o_c_digo_de_confirma_recebeu_por_sms">Insira o Código de Confirmação \n que recebeu por SMS</string>
     <string name="msg_permissao_localizacao">Este aplicativo precisa de permissão de localização para continuar!</string>
     <string name="encontrar_por">Encontrar por</string>
-    <string name="filtros">Filtros</string>
     <string name="filtros_adicionais">Filtros adicionais</string>
     <string name="aplicar">Aplicar</string>
     <string name="login_no_facebook">Login no Facebook</string>
+    <string name="registe_com_facebook">Registe-se com Facebook</string>
     <string name="rastrear">Rastrear</string>
     <string name="perto_de_mim">Perto de mim</string>
-    <string name="mais_populares">Mais populares</string>
     <string name="altas_horas">Altas horas</string>
     <string name="msg_ligar_gps">Para continuar, ative a localização do dispositivo, a qual utiliza o serviço de localização da Google.</string>
     <string name="no_thanks">Não, Obrigado</string>
+    <string name="filtrar">Filtrar</string>
+    <string name="powered_by_pro_it_consulting">© Powered by Pro-IT Consulting</string>
 
 </resources>

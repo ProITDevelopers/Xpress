@@ -16,8 +16,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+
+
     <application
         android:name=".XpressEntregasApplication"
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,39 +33,73 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- FOTO_CROP_ACTIVITY -->
+
         <activity
             android:name=".activities.ConfiguracoesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.EnviarPedidoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.CheckOutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.ShoppingCartActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- MAPA DA GOOGLE -->
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- MAPA DA GOOGLE -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" /> <!-- MAPA DA GOOGLE -->
+            android:required="false" />
+        <!-- MAPA DA GOOGLE -->
+
+
         <activity
             android:name=".activities.MapaActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.imagePicker.ImagePickerActivity" />
+
+
         <activity
             android:name=".activities.MenuActivity"
             android:label="@string/title_activity_menu"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activities.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity
+            android:name=".activities.AlterarPalavraPasseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AlterarPassTheme" />
+
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <activity android:name=".activities.imagePicker.ImagePickerActivity" />
+
+
+        <activity
+            android:name=".activities.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/WelcomeTheme" />
+
+
+
         <activity
             android:name=".activities.SplashScreenActivity"
             android:screenOrientation="portrait"
@@ -73,33 +110,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity
-            android:name=".activities.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity
-            android:name=".activities.AlterarPalavraPasseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AlterarPassTheme" />
-        <activity
-            android:name=".activities.LoginTemporarioActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity
-            android:name=".activities.WelcomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/WelcomeTheme" />
 
         <activity android:name=".activities.WebViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+
 
         <!-- Photo cache directory file provider paths -->
         <provider
@@ -110,11 +125,18 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- Photo cache directory file provider paths -->
+        </provider>
+        <!-- Photo cache directory file provider paths -->
+
+
         <!-- SIGNALR NOTIFICATIONS SERVICE -->
         <service
             android:name=".mySignalR.MySignalRService"
-            android:enabled="true" /> <!-- FACEBOOK LOGIN CONNECTION -->
+            android:enabled="true" />
+        <!-- SIGNALR NOTIFICATIONS SERVICE -->
+
+
+        <!-- FACEBOOK LOGIN CONNECTION -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -135,6 +157,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <!-- FACEBOOK LOGIN CONNECTION -->
+
+
     </application>
 
 </manifest>

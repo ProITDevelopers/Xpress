@@ -37,7 +37,7 @@ public class Common {
     public static final String SHARE_URL_GOOGLE_DRIVE = "https://drive.google.com/file/d/1bJ1aNdo2fhHblrpm7YtazTXVHUAK6uJp/view?usp=sharing";
     public static final String GOOGLE_DRIVE_READ_PDF = "https://docs.google.com/viewer?embedded=true&url=";
     public static final String MANUAL_XPRESS_LINK = "https://express2020.s3.us-east-2.amazonaws.com/Docs/Manual_XpressLengueno_android.pdf";
-    public static final String TERMS_CONDITIONS_XPRESS_LINK = "https://express2020.s3.us-east-2.amazonaws.com/Docs/Termos_Condicoes_XpressLengueno_android.pdf";
+    public static final String TERMS_CONDITIONS_XPRESS_LINK = "https://express2020.s3.us-east-2.amazonaws.com/Docs/Termos_Condicoes_Xpress_android.pdf";
     public static final String PROIT_CONSULTING_LINK = "https://proit-consulting.co.ao/";
     public static String bearerApi = "Bearer ";
 
@@ -58,12 +58,13 @@ public class Common {
         List<SobreNos> sobreNosList = new ArrayList<>();
 
 //        sobreNosList.add(new SobreNos(3,"Manual", "Manual de utilizador",MANUAL_XPRESS_LINK));
+//        sobreNosList.add(new SobreNos(4,"Desenvolvedor","Copyright © 2020 - HXA"+"\n"+"Powered by Pro-IT Consulting",PROIT_CONSULTING_LINK));
 
         sobreNosList.add(new SobreNos(1,"Segurança e login","Alterar palavra-passe",""));
         sobreNosList.add(new SobreNos(2,"Sobre nós","Xpress Lengueno é um serviço de delivery que permite o usuário realizar os seus pedidos preferidos.",MANUAL_XPRESS_LINK));
 
         sobreNosList.add(new SobreNos(3,"Versão", BuildConfig.VERSION_NAME,""));
-        sobreNosList.add(new SobreNos(4,"Desenvolvedor","Copyright © 2020 - HXA"+"\n"+"Powered by Pro-IT Consulting",PROIT_CONSULTING_LINK));
+        sobreNosList.add(new SobreNos(4,"Desenvolvedor","© 2020 - Powered by Pro-IT Consulting",PROIT_CONSULTING_LINK));
         sobreNosList.add(new SobreNos(5,"Enviar feedback","Tem alguma dúvida? Estamos felizes em ajudar.",""));
         sobreNosList.add(new SobreNos(6,"Partilhar","Partilhe o link da app com os seus contactos.",""));
 

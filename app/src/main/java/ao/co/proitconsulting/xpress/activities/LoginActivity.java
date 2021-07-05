@@ -33,7 +33,6 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 
-import com.asksira.loopingviewpager.LoopingViewPager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -48,12 +47,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import ao.co.proitconsulting.xpress.R;
-import ao.co.proitconsulting.xpress.adapters.topSlide.TopImageSlideAdapter;
 import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
@@ -61,7 +58,6 @@ import ao.co.proitconsulting.xpress.helper.MetodosUsados;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.modelos.FaceBookLoginRequest;
 import ao.co.proitconsulting.xpress.modelos.LoginRequest;
-import ao.co.proitconsulting.xpress.modelos.TopSlideImages;
 import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
 import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
 import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
@@ -87,9 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     private AlertDialog waitingDialog;
 
     private UsuarioPerfil usuarioPerfil;
-    //DIALOG_LAYOUT_COVID_19
-    private Dialog dialogLayoutCOVID;
-    private LoopingViewPager loopingViewPager;
+
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
@@ -284,33 +278,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-         //-------------------------------------------------------------//
-        //-------------------------------------------------------------//
-        //DIALOG_LAYOUT_COVID_19
-        dialogLayoutCOVID = new Dialog(this);
-        dialogLayoutCOVID.setContentView(R.layout.layout_covid);
-        dialogLayoutCOVID.setCancelable(false);
-        if (dialogLayoutCOVID.getWindow()!=null)
-            dialogLayoutCOVID.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        loopingViewPager = dialogLayoutCOVID.findViewById(R.id.loopingViewPager);
-        List<TopSlideImages> topSlideImages = new ArrayList<>();
-        topSlideImages.add(new TopSlideImages(R.drawable.img_lavar_maos2));
-        topSlideImages.add(new TopSlideImages(R.drawable.img_lavar_maos));
-        TopImageSlideAdapter topImageSlideAdapter = new TopImageSlideAdapter(this,topSlideImages,true);
-        loopingViewPager.setAdapter(topImageSlideAdapter);
-
-
-        ImageView imgBtnFecharTelef = dialogLayoutCOVID.findViewById(R.id.imgBtnFecharTelef);
-        imgBtnFecharTelef.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogLayoutCOVID.dismiss();
-                dialogLayoutCOVID.cancel();
-            }
-        });
-
-        dialogLayoutCOVID.show();
 
     }
 
@@ -705,21 +673,21 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        loopingViewPager.resumeAutoScroll();
+
 
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        dialogLayoutCOVID.cancel();
+
         dialogLayoutConfirmarProcesso.cancel();
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        loopingViewPager.pauseAutoScroll();
+
         super.onPause();
 
     }

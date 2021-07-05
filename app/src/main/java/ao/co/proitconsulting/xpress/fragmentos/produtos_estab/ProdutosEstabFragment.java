@@ -310,24 +310,10 @@ public class ProdutosEstabFragment extends Fragment  {
         waitingDialog.dismiss();
         if (produtosList.size()>0){
 
-//            itemAdapter = new ProdutosAdapter(this, produtosList,this, gridLayoutManager);
-//            itemAdapter = new ProdutosViewAdapter(getContext(), produtosList,this);
+
             itemAdapter = new ProdutosViewAdapter(getContext(), produtosList);
             recyclewProdutos.setAdapter(itemAdapter);
             recyclewProdutos.setLayoutManager(gridLayoutManager);
-
-//            itemAdapter.setItemClickListener(new RecyclerViewOnItemClickListener() {
-//                @Override
-//                public void onItemClickListener(int position) {
-//                    Produtos produto = produtosList.get(position);
-//                    Intent intent = new Intent(getContext(), ProdutoDetailsActivity.class);
-//                    intent.putExtra("toolbarTitle",produto.estabelecimento);
-//                    intent.putExtra("produtoId",produto.idProduto);
-//                    intent.putExtra("position",position);
-//                    startActivity(intent);
-//
-//                }
-//            });
 
 
         }
@@ -411,9 +397,13 @@ public class ProdutosEstabFragment extends Fragment  {
 //        searchView.setQueryHint(getString(R.string.pesquisar));
 
         SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-//        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
+        if (getContext()!=null)
+            theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        // Does help!
+        ImageView searchClose = (ImageView) searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        searchClose.setImageResource(R.drawable.ic_baseline_clear_search_24);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

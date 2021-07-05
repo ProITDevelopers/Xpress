@@ -135,12 +135,15 @@ public class MetodosUsados {
 
         final String appPackageName = context.getPackageName();
         String appName = context.getString(R.string.app_name);
-        String appCategory = "Bebidas";
+
+
+
+        String appCategory = "restaurantes e bares preferidos!";
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         String postData = "Obtenha o aplicativo " + appName +
-                " para ter acesso as melhores " + appCategory + "\n" +
+                " para teres acesso aos teus " + appCategory + "\n" +
                 Common.SHARE_URL_PLAYSTORE + appPackageName;
 
 

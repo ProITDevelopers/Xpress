@@ -23,8 +23,8 @@
             >
 
             <androidx.cardview.widget.CardView
-                android:layout_width="140dp"
-                android:layout_height="137dp"
+                android:layout_width="280dp"
+                android:layout_height="274dp"
                 app:cardElevation="10dp"
                 app:cardCornerRadius="8dp">
 
@@ -70,8 +70,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="15sp"
-                    android:maxLines="2"
-                    android:lines="2"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:ellipsize="end"

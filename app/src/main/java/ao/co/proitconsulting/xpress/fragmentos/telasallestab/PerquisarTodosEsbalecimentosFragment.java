@@ -847,7 +847,9 @@ public class PerquisarTodosEsbalecimentosFragment extends Fragment {
             theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-
+// Does help!
+        ImageView searchClose = (ImageView) searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        searchClose.setImageResource(R.drawable.ic_baseline_clear_search_24);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

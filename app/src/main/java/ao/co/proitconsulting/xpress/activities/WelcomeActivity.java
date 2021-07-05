@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
@@ -131,53 +130,5 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
 
-    private void checkAuthToken(){
-        if (AppPrefsSettings.getInstance().getAuthToken()==null) {
 
-            if (AppPrefsSettings.getInstance().getUser()!=null){
-                Intent intent = new Intent(WelcomeActivity.this, LoginTemporarioActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-                return;
-            }else {
-                relative_Start.setVisibility(View.VISIBLE);
-                relative_Start.setAnimation(bottomAnim);
-                fabStart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
-//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-
-                    }
-                });
-
-
-                txt_SignUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
-//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-
-                    }
-                });
-
-//                            Intent intent = new Intent(SplashScreenActivity.this, WelcomeActivity.class);
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(intent);
-
-
-
-            }
-
-
-
-        }
-        if (!TextUtils.isEmpty(AppPrefsSettings.getInstance().getAuthToken())) {
-
-            launchHomeScreen();
-        }
-    }
 }

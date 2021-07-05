@@ -40,8 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="28dp"
-                android:paddingLeft="35dp"
-                android:paddingRight="35dp"
+                android:paddingLeft="65dp"
+                android:paddingRight="65dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -57,12 +57,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="160dp"
                 android:paddingTop="5dp"
                 android:id="@+id/hint_nome"
                 android:baselineAligned="false"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="120dp"
+                android:layout_marginRight="120dp">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -165,8 +165,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:id="@+id/hint_telefone"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="120dp"
+                android:layout_marginRight="120dp">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editTelefone"
@@ -193,8 +193,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:id="@+id/hint_email"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="120dp"
+                android:layout_marginRight="120dp">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/editEmail"
@@ -221,8 +221,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:id="@+id/hint_pass"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="120dp"
+                android:layout_marginRight="120dp">
 
                 <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
                     android:id="@+id/editPass"
@@ -250,8 +250,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:id="@+id/hint_confirmpass"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="120dp"
+                android:layout_marginRight="120dp">
 
                 <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
                     android:id="@+id/editConfirmPass"
@@ -313,13 +313,13 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:background="@drawable/button_background_green_lined"
                 android:textColor="@android:color/white"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="60dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="124dp"
+                android:layout_marginLeft="124dp"
+                android:layout_marginRight="124dp"
+                android:layout_marginEnd="124dp"
                 android:fontFamily="@font/poppins_regular"
                 android:textAllCaps="false"
                 />
@@ -328,10 +328,10 @@
                 android:id="@+id/btnLoginFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginStart="124dp"
+                android:layout_marginLeft="124dp"
+                android:layout_marginRight="124dp"
+                android:layout_marginEnd="124dp"
                 android:layout_marginTop="40dp"
                 android:text="@string/registe_com_facebook"
                 android:background="@drawable/facebook_btn_bkgnd"

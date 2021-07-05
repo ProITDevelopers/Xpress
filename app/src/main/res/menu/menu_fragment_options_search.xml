@@ -15,7 +15,7 @@
     <item
         android:id="@+id/action_filtros"
         android:orderInCategory="101"
-        android:title="Filtrar"
+        android:title="@string/filtrar"
         app:showAsAction="never"
         android:fontFamily="@font/montserrat_regular"
         />

@@ -27,7 +27,7 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+<!--        <item name="android:windowBackground">@drawable/splash_screen</item>-->
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
@@ -67,14 +67,6 @@
     <style name="SwitchCompatTheme">
         <item name="colorControlActivated">@color/xpress_green</item>
     </style>
-
-
-    <style name="CustomNavigationView" parent="Widget.Design.NavigationView">
-        <item name="itemIconTint">?attr/colorNavigationItem</item>
-        <item name="itemTextColor">?attr/colorNavigationItem</item>
-        <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
-    </style>
-
 
 
     <style name="AppTheme.NoActionBar">

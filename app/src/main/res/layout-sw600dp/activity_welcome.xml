@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imgAppLogoHands"
-        android:layout_width="wrap_content"
-        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="800dp"
         android:src="@drawable/xpress_hands"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
     <ImageView
         android:id="@+id/imgAppLogo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:src="@drawable/xpress_logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

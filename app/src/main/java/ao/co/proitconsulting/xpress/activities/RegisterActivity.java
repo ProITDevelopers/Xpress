@@ -25,13 +25,22 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
@@ -47,6 +56,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -56,8 +66,15 @@ import ao.co.proitconsulting.xpress.api.ApiClient;
 import ao.co.proitconsulting.xpress.api.ApiInterface;
 import ao.co.proitconsulting.xpress.helper.Common;
 import ao.co.proitconsulting.xpress.helper.MetodosUsados;
+import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
+import ao.co.proitconsulting.xpress.modelos.FaceBookLoginRequest;
+import ao.co.proitconsulting.xpress.modelos.LoginRequest;
 import ao.co.proitconsulting.xpress.modelos.RegisterRequest;
+import ao.co.proitconsulting.xpress.modelos.UsuarioAuth;
+import ao.co.proitconsulting.xpress.modelos.UsuarioPerfil;
+import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
 import de.hdodenhof.circleimageview.CircleImageView;
+import dmax.dialog.SpotsDialog;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
@@ -81,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private AppCompatCheckBox checkboxAcceptTerms;
     private TextView txtTermsCondicoes;
-    private Button btnRegistro;
+    private Button btnRegistro,btnLoginFacebook;
 
 
     private String primeiroNome,sobreNome,email,telefone,senha,confirmSenha;
@@ -90,6 +107,15 @@ public class RegisterActivity extends AppCompatActivity {
     private Uri selectedImage;
     private String postPath="";
 
+    //LOGIN_FACEBOOK
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+    private AccessToken accessToken;
+    private String facebookToken;
+    private FaceBookLoginRequest faceBookLoginRequest = new FaceBookLoginRequest();
+    private AlertDialog waitingDialog;
+    private UsuarioPerfil usuarioPerfil;
+
 
     //DIALOG_LAYOUT_CONFIRMAR_PROCESSO
     private Dialog dialogLayoutConfirmarProcesso;
@@ -97,10 +123,8 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView txtConfirmTitle,txtConfirmMsg;
     private Button dialog_btn_deny_processo,dialog_btn_accept_processo;
 
-    //DIALOG_LAYOUT_SUCESSO
-    private Dialog dialogLayoutSuccess;
-    private TextView dialog_txtConfirmSucesso;
-    private Button dialog_btn_sucesso;
+
+
     private String textlistenerNome, textlistenerSobreNome;
 
 
@@ -120,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initViews() {
 
-
+        waitingDialog = new SpotsDialog.Builder().setContext(this).setTheme(R.style.CustomSpotsDialog).build();
         register_root = findViewById(R.id.register_root);
         fabPrevious = findViewById(R.id.fabPrevious);
         imgUserPhoto = findViewById(R.id.imgUserPhoto);
@@ -139,6 +163,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         btnRegistro = findViewById(R.id.btnRegistro);
+
+        btnLoginFacebook = findViewById(R.id.btnLoginFacebook);
 
         checkboxAcceptTerms = findViewById(R.id.checkboxAcceptTerms);
         txtTermsCondicoes = findViewById(R.id.txtTermsCondicoes);
@@ -242,6 +268,60 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
+        //---------------------------------
+        //---------------------------------
+        loginButton = findViewById(R.id.btnFBLogin);
+        LoginManager.getInstance().logOut();
+        callbackManager = CallbackManager.Factory.create();
+        loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
+
+        btnLoginFacebook.setEnabled(true);
+        btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginButton.performClick();
+                btnLoginFacebook.setEnabled(false);
+            }
+        });
+
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                accessToken = loginResult.getAccessToken();
+
+                btnLoginFacebook.setEnabled(false);
+
+                ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                if (conMgr!=null){
+                    NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+                    if (netInfo == null) {
+                        LoginManager.getInstance().logOut();
+                        MetodosUsados.mostrarMensagem(RegisterActivity.this,getString(R.string.msg_erro_internet));
+                        btnLoginFacebook.setEnabled(true);
+                    } else {
+                        loaduserProfile(accessToken);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancel() {
+                btnLoginFacebook.setEnabled(true);
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                btnLoginFacebook.setEnabled(true);
+                Toast.makeText(RegisterActivity.this, "FacebookException: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
@@ -261,35 +341,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
-        //DIALOG_LAYOUT_SUCESSO
-        dialogLayoutSuccess = new Dialog(this);
-        dialogLayoutSuccess.setContentView(R.layout.layout_sucesso);
-        dialogLayoutSuccess.setCancelable(false);
-        if (dialogLayoutSuccess.getWindow()!=null)
-            dialogLayoutSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        dialog_txtConfirmSucesso = dialogLayoutSuccess.findViewById(R.id.dialog_txtConfirmSucesso);
-        dialog_btn_sucesso = dialogLayoutSuccess.findViewById(R.id.dialog_btn_sucesso);
-
-        dialog_btn_sucesso.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MetodosUsados.esconderTeclado(RegisterActivity.this);
-                dialogLayoutSuccess.cancel();
-                launchHomeScreen();
-            }
-        });
 
 
 
     }
 
-    private void launchHomeScreen() {
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
+//    private void launchHomeScreen() {
+//        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        startActivity(intent);
+//        finish();
+//    }
 
     private void verificarPermissaoFotoCameraGaleria() {
         Dexter.withContext(this)
@@ -355,59 +417,6 @@ public class RegisterActivity extends AppCompatActivity {
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
         startActivityForResult(intent, REQUEST_IMAGE);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Uri uri = data.getParcelableExtra("path");
-                try {
-                    // You can update this bitmap to your server
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-
-
-                    selectedImage = uri;
-                    postPath = selectedImage.getPath();
-
-                    Log.d("TAG", "Image Get Uri path: " + uri.getPath());
-                    Log.d("TAG", "Image Get Uri toString(): " + uri.toString());
-
-                    // loading profile image from local cache
-                    loadProfile(uri.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    /**
-     * Showing Alert Dialog with Settings option
-     * Navigates user to app settings
-     * NOTE: Keep proper title and message depending on your app
-     */
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
-            dialog.cancel();
-            openSettings();
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
-        builder.show();
-
-    }
-
-    // navigating user to app settings
-    private void openSettings() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        intent.setData(uri);
-        startActivityForResult(intent, 101);
-    }
-
 
     private boolean verificarCampos() {
 
@@ -638,14 +647,15 @@ public class RegisterActivity extends AppCompatActivity {
                                     imgUserPhoto.setImageResource(R.drawable.ic_baseline_outline_person_add_24);
                                     editPrimeiroNome.setText("");
                                     editUltimoNome.setText("");
-                                    editEmail.setText("");
                                     editTelefone.setText("");
+                                    editEmail.setText("");
                                     editPass.setText("");
+                                    editConfirmPass.setText("");
+                                    checkboxAcceptTerms.setChecked(false);
+
+                                    autenticacaoLogin();
 
 
-
-                                    dialog_txtConfirmSucesso.setText(getString(R.string.msg_conta_criada_sucesso));
-                                    dialogLayoutSuccess.show();
                                 }
                             });
 
@@ -705,6 +715,331 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    private void loaduserProfile(AccessToken newAccessToken){
+
+
+        facebookToken =newAccessToken.getToken();
+        Log.d(TAG, "facebookToken: "+facebookToken);
+
+        faceBookLoginRequest.accessToken = facebookToken;
+        autenticacaoFaceBook();
+
+//        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+//            @Override
+//            public void onCompleted(JSONObject object, GraphResponse response) {
+//
+//                try {
+//                    String first_name = object.getString("first_name");
+//                    String last_name = object.getString("last_name");
+//                    String email = object.getString("email");
+//                    String id = object.getString("id");
+//                    String name = first_name + " "+last_name;
+//
+//                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=large";
+//
+//
+//                    Log.d(TAG, "facebookToken: "+facebookToken);
+//
+//
+//
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        });
+//
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields","first_name,last_name,email,id");
+//        request.setParameters(parameters);
+//        request.executeAsync();
+
+    }
+
+    private void autenticacaoLogin() {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.email = email;
+        loginRequest.password = senha;
+        loginRequest.rememberMe = true;
+
+        waitingDialog.setMessage(getString(R.string.msg_login_auth_verification));
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+
+
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<UsuarioAuth> call = apiInterface.autenticarCliente(loginRequest);
+        call.enqueue(new Callback<UsuarioAuth>() {
+            @Override
+            public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
+
+
+                waitingDialog.setMessage(getString(R.string.msg_login_auth_validando));
+                if (response.isSuccessful()) {
+                    if (response.body() != null){
+                        UsuarioAuth userToken = response.body();
+
+                        AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
+                        AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
+
+
+                        AppPrefsSettings.getInstance().setLoggedIn(true);
+
+
+
+                        carregarMeuPerfil(userToken.tokenuser);
+
+
+                    }
+                } else {
+
+                    waitingDialog.dismiss();
+
+                    String message ="";
+
+                    try {
+                        message = response.errorBody().string();
+                        Log.d(TAG, "onLoginResponseError: "+message+", Error code: "+response.code());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    launchLoginScreen();
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
+                waitingDialog.dismiss();
+                if (!MetodosUsados.conexaoInternetTrafego(RegisterActivity.this,TAG)){
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet);
+                }else  if (t.getMessage().contains("timeout")) {
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet_timeout);
+                }else {
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro);
+                }
+                Log.d(TAG,"onFailure" + t.getMessage());
+
+
+            }
+        });
+
+    }
+
+    private void autenticacaoFaceBook() {
+        waitingDialog.setMessage(getString(R.string.msg_login_auth_verification));
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<UsuarioAuth> call = apiInterface.autenticarFaceBook(faceBookLoginRequest);
+        call.enqueue(new Callback<UsuarioAuth>() {
+            @Override
+            public void onResponse(@NonNull Call<UsuarioAuth> call, @NonNull Response<UsuarioAuth> response) {
+
+
+                waitingDialog.setMessage(getString(R.string.msg_login_auth_validando));
+                if (response.isSuccessful()) {
+                    if (response.body() != null){
+
+                        UsuarioAuth userToken = response.body();
+
+                        AppPrefsSettings.getInstance().saveAuthToken(userToken.tokenuser);
+                        AppPrefsSettings.getInstance().saveTokenTime(userToken.expiracao);
+
+                        AppPrefsSettings.getInstance().setLoggedIn(true);
+
+
+                        carregarMeuPerfil(userToken.tokenuser);
+
+
+                    }
+                } else {
+
+                    waitingDialog.dismiss();
+                    LoginManager.getInstance().logOut();
+                    btnLoginFacebook.setEnabled(true);
+
+                    String message ="";
+
+                    try {
+                        message = response.errorBody().string();
+                        Log.d(TAG, "onLoginResponseError: "+message+", Error code: "+response.code());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,message+", ErroCode: "+response.code());
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UsuarioAuth> call, @NonNull Throwable t) {
+                waitingDialog.dismiss();
+                LoginManager.getInstance().logOut();
+                btnLoginFacebook.setEnabled(true);
+                if (!MetodosUsados.conexaoInternetTrafego(RegisterActivity.this,TAG)){
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet);
+                }else  if (t.getMessage().contains("timeout")) {
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet_timeout);
+                }else {
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro);
+                }
+                Log.d(TAG,"onFailure" + t.getMessage());
+
+
+            }
+        });
+    }
+
+    private void carregarMeuPerfil(String token) {
+        waitingDialog.setMessage(getString(R.string.msg_login_auth_carregando_dados));
+        String bearerToken = Common.bearerApi.concat(token);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<UsuarioPerfil>>  usuarioCall = apiInterface.getPerfilLogin(bearerToken);
+
+        usuarioCall.enqueue(new Callback<List<UsuarioPerfil>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Response<List<UsuarioPerfil>> response) {
+
+                if (response.isSuccessful()) {
+
+
+                    if (response.body()!=null){
+                        usuarioPerfil = response.body().get(0);
+                        AppPrefsSettings.getInstance().saveUser(usuarioPerfil);
+
+                        waitingDialog.dismiss();
+                        launchHomeScreen();
+                    }
+
+                } else {
+                    waitingDialog.dismiss();
+                    AppPrefsSettings.getInstance().clearAppPrefs();
+                    LoginManager.getInstance().logOut();
+                    btnLoginFacebook.setEnabled(true);
+                    launchLoginScreen();
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<UsuarioPerfil>> call, @NonNull Throwable t) {
+                AppPrefsSettings.getInstance().clearAppPrefs();
+                waitingDialog.dismiss();
+                if (!MetodosUsados.conexaoInternetTrafego(RegisterActivity.this,TAG)){
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet);
+                }else  if (t.getMessage().contains("timeout")) {
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro_internet_timeout);
+                }else {
+                    MetodosUsados.mostrarMensagem(RegisterActivity.this,R.string.msg_erro);
+                }
+                Log.d(TAG, "onLoginPerfilFailed: "+t.getMessage());
+
+            }
+        });
+    }
+
+    private void launchLoginScreen() {
+
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void launchHomeScreen() {
+
+
+
+
+        Intent intent = new Intent(RegisterActivity.this, MenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        Intent serviceIntent = new Intent(this, MySignalRService.class);
+        startService(serviceIntent);
+
+
+//        String title = "Olá, ".concat(usuarioPerfil.primeiroNome+" "+usuarioPerfil.ultimoNome);
+//        String message = "Seja bem-vindo(a) ao Xpress Lengueno!";
+//        notificationHelper.createNotification(title,message,false);
+
+
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri uri = data.getParcelableExtra("path");
+                try {
+                    // You can update this bitmap to your server
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+
+                    selectedImage = uri;
+                    postPath = selectedImage.getPath();
+
+                    Log.d("TAG", "Image Get Uri path: " + uri.getPath());
+                    Log.d("TAG", "Image Get Uri toString(): " + uri.toString());
+
+                    // loading profile image from local cache
+                    loadProfile(uri.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Showing Alert Dialog with Settings option
+     * Navigates user to app settings
+     * NOTE: Keep proper title and message depending on your app
+     */
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+        builder.setTitle(getString(R.string.dialog_permission_title));
+        builder.setMessage(getString(R.string.dialog_permission_message));
+        builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
+            dialog.cancel();
+            openSettings();
+        });
+        builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
+        builder.show();
+
+    }
+
+    // navigating user to app settings
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
+
+
+
+
+
 
     @Override
     protected void onResume() {
@@ -721,7 +1056,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onDestroy() {
         MetodosUsados.hideLoadingDialog();
         dialogLayoutConfirmarProcesso.cancel();
-        dialogLayoutSuccess.cancel();
+
         super.onDestroy();
     }
 

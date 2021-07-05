@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -228,9 +229,15 @@ public class CategoryEstabFragment extends Fragment {
 //        searchView.setQueryHint(getString(R.string.pesquisar));
 
         SearchView.SearchAutoComplete theTextArea = (SearchView.SearchAutoComplete)searchView.findViewById(R.id.search_src_text);
-//        theTextArea.setHintTextColor(ContextCompat.getColor(getContext(), R.color.xpress_green));
-        theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
+
+        if (getContext()!=null)
+            theTextArea.setTextColor(ContextCompat.getColor(getContext(), R.color.search_text_color));
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+
+// Does help!
+        ImageView searchClose = (ImageView) searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        searchClose.setImageResource(R.drawable.ic_baseline_clear_search_24);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

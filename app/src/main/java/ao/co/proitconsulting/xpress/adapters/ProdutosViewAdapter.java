@@ -8,13 +8,11 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -112,46 +110,6 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
 
 
 
-            holder.btn_addCart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-//                    listener.onProductAddedCart(position, produto);
-
-                    Snackbar.make(view, produto.getNomeProduto()+" adicionado ao Carrinho!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-                }
-            });
-
-//            holder.ic_add.setOnClickListener(view -> {
-//
-//                listener.onProductAddedCart(position, produto);
-//            });
-//
-//            holder.ic_remove.setOnClickListener(view -> {
-//                listener.onProductRemovedFromCart(position, produto);
-//            });
-//
-//            if (cartItems != null) {
-//                CartItemProdutos cartItem = cartItems.where().equalTo("produtos.idProduto", produto.getIdProduto()).findFirst();
-//                if (cartItem != null) {
-//                    holder.product_count.setText(String.valueOf(cartItem.quantity));
-//                    holder.linearAddRemove.setVisibility(View.VISIBLE);
-//                    holder.btn_addCart.setEnabled(false);
-//                    holder.btn_addCart.setVisibility(View.INVISIBLE);
-//
-//
-//
-//                } else {
-//
-//                    holder.product_count.setText(String.valueOf(0));
-//                    holder.linearAddRemove.setVisibility(View.GONE);
-//                    holder.btn_addCart.setEnabled(true);
-//                    holder.btn_addCart.setVisibility(View.VISIBLE);
-//                }
-//            }
-
         }
 
 
@@ -214,11 +172,7 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
         private TextView name;
         private TextView descricao;
         private TextView price;
-        private ImageView btn_addCart;
 
-        private ImageView ic_add,ic_remove;
-        private TextView product_count;
-        private LinearLayout linearAddRemove;
         private Button btnGoToDetails;
         private IRecyclerClickListener listener;
 
@@ -229,13 +183,7 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
                 name =  itemView.findViewById(R.id.titleProdLeft);
                 descricao =  itemView.findViewById(R.id.descProdLeft);
                 price =  itemView.findViewById(R.id.priceProdLeft);
-                btn_addCart =  itemView.findViewById(R.id.btn_addCart);
 
-
-                ic_remove =  itemView.findViewById(R.id.ic_remove);
-                product_count =  itemView.findViewById(R.id.product_count);
-                ic_add =  itemView.findViewById(R.id.ic_add);
-                linearAddRemove = itemView.findViewById(R.id.linearAddRemove);
 
                 btnGoToDetails =  itemView.findViewById(R.id.btnGoToDetails);
 
@@ -244,13 +192,7 @@ public class ProdutosViewAdapter extends RecyclerView.Adapter<ProdutosViewAdapte
                 name = itemView.findViewById(R.id.titleProdRight);
                 price =  itemView.findViewById(R.id.priceProdRight);
                 descricao =  itemView.findViewById(R.id.descProdRight);
-                btn_addCart = itemView.findViewById(R.id.btn_addCart);
 
-                ic_remove =  itemView.findViewById(R.id.ic_remove);
-                product_count =  itemView.findViewById(R.id.product_count);
-                ic_add =  itemView.findViewById(R.id.ic_add);
-
-                linearAddRemove = itemView.findViewById(R.id.linearAddRemove);
 
 
                 btnGoToDetails = itemView.findViewById(R.id.btnGoToDetails);

@@ -9,6 +9,7 @@ import com.facebook.login.LoginManager;
 
 import java.util.concurrent.TimeUnit;
 
+import ao.co.proitconsulting.xpress.R;
 import ao.co.proitconsulting.xpress.localDB.AppDatabase;
 import ao.co.proitconsulting.xpress.localDB.AppPrefsSettings;
 import ao.co.proitconsulting.xpress.mySignalR.MySignalRService;
@@ -24,7 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_splash_screen);
         delaySplashScreen();
 
     }

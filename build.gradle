@@ -19,7 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        mavenCentral() //ASKSIRA_LOOPINGVIEWPAGER, GLIDE, FACEBOOK
+        mavenCentral() // GLIDE, FACEBOOK
         maven { url "https://jitpack.io" } //SHOW_HIDE_PASSWORD, NAIKSOFT_STOMPANDROID, YALANTIS_UCROP
     }
 }

@@ -225,8 +225,8 @@ public class HomeFragment extends Fragment {
 //            floatingActionButton.show();
 //        }
 
-        if (getContext()!=null)
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        if (getActivity()!=null)
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         //-------------------------------------------------------------//
         //-------------------------------------------------------------//
